@@ -1,0 +1,25 @@
+{
+  "name": "bridge.node.js",
+  "version": "0.0.0",
+  "description": "support bridge.js",
+  "main": "app.js",
+  "dependencies": {
+    "async": "~0.2.10",
+    "express": "~3.4.8",
+    "socket.io": "~0.9.16"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wadolsh/bridge.git"
+  },
+  "author": "wadolsh",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/wadolsh/bridge/issues"
+  }
+}
