@@ -2,7 +2,7 @@
   "name": "bridge.node.js",
   "version": "0.0.0",
   "description": "support bridge.js",
-  "main": "app.js",
+  "main": "bridge.node.js",
   "dependencies": {
     "async": "~0.2.10",
     "express": "~3.4.8",

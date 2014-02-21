@@ -11,7 +11,7 @@
     <div id="test" class="tmpl">
         <ul>
             #$.each(data.list, function(ind, obj) {#
-                <li data-ind="#=ind#" data-event="#:data.event#">#=obj.text#</li>
+                <li data-ind="#=ind#" data-id="#=obj._id#" data-event="#:data.oneline#">#=obj.text# <span data-event="#:data.lineDelete#"> delete </span></li>
             #});#
             <li id="ttt" data-event="#:data.event1#">aaaaaaaaaaaa</li>
         </ul>
@@ -19,23 +19,39 @@
     
     <div id="result"></div>
     
-    <div id="login"></div>
     
     <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
     <script src="js/underscore.js"></script>
     <script src="js/bridge.json.js"></script>
     <script type="text/javascript">
-        var html = Bridge.tmplTool.render('test', { 
-            a:10,
-            list : [{text: 't1', mark: '11111'},
-                    {text: 't2', mark: '22222'},
-                    {text: 't3', mark: '33333'}],
-            event: {click: function(e) {
-                    alert(e.data.mark);
-            }},
-            event1: {click: function(e) {
-                    alert('xxxxxxxxx');
-            }}
+        var mydata = new Bridge.Connector({tableName : "mydata"});
+        
+        mydata.reset().reqInsert('reqInsert', {text : new Date().toString()}).request(function(data, textStatus, jqXHR) {
+            var data = data['reqInsert'];
+        });
+
+        
+        mydata.reset().reqList('reqList', {}).request(function(data, textStatus, jqXHR) {
+            
+            var html = Bridge.tmplTool.render('test', { 
+                a:10,
+                list : data['reqList'],
+                oneline: {click: function(e) {
+                        mydata.reset().reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
+    				        var data = data['eventData'];
+    		        	});
+                        //alert(e.data.mark);
+                }},
+                lineDelete: {click: function(e) {
+                        mydata.reset().reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
+    				        var data = data['reqDelete'];
+    		        	});
+                        //alert(e.data.mark);
+                }},
+                event1: {click: function(e) {
+                        alert('xxxxxxxxx');
+                }}
+            });
         });
         
         $('#ttt').on('mouseover', function(e) {
