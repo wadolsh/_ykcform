@@ -77,12 +77,12 @@ exports.reqInsert = function(reqData, callback){
     mongodb.MongoClient.connect(config.method.db.url, function(err, db) {
         if(err) throw err;
         // id採番
-        reqData['_id'] = newId();
-        db.collection(reqData.tableName).insert(reqData, {w:1}, function (err, docs) {
+        reqData.data['_id'] = newId();
+        db.collection(reqData.tableName).insert(reqData.data, {w:1}, function (err, docs) {
             if(err) throw err;
             console.log(docs);
             var resData = {};
-            resData[reqData.key] = docs;
+            resData[reqData.key] = docs[0];
             callback(resData);
         });
     });
@@ -91,15 +91,53 @@ exports.reqInsert = function(reqData, callback){
 exports.reqUpdate = function(reqData, callback){
     mongodb.MongoClient.connect(config.method.db.url, function(err, db) {
         if(err) throw err;
-        // id採番
-        delete reqData._id;
-        db.collection(reqData.tableName).update({_id : reqData.id}, {$set : reqData}, function (err, docs) {
+        var id = reqData.data._id;
+        delete reqData.data._id;
+        db.collection(reqData.tableName).update({_id : id}, {$set : reqData.data}, function (err, docs) {
             if(err) throw err;
             console.log(docs);
             var resData = {};
-            resData[reqData.key] = docs;
+            
+            if (docs == 0) {
+                callback(resData);
+            }
+            
+            resData[reqData.key] = reqData.data;
             callback(resData);
         });
+    });
+};
+
+exports.reqSave = function(reqData, callback){
+    mongodb.MongoClient.connect(config.method.db.url, function(err, db) {
+        if(err) throw err;
+        
+        if(reqData.data._id) {
+            //update
+            var id = reqData.data._id;
+            delete reqData.data._id;
+            db.collection(reqData.tableName).update({_id : id}, {$set : reqData.data}, function (err, docs) {
+                if(err) throw err;
+                console.log(docs);
+                var resData = {};
+                
+                if (docs == 0) {
+                    callback(resData);
+                }
+                
+                resData[reqData.key] = reqData.data;
+                callback(resData);
+            });
+        } else {
+            reqData.data['_id'] = newId();
+            db.collection(reqData.tableName).insert(reqData.data, {w:1}, function (err, docs) {
+                if(err) throw err;
+                console.log(docs);
+                var resData = {};
+                resData[reqData.key] = docs[0];
+                callback(resData);
+            });
+        }
     });
 };
 

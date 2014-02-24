@@ -8,12 +8,17 @@
 <title>タイトル</title>
 </head>
 <body>
-    <div id="test" class="tmpl">
+    <div id="edit" class="tmpl">
+        <input type="hidden" name="_id" value="#=data._id#"/>
+        <input type="text" name="text" value="#=data.text#"/>
+        <input type="submit" value="修正" data-event="#:model.update#"/>
+        <input type="submit" value="新規追加" data-event="#:model.insert#"/>
+    </div>
+    <div id="list" class="tmpl">
         <ul>
-            #$.each(data.list, function(ind, obj) {#
+            #$.each(data.listData, function(ind, obj) {#
                 <li data-ind="#=ind#" data-id="#=obj._id#" data-event="#:data.oneline#">#=obj.text# <span data-event="#:data.lineDelete#"> delete </span></li>
             #});#
-            <li id="ttt" data-event="#:data.event1#">aaaaaaaaaaaa</li>
         </ul>
     </div>
     
@@ -22,42 +27,63 @@
     
     <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
     <script src="js/underscore.js"></script>
-    <script src="js/bridge.json.js"></script>
+    <script src="js/bridge.core.js"></script>
     <script type="text/javascript">
         var mydata = new Bridge.Connector({tableName : "mydata"});
         
-        mydata.reset().reqInsert('reqInsert', {text : new Date().toString()}).request(function(data, textStatus, jqXHR) {
-            var data = data['reqInsert'];
-        });
-
-        
-        mydata.reset().reqList('reqList', {}).request(function(data, textStatus, jqXHR) {
-            
-            var html = Bridge.tmplTool.render('test', { 
+        var model = {
                 a:10,
-                list : data['reqList'],
+                listData : {},
                 oneline: {click: function(e) {
-                        mydata.reset().reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
+                        e.stopPropagation();
+                        mydata.reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
     				        var data = data['eventData'];
+    				        Bridge.tmplTool.render('edit', data);
     		        	});
                         //alert(e.data.mark);
                 }},
                 lineDelete: {click: function(e) {
-                        mydata.reset().reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
+                        e.stopPropagation();
+                        mydata.reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
     				        var data = data['reqDelete'];
+    				        $(e.target).parent().remove();
     		        	});
                         //alert(e.data.mark);
                 }},
-                event1: {click: function(e) {
-                        alert('xxxxxxxxx');
-                }}
-            });
-        });
-        
-        $('#ttt').on('mouseover', function(e) {
-            e.target.style.color = 'yellow';
-        });
+                			submit: {click: function(e) {
+			    var template = $(e.target).parent('.tmpl');
+			    var obj = Bridge.tmplTool.editor(template);
+	            mydata.reqSave('reqSave', obj.data).request(function(data) {
+                    var data = data['reqSave'];
+                    model.listReset();
+                });
+	        }},
+			insert: {click: function(e) {
+			    var template = $(e.target).parent('.tmpl');
+			    var obj = Bridge.tmplTool.editor(template);
+			    delete obj.data._id;
+	            mydata.reqInsert('reqInsert', obj.data).request(function(data) {
+                    model.listReset();
+                });
+	        }},
+			update: {click: function(e) {
+			    var template = $(e.target).parent('.tmpl');
+			    var obj = Bridge.tmplTool.editor(template);
+	            mydata.reqUpdate('reqInsert', obj.data._id, obj.data).request(function(data) {
+                    model.listReset();
+                });
+	        }},
+	        
+	        listReset: function() {
+                mydata.reset().reqList('reqList', {}).request(function(data, textStatus, jqXHR) {
+                    model.listData = data['reqList'];
+                    Bridge.tmplTool.render('list', model);
+                });
+            }
+        };
 
+        Bridge.tmplTool.render('edit', {});
+        model.listReset();
     </script>
 </body>
 </html>
