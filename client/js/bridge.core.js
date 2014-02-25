@@ -177,7 +177,7 @@
         editor: function($html) {
             var inputList = [];
             var data = {};
-            $html.find('input').each(function(ind, input) {
+            $html.find('input[name]').each(function(ind, input) {
                 inputList.push({
                     target: input,
                     name: input.name,
@@ -191,6 +191,12 @@
                 inputList: inputList,
                 data: data
             };
+        },
+        
+        clearAll : function() {
+            for (var key in this.cache) {
+                this.cache[key]({});
+            }
         }
     }.init($('.tmpl'));
 	
@@ -374,7 +380,7 @@
 	/** サーバーとの通信を担当 */
 	var Connector = Bridge.Connector = function(config) {
 		this.config = config || {};
-		this.tableName = config.tableName || Bridge.tableName;
+		this.dataName = config.dataName || Bridge.dataName;
 		this.url = config.url || Bridge.url ||"/bridge";
 		this.idName = config.idName || Bridge.idName || "id";
 		this.baseParm = config.baseParm;
@@ -392,7 +398,7 @@
 		/** 既存作業を初期化 */
 		reset : function() {
 			this.queueData.length = 0;
-			this.tableName = this.config.tableName || Bridge.tableName;
+			this.dataName = this.config.dataName || Bridge.dataName;
 			return this;
 		},
 		
@@ -402,12 +408,12 @@
 			this.reset();
 		},
 
-		tableName :function(tableName) {
-			this.tableName = tableName;
+		dataName :function(dataName) {
+			this.dataName = dataName;
 		},
 		
 		combine : function (data) {
-			this.queueData.push(JSON.stringify(extend(data, {"tableName" : this.tableName}, this.baseParm)));
+			this.queueData.push(JSON.stringify(extend(data, {"dataName" : this.dataName}, this.baseParm)));
 		},
 		
 		/** メタ情報要求 */
@@ -430,37 +436,36 @@
 		},
 		reqList : function (key, query) {
 			query = query || {};
-			this.combine(extend({
+			this.combine({
 				"key" : key,
 				"method" : "reqList",
 				"parm" : query,
-			}));
+			});
 			return this;
 		},
 		reqMovePage : function (key, query) {
 			query = query || {};
-			this.combine(extend({
+			this.combine({
 				"key" : key,
 				"method" : "reqMovePage",
 				"parm" : query,
-			}));
+			});
 			return this;
 		},
 		reqInsert : function (key, data) {
-			this.combine(extend({
+			this.combine({
 				"key" : key,
 				"method" : "reqInsert",
 				"data" : data
-			}));
+			});
 			return this;
 		},
 		reqUpdate : function (key, id, data) {
-			this.combine(extend({
+			this.combine({
 				"key" : key,
 				"method" : "reqUpdate",
 				"data" : this.addId(data, id)
-				
-			}));
+			});
 			return this;
 		},
 		reqSave : function (key, data) {
@@ -479,10 +484,11 @@
 			return this;
 		},
 		reqExecMethod : function (key, method, data) {
-			this.combine(extend(data, {
+			this.combine({
 				"key" : key,
-				"method" : method
-			}));
+				"method" : method,
+				"data" : data
+			});
 			return this;
 		},
 	});

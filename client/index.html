@@ -8,16 +8,28 @@
 <title>タイトル</title>
 </head>
 <body>
+    
+    <div id="login" class="tmpl">
+        <input type="text" name="login_id" value=""/>
+        <input type="password" name="password" value=""/>
+        <input type="submit" value="Sign In" data-event="#:model.login#"/>
+    </div>
+    
+    
+    
     <div id="edit" class="tmpl">
         <input type="hidden" name="_id" value="#=data._id#"/>
         <input type="text" name="text" value="#=data.text#"/>
         <input type="submit" value="修正" data-event="#:model.update#"/>
         <input type="submit" value="新規追加" data-event="#:model.insert#"/>
     </div>
+
+    
+    
     <div id="list" class="tmpl">
         <ul>
-            #$.each(data.listData, function(ind, obj) {#
-                <li data-ind="#=ind#" data-id="#=obj._id#" data-event="#:data.oneline#">#=obj.text# <span data-event="#:data.lineDelete#"> delete </span></li>
+            #$.each(data || {} , function(ind, obj) {#
+                <li data-ind="#=ind#" data-id="#=obj._id#" data-event="#:model.oneline#">#=obj.text# <span data-event="#:model.lineDelete#"> delete </span></li>
             #});#
         </ul>
     </div>
@@ -29,11 +41,11 @@
     <script src="js/underscore.js"></script>
     <script src="js/bridge.core.js"></script>
     <script type="text/javascript">
-        var mydata = new Bridge.Connector({tableName : "mydata"});
+        var mydata = new Bridge.Connector({dataName : "mydata"});
+        
+        var listData = {};
         
         var model = {
-                a:10,
-                listData : {},
                 oneline: {click: function(e) {
                         e.stopPropagation();
                         mydata.reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
@@ -73,16 +85,22 @@
                     model.listReset();
                 });
 	        }},
-	        
+	        login: {click: function(e) {
+			    var template = $(e.target).parent('.tmpl');
+			    var obj = Bridge.tmplTool.editor(template);
+	            mydata.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
+                    console.log(data['reqExecLogin']);
+                });
+	        }},
 	        listReset: function() {
                 mydata.reset().reqList('reqList', {}).request(function(data, textStatus, jqXHR) {
-                    model.listData = data['reqList'];
-                    Bridge.tmplTool.render('list', model);
+                    listData = data['reqList'];
+                    Bridge.tmplTool.render('list', listData);
                 });
             }
         };
 
-        Bridge.tmplTool.render('edit', {});
+        Bridge.tmplTool.clearAll();
         model.listReset();
     </script>
 </body>

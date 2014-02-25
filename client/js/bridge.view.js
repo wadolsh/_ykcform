@@ -220,25 +220,25 @@
 			var baseFieldMap = this.fieldMap;
 			
 			if (this.isRequestMetaData) {
-				this.fieldMap = extendObj(this.findFieldMap(config.fieldMapKey || config.tableName || Bridge.tableName || this.connector.tableName), baseFieldMap, config.fieldMap);
+				this.fieldMap = extendObj(this.findFieldMap(config.fieldMapKey || config.dataName || Bridge.dataName || this.connector.dataName), baseFieldMap, config.fieldMap);
 			} else {
 				this.fieldMap = extendObj(baseFieldMap, config.fieldMap);
 			}
 		},
 		
-		findFieldMap : function(tableName, fields) {
+		findFieldMap : function(dataName, fields) {
 			var view = this;
-			if (!tableName) {
+			if (!dataName) {
 				log("テーブル名情報がありません");
 				return;
 			}
 			
 			var fieldMap = null;
-			if (!Bridge.fieldMapCache[tableName]) {
-				var key = this.nameKey + tableName;
+			if (!Bridge.fieldMapCache[dataName]) {
+				var key = this.nameKey + dataName;
 				this.connector.reset().reqMetaData(key).request(function(data) {
 					// fieldMap = _.clone(data[key]);
-					fieldMap = Bridge.fieldMapCache[tableName] = data[key];
+					fieldMap = Bridge.fieldMapCache[dataName] = data[key];
 					Bridge.dataTypeConvert(fieldMap, view.dataTypeMap);
 
 					var field = null;
@@ -254,7 +254,7 @@
 				
 
 			} else {
-				fieldMap = _.clone(Bridge.fieldMapCache[tableName]);
+				fieldMap = _.clone(Bridge.fieldMapCache[dataName]);
 			}
 			
 
@@ -672,7 +672,7 @@
 	var GridView = Bridge.GridView = function(config) {
 		this.pagination = config.Pagination || false;
 		this.nameKey = config.nameKey || this.nameKey || "GridView";
-		this.tableName = config.tableName || this.tableName;
+		this.dataName = config.dataName || this.dataName;
 		
 		this.connector = config.connector || this.connector || Bridge.connector;
 		
@@ -702,7 +702,7 @@
 		
 		addNewLine : function(data) {
 			var view = this;
-			var lineViewObj = new this.lineView({$area : this.$tbody, connector : this.connector, tableName : this.tableName}).render();
+			var lineViewObj = new this.lineView({$area : this.$tbody, connector : this.connector, dataName : this.dataName}).render();
 			this.lineObjList.push(lineViewObj);
 			var length = this.lineObjList.length;
 			
@@ -1000,7 +1000,7 @@
 		},
 		
 		moveLogin : function() {
-			this.fieldMap = this.findFieldMap(this.connector.tableName);
+			this.fieldMap = this.findFieldMap(this.connector.dataName);
 			this.render();
 			this.$registButton.detach();
 			this.$moveLoginButton.detach();

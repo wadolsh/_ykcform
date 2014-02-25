@@ -1,12 +1,84 @@
-var mongodb = require('mongodb');
-var ObjectID = mongodb.ObjectID;
+mongodb = require('mongodb');
+ObjectID = mongodb.ObjectID;
 //https://github.com/mongodb/node-mongodb-native
 //http://mongodb.github.io/node-mongodb-native/api-generated/collection.html
+
+var customMethod = {};
+for(var key in bridge_config) {
+    if (key == "method") {
+        continue;
+    }
+    console.log("method module load = " + bridge_config[key].file);
+    customMethod[key] = require("./" + bridge_config[key].file);
+}
+
+/**
+ * 機能を実行
+ */
+exports.excuteMethod = function(reqData, req, res) {
+
+    try {
+        
+        var configKey = null;
+        var methodObj = null;
+        if (exports[reqData.method]) {
+            configKey = "method";
+            methodObj = exports;
+        } else {
+            var selected = null;
+            for (var key in customMethod) {
+                selected = customMethod[key];
+                if (selected[reqData.method]) {
+                    configKey = key;
+                    methodObj = selected;
+                }
+            }
+        }
+        
+        exports.beforeFilter(configKey, reqData, req, res);
+        methodObj[reqData.method](reqData, function(result) {
+            exports.afterFilter(configKey, reqData, result, req, res);
+            res.json(result);
+        }, req, res);
+
+    } catch (e) {
+        console.log(e);
+        res.json({error : "エラー"});
+    } finally {
+        
+    }
+};
 
 var newId = function() {
     // Create a new ObjectID
     return new ObjectID().toHexString();
 };
+
+exports.beforeFilter = function(configKey, reqData, req, res) {
+    console.log("beforeFilter");
+    
+    var filters = bridge_config[configKey].filter;
+    if (filters) {
+        for(var ind in filters) {
+            filters[ind](reqData, req, res);
+        }
+    }
+
+    //throw new Error('例外');
+}
+
+exports.afterFilter = function(configKey, reqData, result, req, res) {
+    console.log("afterFilter");
+    
+    var filters = bridge_config[configKey].filter;
+    if (filters) {
+        for(var ind in filters) {
+            filters[ind](reqData, result, req, res);
+        }
+    }
+}
+
+
 
 /*
 var Db = require('mongodb').Db,
@@ -23,32 +95,15 @@ var Db = require('mongodb').Db,
 */
 
 
-exports.login = function(reqData, callback, req){
-    mongodb.MongoClient.connect(config.method.db.url, function(err, db) {
-        if(err) throw err;
-        db.collection(reqData.tableName).findOne({_id : reqData.id}, function (err, doc) {
-            if(err) throw err;
-            
-            req.session.user = {
-                user_id: doc._id,
-                name: doc.name
-            };
-            
-            var resData = {};
-            resData[reqData.key] = doc;
-            callback(resData);
-        });
-    });
-};
 
 
 /**
  * 1件取得
  */
 exports.reqData = function(reqData, callback){
-    mongodb.MongoClient.connect(config.method.db.url, function(err, db) {
+    mongodb.MongoClient.connect(bridge_config.method.db.url, function(err, db) {
         if(err) throw err;
-        db.collection(reqData.tableName).findOne({_id : reqData.id}, function (err, docs) {
+        db.collection(reqData.dataName).findOne({_id : reqData.id}, function (err, docs) {
             if(err) throw err;
             var resData = {};
             resData[reqData.key] = docs;
@@ -61,9 +116,9 @@ exports.reqData = function(reqData, callback){
  * リスト取得
  */
 exports.reqList = function(reqData, callback){
-    mongodb.MongoClient.connect(config.method.db.url, function(err, db) {
+    mongodb.MongoClient.connect(bridge_config.method.db.url, function(err, db) {
         if(err) throw err;
-        db.collection(reqData.tableName).find(reqData.parm).toArray(function (err, docs) {
+        db.collection(reqData.dataName).find(reqData.parm).toArray(function (err, docs) {
             if(err) throw err;
             console.log(docs);
             var resData = {};
@@ -74,11 +129,11 @@ exports.reqList = function(reqData, callback){
 };
 
 exports.reqInsert = function(reqData, callback){
-    mongodb.MongoClient.connect(config.method.db.url, function(err, db) {
+    mongodb.MongoClient.connect(bridge_config.method.db.url, function(err, db) {
         if(err) throw err;
         // id採番
         reqData.data['_id'] = newId();
-        db.collection(reqData.tableName).insert(reqData.data, {w:1}, function (err, docs) {
+        db.collection(reqData.dataName).insert(reqData.data, {w:1}, function (err, docs) {
             if(err) throw err;
             console.log(docs);
             var resData = {};
@@ -89,11 +144,11 @@ exports.reqInsert = function(reqData, callback){
 };
 
 exports.reqUpdate = function(reqData, callback){
-    mongodb.MongoClient.connect(config.method.db.url, function(err, db) {
+    mongodb.MongoClient.connect(bridge_config.method.db.url, function(err, db) {
         if(err) throw err;
         var id = reqData.data._id;
         delete reqData.data._id;
-        db.collection(reqData.tableName).update({_id : id}, {$set : reqData.data}, function (err, docs) {
+        db.collection(reqData.dataName).update({_id : id}, {$set : reqData.data}, function (err, docs) {
             if(err) throw err;
             console.log(docs);
             var resData = {};
@@ -109,14 +164,14 @@ exports.reqUpdate = function(reqData, callback){
 };
 
 exports.reqSave = function(reqData, callback){
-    mongodb.MongoClient.connect(config.method.db.url, function(err, db) {
+    mongodb.MongoClient.connect(bridge_config.method.db.url, function(err, db) {
         if(err) throw err;
         
         if(reqData.data._id) {
             //update
             var id = reqData.data._id;
             delete reqData.data._id;
-            db.collection(reqData.tableName).update({_id : id}, {$set : reqData.data}, function (err, docs) {
+            db.collection(reqData.dataName).update({_id : id}, {$set : reqData.data}, function (err, docs) {
                 if(err) throw err;
                 console.log(docs);
                 var resData = {};
@@ -130,7 +185,7 @@ exports.reqSave = function(reqData, callback){
             });
         } else {
             reqData.data['_id'] = newId();
-            db.collection(reqData.tableName).insert(reqData.data, {w:1}, function (err, docs) {
+            db.collection(reqData.dataName).insert(reqData.data, {w:1}, function (err, docs) {
                 if(err) throw err;
                 console.log(docs);
                 var resData = {};
@@ -143,9 +198,9 @@ exports.reqSave = function(reqData, callback){
 
 
 exports.reqDelete = function(reqData, callback){
-    mongodb.MongoClient.connect(config.method.db.url, function(err, db) {
+    mongodb.MongoClient.connect(bridge_config.method.db.url, function(err, db) {
         if(err) throw err;
-        db.collection(reqData.tableName).remove({_id : reqData.id}, {w:1}, function (err, docs) {
+        db.collection(reqData.dataName).remove({_id : reqData.id}, {w:1}, function (err, docs) {
             if(err) throw err;
             console.log(docs);
             var resData = {};
