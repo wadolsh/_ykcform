@@ -193,9 +193,10 @@
             };
         },
         
-        clearAll : function() {
+        resetAll : function(initData) {
+            initData = initData || {};
             for (var key in this.cache) {
-                this.cache[key]({});
+                this.cache[key](initData[key] ? initData[key] : {});
             }
         }
     }.init($('.tmpl'));
@@ -384,7 +385,10 @@
 		this.url = config.url || Bridge.url ||"/bridge";
 		this.idName = config.idName || Bridge.idName || "id";
 		this.baseParm = config.baseParm;
-
+        
+        this.beforeFunc = config.beforeFunc;
+        this.afterFunc = config.afterFunc;
+        
 		this.queueData = [];
 	};
 	
@@ -403,7 +407,16 @@
 		},
 		
 		request : function(callBack) {
-			$.post(this.url, {req : this.queueData}, callBack, "json");
+            var conn = this;
+			$.post(this.url, {req : this.queueData}, function (data, textStatus, jqXHR) {
+                if (conn.beforeFunc && !conn.beforeFunc(data, textStatus, jqXHR)) {
+                    return false;
+                }
+                callBack(data, textStatus, jqXHR);
+                if (conn.afterFunc) {
+                    conn.afterFunc(data, textStatus, jqXHR);
+                }
+			}, "json");
 			
 			this.reset();
 		},

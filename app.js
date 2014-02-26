@@ -23,20 +23,21 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 })
 
+
+
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
     var addr = server.address();
     console.log("server listening at", addr.address + ":" + addr.port);
 });
 
-bridge_config = require('./server/config');
-var method = require('./server/' + bridge_config.method.file);
+
+
+
+
+bridge_config = require('./server/bridge.config');
+var executer = require('./bridge');
 
 app.post('/bridge', function(req, res){
-    console.log(req.body.req[0]);
-    var reqData = JSON.parse(req.body.req[0]);
-    method.excuteMethod(reqData, req, res)
+    executer.process(req, res);
 });
-
-
-
 
