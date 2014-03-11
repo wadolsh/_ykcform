@@ -14,6 +14,10 @@ exports.addLastUpdate = function(reqData, req) {
         if (req.session.user) {
             reqData.data.last_update_user = req.session.user._id;
         }
-        reqData.data.last_update_date = new Date();
+        reqData.data.last_update_date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+
+    } else if (method.indexOf('reqData') > -1 || method.indexOf('reqList') > -1) {
+        console.log('last_update_user insert !');
+        reqData.parm.last_update_user = req.session.user._id;
     }
 }

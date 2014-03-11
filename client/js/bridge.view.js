@@ -164,12 +164,7 @@
 			return val;
 		},
 		
-		validate : function() {
-			
-			if (this.isView) {
-				// viewの場合
-				return this.type.validate();
-			}
+		validate: function() {
 			
 			if (!this.validateTool || !this.validateRule) {
 				return true;

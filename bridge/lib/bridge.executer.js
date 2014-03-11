@@ -12,7 +12,7 @@ for(var key in bridge_config) {
  * 入口
  */
 exports.process = function(req, res) {
-    //console.log(req.body.req);
+    console.log(req.body.req);
     var reqDataArray = req.body.req;
     var resData = {};
 

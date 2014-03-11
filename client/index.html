@@ -13,14 +13,13 @@
         <div>#=data.msg#</div>
     </div>
     
-    <div id="login"></div>
+    <div id="login" class="tmpl"></div>
 
-    <div id="edit"></div>
+    <div id="edit" class="tmpl"></div>
 
-    <div id="list"></div>
+    <div id="list" class="tmpl"></div>
 
-    <div id="result"></div>
-    
+    <div id="result" class="tmpl"></div>
     
     <script src="js/jquery-2.1.0.min.js"></script>
     <script src="js/underscore.js"></script>
@@ -28,17 +27,17 @@
     <script type="text/javascript">
     
         $.ajaxSetup({
-    		async : false,
-    		complete : function(jqXHR, textStatus) {
-    		},
-    		error : function(jqXHR, textStatus, errorThrown ) {
-    			if (jqXHR.status == 404) {
-    				Bridge.msg("サーバーとの通信時にエラーが発生しました。");
-    			}
-    			log(textStatus + " : " + errorThrown);
-    		}
-    	});
-    	
+            async : false,
+            complete : function(jqXHR, textStatus) {
+            },
+            error : function(jqXHR, textStatus, errorThrown ) {
+                if (jqXHR.status == 404) {
+                    Bridge.msg("サーバーとの通信時にエラーが発生しました。");
+                }
+                log(textStatus + " : " + errorThrown);
+            }
+        });
+        
         var mydata = new Bridge.Connector({dataName : "mydata",
                     url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
         
@@ -48,61 +47,66 @@
                 oneline: {click: function(e) {
                         e.stopPropagation();
                         mydata.reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
-    				        var data = data['eventData'];
-    				        Bridge.tmplTool.render('edit', data);
-    		        	});
+                            var data = data['eventData'];
+                            Bridge.tmplTool.render('edit', data);
+                        });
                         //alert(e.data.mark);
                 }},
                 lineDelete: {click: function(e) {
                         e.stopPropagation();
                         mydata.reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
-    				        var data = data['reqDelete'];
-    				        $(e.target).parent().remove();
-    		        	});
+                            var data = data['reqDelete'];
+                            $(e.target).parent().remove();
+                        });
                         //alert(e.data.mark);
                 }},
-                			submit: {click: function(e) {
-			    var template = $(e.target).parent('.tmpl');
-			    var obj = Bridge.tmplTool.editor(template);
-	            mydata.reqSave('reqSave', obj.data).request(function(data) {
+                            submit: {click: function(e) {
+                var template = $(e.target).parent('.tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                mydata.reqSave('reqSave', obj.data).request(function(data) {
                     var data = data['reqSave'];
                     model.listAreaReset();
                 });
-	        }},
-			insert: {click: function(e) {
-			    var template = $(e.target).parent('.tmpl');
-			    var obj = Bridge.tmplTool.editor(template);
-			    delete obj.data._id;
-	            mydata.reqInsert('reqInsert', obj.data).request(function(data) {
+            }},
+            insert: {click: function(e) {
+                var template = $(e.target).parent('.tmpl');
+                var obj = Bridge.tmplTool.editor(template, {
+                    text : {validateRule : {isNullAble : false}}
+                });
+                if (obj.validate()) {
+                    delete obj.data._id;
+                    mydata.reqInsert('reqInsert', obj.data).request(function(data) {
+                        model.listAreaReset();
+                    });
+                }
+
+            }},
+            update: {click: function(e) {
+                var template = $(e.target).parent('.tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                mydata.reqUpdate('reqInsert', obj.data._id, obj.data).request(function(data) {
                     model.listAreaReset();
                 });
-	        }},
-			update: {click: function(e) {
-			    var template = $(e.target).parent('.tmpl');
-			    var obj = Bridge.tmplTool.editor(template);
-	            mydata.reqUpdate('reqInsert', obj.data._id, obj.data).request(function(data) {
-                    model.listAreaReset();
-                });
-	        }},
-	        login: {click: function(e) {
-			    var template = $(e.target).parent('.tmpl');
-			    var obj = Bridge.tmplTool.editor(template);
-	            mydata.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
+            }},
+            login: {click: function(e) {
+                var template = $(e.target).parent('.tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                mydata.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
                     console.log(data['reqExecLogin']);
                     model.listAreaReset();
                     model.loginAreaReset();
                 });
-	        }},
-	        logout: {click: function(e) {
-			    var template = $(e.target).parent('.tmpl');
-			    var obj = Bridge.tmplTool.editor(template);
-	            mydata.reqExecMethod('reqExecLogout', 'logout', obj.data).request(function(data) {
+            }},
+            logout: {click: function(e) {
+                var template = $(e.target).parent('.tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                mydata.reqExecMethod('reqExecLogout', 'logout', obj.data).request(function(data) {
                     console.log(data['reqExecLogout']);
                     model.listAreaReset();
                     model.loginAreaReset();
                 });
-	        }},
-	        
+            }},
+            
             loginAreaReset: function() {
                 mydata.reqExecMethod('loginChecker', 'loginChecker').request(function(data) {
                     Bridge.tmplTool.render('login', data.loginChecker);
@@ -124,9 +128,9 @@
             }
         };
 
-    	Bridge.tmplTool.addTmpl('./tmpl.html');
+        Bridge.tmplTool.addTmpl('./tmpl.html');
 
-
+//model.listAreaReset();
         Bridge.tmplTool.resetAll();
         model.loginAreaReset();
     </script>
