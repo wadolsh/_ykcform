@@ -46,11 +46,24 @@
     <script src="js/underscore.js"></script>
     <script src="js/bridge.core.js"></script>
     <script type="text/javascript">
-        var mydata = new Bridge.Connector({dataName : "mydata", url: "https://bridge-c9-choish.c9.io/bridge"});
+    
+        $.ajaxSetup({
+    		async : false,
+    		complete : function(jqXHR, textStatus) {
+    		},
+    		error : function(jqXHR, textStatus, errorThrown ) {
+    			if (jqXHR.status == 404) {
+    				Bridge.msg("サーバーとの通信時にエラーが発生しました。");
+    			}
+    			log(textStatus + " : " + errorThrown);
+    		}
+    	});
+    
+    
+        var mydata = new Bridge.Connector({dataName : "mydata",
+                    url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
         
         var listData = {};
-        
-        
         
         var model = {
                 oneline: {click: function(e) {

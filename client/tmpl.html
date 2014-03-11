@@ -1,15 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
-<head>
-<meta charset="utf-8">
-<title>タイトル</title>
-</head>
-<body>
-    
-    <script src="//code.jquery.com/jquery-2.1.0.min.js"></script>
-    <script type="text/javascript">
-        
-        
-    </script>
-</body>
-</html>
+
+<div id="list" class="tmpl">
+    <ul>
+        #$.each(data || {} , function(ind, obj) {#
+            <li data-ind="#=ind#" data-id="#=obj._id#" data-event="#:model.oneline#">#=obj.text# <span data-event="#:model.lineDelete#"> delete </span></li>
+        #});#
+    </ul>
+</div>

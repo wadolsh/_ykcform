@@ -3,18 +3,6 @@
  */
 (function(){
 	
-	$.ajaxSetup({
-		async : false,
-		complete : function(jqXHR, textStatus) {
-		},
-		error : function(jqXHR, textStatus, errorThrown ) {
-			if (jqXHR.status == 404) {
-				Bridge.msg("サーバーとの通信時にエラーが発生しました。");
-			}
-			log(textStatus + " : " + errorThrown);
-		}
-	});
-	
 	var root = this;
 	
 	var Bridge = root.Bridge = {};
@@ -150,14 +138,6 @@
         init: function($tmplate) {
             this.$tmplate = $tmplate;
             var tmpl = this;
-            /*
-            _.templateSettings = {
-                evaluate    : /##([\s\S]+?)##/g,
-                interpolate : /##=([\s\S]+?)##/g,
-                escape      : /##-([\s\S]+?)##/g,
-                variable: 'data'
-            };
-            */
             
             this.$tmplate.each(function(ind, ele) {
                 tmpl.cache[ele.id] = template($('#' + ele.id), ele.innerHTML);
@@ -199,10 +179,10 @@
                 this.cache[key](initData[key] ? initData[key] : {});
             }
         }
+        
+        
     }.init($('.tmpl'));
-	
-	
-	
+
 	// underscore.jsがある場合 underscoreを使用するようにする
 	if (root._) {
 	    

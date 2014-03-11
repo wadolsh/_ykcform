@@ -2,7 +2,8 @@
 
 var customMethod = {};
 for(var key in bridge_config) {
-    console.log("method module load = " + bridge_config[key].module.filename);
+    //console.log("method module load = " + bridge_config[key].module.filename);
+    
     var moduel = customMethod[key] = bridge_config[key].module;
     moduel.methodConfig = bridge_config[key];
 }
@@ -12,24 +13,21 @@ for(var key in bridge_config) {
  */
 exports.process = function(req, res) {
     
-    console.log(req.body.req);
+    //console.log(req.body.req);
     
-    var request = req.body.req;
-    var reqData = null;
-    var result = {};
-    for (var ind in request) {
-        reqData = JSON.parse(request[ind]);
-        result[reqData.key] = this.excuteMethod(reqData, req, res);
-    }
-    //res.json(result);
+    var reqDataArray = req.body.req;
+    var resData = {};
+
+    this.excuteMethod(0, reqDataArray, resData, req, res);
+
 }
 
 
 /**
  * 機能を実行
  */
-exports.excuteMethod = function(reqData, req, res) {
-    var resData = {};
+exports.excuteMethod = function(ind, reqDataArray, resData, req, res) {
+    var reqData = JSON.parse(reqDataArray[ind]);
     try {
         var configKey = null;
         var methodObj = null;
@@ -47,8 +45,13 @@ exports.excuteMethod = function(reqData, req, res) {
         methodObj[reqData.method](reqData, function(result) {
             afterFilter(configKey, reqData, result, req, res);
             //return result;
-            resData[reqData.method] = result;
-            res.json(resData);
+            resData[reqData.key] = result;
+
+            if (reqDataArray[++ind]) {
+                exports.excuteMethod(ind, reqDataArray, resData, req, res);
+            } else {
+                res.json(resData);
+            }
         }, req, res);
 
     } catch (e) {
