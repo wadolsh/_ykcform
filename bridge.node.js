@@ -23,21 +23,19 @@ app.configure('development', function(){
   app.use(express.errorHandler());
 })
 
-
-
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
     var addr = server.address();
     console.log("server listening at", addr.address + ":" + addr.port);
 });
-
-
-
-
 
 bridge_config = require('./server/bridge.config');
 var executer = require('./bridge');
 
 app.post('/bridge', function(req, res){
     executer.process(req, res);
+});
+
+app.all('/*', function(req, res){
+    res.json({msg: "処理不可"});
 });
 

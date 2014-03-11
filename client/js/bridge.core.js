@@ -133,17 +133,30 @@
 	
 	
 	var tmplTool = {
-        $tmplate: null,
         cache: {},
-        init: function($tmplate) {
-            this.$tmplate = $tmplate;
+        addTmpl: function(obj) {
             var tmpl = this;
-            
-            this.$tmplate.each(function(ind, ele) {
-                tmpl.cache[ele.id] = template($('#' + ele.id), ele.innerHTML);
-                ele.innerHTML = '';
-            });
-            
+            if (obj instanceof jQuery) {
+                obj.each(function(ind, ele) {
+                    tmpl.cache[ele.id] = template($('#' + ele.id), ele.innerHTML);
+                    ele.innerHTML = '';
+                });
+            } else {
+                /*
+                $.get(obj, function(html) {
+                        tmpl.addTmpl($(html).find('.tmpl'));
+                    }
+                );
+                */
+                $.ajax({
+                    url: obj,
+                    success: function(html) {
+                        tmpl.addTmpl($(html).find('.tmpl'));
+                    },
+                    dataType: 'html',
+                    async: false
+                });
+            }
             return this;
         },
         
@@ -180,8 +193,7 @@
             }
         }
         
-        
-    }.init($('.tmpl'));
+    }.addTmpl($('.tmpl'));
 
 	// underscore.jsがある場合 underscoreを使用するようにする
 	if (root._) {

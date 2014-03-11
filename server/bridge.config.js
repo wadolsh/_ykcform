@@ -3,6 +3,10 @@ console.log('bridge.config file path = ' + module.filename);
 var commonFilter = require('../bridge/lib/filter.common');
 var loginFilter = require('./filter.login');
 
+exports.commonMethod = {
+    module : require('../bridge/lib/method.common'),
+}
+
 exports.mongodbMethod = {
     module : require('../bridge/lib/method.mongodb'),
     db : {

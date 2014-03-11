@@ -1,10 +1,27 @@
-<!DOCTYPE html>
-<html lang="ja">
+<div>
+    <div id="login" class="tmpl">
+        #if(!data.name) {#
+        <input type="text" name="login_id" value=""/>
+        <input type="password" name="password" value=""/>
+        <input type="submit" value="Sign In" data-event="#:model.login#"/>
+        #} else {#
+        <span>#=data.name#</span>
+        <input type="submit" value="Sign Out" data-event="#:model.logout#"/>
+        #}#
+    </div>
 
-<div id="list" class="tmpl">
-    <ul>
-        #$.each(data || {} , function(ind, obj) {#
-            <li data-ind="#=ind#" data-id="#=obj._id#" data-event="#:model.oneline#">#=obj.text# <span data-event="#:model.lineDelete#"> delete </span></li>
-        #});#
-    </ul>
+    <div id="edit" class="tmpl">
+        <input type="hidden" name="_id" value="#=data._id#"/>
+        <input type="text" name="text" value="#=data.text#"/>
+        <input type="submit" value="修正" data-event="#:model.update#"/>
+        <input type="submit" value="新規追加" data-event="#:model.insert#"/>
+    </div>
+
+    <div id="list" class="tmpl">
+        <ul>
+            #$.each(data || {} , function(ind, obj) {#
+                <li data-ind="#=ind#" data-id="#=obj._id#" data-event="#:model.oneline#">#=obj.text# <span data-event="#:model.lineDelete#"> delete </span></li>
+            #});#
+        </ul>
+    </div>
 </div>

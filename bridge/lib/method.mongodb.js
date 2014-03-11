@@ -1,5 +1,3 @@
-
-
 mongodb = require('mongodb');
 ObjectID = mongodb.ObjectID;
 //https://github.com/mongodb/node-mongodb-native

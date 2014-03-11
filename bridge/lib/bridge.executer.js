@@ -12,14 +12,11 @@ for(var key in bridge_config) {
  * 入口
  */
 exports.process = function(req, res) {
-    
     //console.log(req.body.req);
-    
     var reqDataArray = req.body.req;
     var resData = {};
 
     this.excuteMethod(0, reqDataArray, resData, req, res);
-
 }
 
 
