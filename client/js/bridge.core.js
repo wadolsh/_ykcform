@@ -6,7 +6,6 @@
     var root = this;
     
     var Bridge = root.Bridge = {};
-    Bridge.fieldMapCache = {};
     
     var log = root.log = function(str) {
         console.log(str);
@@ -15,7 +14,29 @@
     var push             = Array.prototype.push,
         slice            = Array.prototype.slice;
     
-    var extend, tmpl, result, clone, isObject, isNumber, isString, isDate, isEmpty, each;
+    var extend, result, clone, isObject, isNumber, isString, isDate, isEmpty, each;
+
+    // underscore.jsがある場合 underscoreを使用するようにする
+    if (root._) {
+        var _ = root._;
+        extend = Bridge.extend = _.extend;
+        // templateSettings = _.templateSettings;
+        //tmpl = Bridge.tmpl = _.template;
+        //tmpl = Bridge.tmpl = template;
+        //tmplTool = Bridge.tmplTool = tmplTool;
+
+        result = Bridge.result = _.result;
+        clone = Bridge.clone = _.clone;
+        isObject = Bridge.isObject = _.isObject;
+        isNumber = Bridge.isNumber = _.isNumber;
+        isString = Bridge.isString = _.isString;
+        isDate = Bridge.isDate = _.isDate;
+        isEmpty = Bridge.isEmpty = _.isEmpty;
+        
+        each = Bridge.each = _.each;
+    }
+
+
 
     // When customizing `templateSettings`, if you don't want to define an
     // interpolation, evaluation or escaping regex, we need one that is
@@ -38,18 +59,18 @@
     
     
     Bridge.templateSettings = {
-            evaluate    : /#([\s\S]+?)#/g,
-            interpolate : /#=([\s\S]+?)#/g,
-            escape      : /#-([\s\S]+?)#/g,
-            func        : /#:([\s\S]+?)#/g,
+            evaluate    : /##([\s\S]+?)##/g,
+            interpolate : /##=([\s\S]+?)##/g,
+            escape      : /##-([\s\S]+?)##/g,
+            func        : /##:([\s\S]+?)##/g,
             variable: 'data'
     };
     
     // JavaScript micro-templating, similar to John Resig's implementation.
     // Underscore templating handles arbitrary delimiters, preserves whitespace,
     // and correctly escapes quotes within interpolated code.
-    var template = function($area, text, data, settings) {
-        var render;
+    var template = Bridge.template = function($area, text, data, settings) {
+        var render = null;
         settings = _.defaults({}, settings, Bridge.templateSettings);
     
         // Combine delimiters into one regular expression via alternation.
@@ -63,8 +84,8 @@
         // Compile the template source, escaping string literals appropriately.
         var index = 0;
         var source = "__p+='";
-        funcArray = {};
-        funcIdCount = 0;
+        window.funcArray = {};
+        window.funcIdCount = 0;
         text.replace(matcher, function(match, escape, interpolate, func, evaluate, offset) {
             source += text.slice(index, offset).replace(escaper, function(match) { return '\\' + escapes[match]; });
 
@@ -132,7 +153,7 @@
     };
     
     
-    var tmplTool = {
+    var tmplTool = Bridge.tmplTool =  {
         cache: {},
         addTmpl: function(obj) {
             var tmpl = this;
@@ -144,16 +165,16 @@
             } else {
                 /*
                 $.get(obj, function(html) {
-                        tmpl.addTmpl($(html).find('.tmpl'));
+                        tmpl.addTmpl($(html).find('.br-tmpl'));
                     }
                 );
                 */
                 $.ajax({
                     url: obj,
                     success: function(html) {
-                        tmpl.addTmpl($(html).find('.tmpl'));
+                        tmpl.addTmpl($(html).find('.br-tmpl'));
                     },
-                    dataType: 'html',
+                    dataType: 'text',
                     async: false
                 });
             }
@@ -164,6 +185,8 @@
             var ele = document.getElementById(id)
             //ele.innerHTML = Bridge.tmpl($('#' + id), tmplTool.cache[id], data);
             var $html = tmplTool.cache[id](data);
+            
+            RouterTool.add(id, data);
             return $html;
         },
         
@@ -187,8 +210,8 @@
                     clearError: inputConfig.clearError || config.clearError || function() {
                         
                     },
-                    renderMessage: inputConfig.renderMessage || config.renderMessage ||  function(str) {
-                        alert(str);
+                    renderMessage: inputConfig.renderMessage || config.renderMessage ||  function(strArray) {
+                        alert(strArray.join('\n'));
                     },
                     validate: inputConfig.validate || config.validate || function() {
                         if (!this.validateTool || !this.validateRule) {
@@ -208,7 +231,7 @@
                         }
                         
                         if (messages.length !== 0) {
-                            this.renderMessage(messages.join('<br/>'));
+                            this.renderMessage(messages);
                             return false;
                         }
                         return true;
@@ -255,28 +278,57 @@
             }
         }
         
-    }.addTmpl($('.tmpl'));
+    }.addTmpl($('.br-tmpl'));
 
-    // underscore.jsがある場合 underscoreを使用するようにする
-    if (root._) {
-        
-        extend = Bridge.extend = _.extend;
-        // templateSettings = _.templateSettings;
-        //tmpl = Bridge.tmpl = _.template;
-        tmpl = Bridge.tmpl = template;
-        tmplTool = Bridge.tmplTool = tmplTool;
 
-        result = Bridge.result = _.result;
-        clone = Bridge.clone = _.clone;
-        isObject = Bridge.isObject = _.isObject;
-        isNumber = Bridge.isNumber = _.isNumber;
-        isString = Bridge.isString = _.isString;
-        isDate = Bridge.isDate = _.isDate;
-        isEmpty = Bridge.isEmpty = _.isEmpty;
-        
-        each = Bridge.each = _.each;
-        
-    }
+    var RouterTool = Bridge.RouterTool = {
+        //history : {},
+        temp: {},
+        init: function() {
+            this.add = function(id, data) {
+                this.temp[id] = data;
+            }
+            var route = this;
+            var history = localStorage.br_history ? JSON.parse(localStorage.br_history) : {};
+            if (!history[location.hash]) {
+                history[location.hash] = {};
+            }
+            //hashchange
+            $(window).on('popstate', function(event) {
+                if (Object.keys(route.temp).length > 0) {
+                    history[location.hash] = route.temp;
+                    localStorage.br_history = JSON.stringify(history);
+                    route.temp = {};
+                } else {
+                    RouterTool.historyBack();
+                }
+            });
+            $(window).trigger('popstate');
+        },
+        add: function(id, data) {
+            
+        },
+        historyBack: function() {
+
+            var history = localStorage.br_history ? JSON.parse(localStorage.br_history) : {};
+            if (!history[location.hash]) {
+                history[location.hash] = {};
+            }
+            $.each(history[location.hash], function(id, data) {
+                tmplTool.render(id, data);
+            });
+        }
+    };
+    
+    var localStorageTool = Bridge.localStorageTool = {
+        push: function(key, data) {
+            localStorage[key] = JSON.stringify(data);
+        },
+        get: function(key) {
+            return JSON.parse(localStorage[key]);
+        }
+    };
+
     
     /**
      * jsonの場合子も拡張する
@@ -303,48 +355,6 @@
     };
 
 
-    var buttonCreater = Bridge.buttonCreate = function(view, label, method) {
-        var $button = view['$' + method + 'Button'] = $('<input type="button" id="' + method + '" value="' + label + '" />')
-                    .click(function () {
-                            view[method].call(view, this);
-                    });
-        return $button;
-    };
-    
-    var createTag = Bridge.createTag = function(obj, metaData) {
-        var $rootTag = $("<div/>");
-        
-        if (metaData.render) {
-            // bridge objectの場合
-            attr.$area = $rootTag;
-            attr.render();
-        } else if (metaData instanceof jQuery) {
-            // jquery objectの場合
-            $rootTag.append(metaData.clone());
-        } else if (typeof metaData == "string") {
-            $rootTag.append(obj.parent[metaData]);
-        } else {
-            var $tempTag = null;
-            var attr = null;
-            
-            for (var tag in metaData) {
-                
-                attr = metaData[tag];
-                $tempTag = $("<" + tag + "/>").appendTo($rootTag);
-
-                for (var name in attr) {
-                    if (name.charAt(0) != '_') {
-                        $tempTag.attr(name, attr[name]);
-                    } else if (name == "_tag") {
-                        $rootTag.append(createTag(attr._tag));
-                    }
-                }
-            }
-        }
-        return $rootTag.children();
-    };
-    
-    
     var fileUpload = Bridge.fileUpload = function(url, fileObj, callBack){
         $.ajax(url, {
             type: 'post',

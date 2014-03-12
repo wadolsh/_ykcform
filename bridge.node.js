@@ -35,7 +35,9 @@ app.post('/bridge', function(req, res){
     executer.process(req, res);
 });
 
+/*
 app.all('/*', function(req, res){
     res.json({msg: "処理不可"});
 });
+*/
 

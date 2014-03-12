@@ -52,7 +52,8 @@ exports.excuteMethod = function(ind, reqDataArray, resData, req, res) {
         }, req, res);
 
     } catch (e) {
-        console.log(e.stack);
+        console.log(e.message);
+        //console.log(e.stack);
         res.json({error : e.message});
         //return {error : e.message};
     } finally {

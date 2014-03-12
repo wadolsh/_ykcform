@@ -67,12 +67,13 @@ exports.reqInsert = function(reqData, callback){
     });
 };
 
-exports.reqUpdate = function(reqData, callback){
+exports.reqUpdate = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
-        var id = reqData.data._id;
+        var query = req.query ? req.query : {};
+        query['_id'] = reqData.data._id;
         delete reqData.data._id;
-        db.collection(reqData.dataName).update({_id : id}, {$set : reqData.data}, function (err, docs) {
+        db.collection(reqData.dataName).update(query, {$set : reqData.data}, function (err, docs) {
             if(err) throw err;
 
             if (docs == 0) {
@@ -84,15 +85,16 @@ exports.reqUpdate = function(reqData, callback){
     });
 };
 
-exports.reqSave = function(reqData, callback){
+exports.reqSave = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
         
         if(reqData.data._id) {
             //update
-            var id = reqData.data._id;
+            var query = req.query ? req.query : {};
+            query['_id'] = reqData.data._id;
             delete reqData.data._id;
-            db.collection(reqData.dataName).update({_id : id}, {$set : reqData.data}, function (err, docs) {
+            db.collection(reqData.dataName).update(query, {$set : reqData.data}, function (err, docs) {
                 if(err) throw err;
 
                 if (docs == 0) {
@@ -112,10 +114,12 @@ exports.reqSave = function(reqData, callback){
 };
 
 
-exports.reqDelete = function(reqData, callback){
+exports.reqDelete = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
-        db.collection(reqData.dataName).remove({_id : reqData.id}, {w:1}, function (err, docs) {
+        var query = req.query ? req.query : {};
+        query['_id'] = reqData.id;
+        db.collection(reqData.dataName).remove(query, {w:1}, function (err, docs) {
             if(err) throw err;
             callback(docs);
         });

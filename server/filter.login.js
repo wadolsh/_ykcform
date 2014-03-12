@@ -15,9 +15,50 @@ exports.addLastUpdate = function(reqData, req) {
             reqData.data.last_update_user = req.session.user._id;
         }
         reqData.data.last_update_date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+    }
+}
 
-    } else if (method.indexOf('reqData') > -1 || method.indexOf('reqList') > -1) {
+var authCheckLogic = {
+    Update : function(authData, reqData, req) {
+        if (authData.save) {
+            var user = req.session.user;
+            if (authData.save == 1 && user) {
+                if (!user.memberType && user.memberType < authData.save) {
+                    req.query = {last_update_user : user.id};
+                }
+                return true;
+            } else if (user.memberType > authData.save) {
+                return true;
+            }
+            return false;
+        }
+        return true;
+    },
+    reqData : function(authData, reqData, req) {
         console.log('last_update_user insert !');
         reqData.parm.last_update_user = req.session.user._id;
     }
+}
+authCheckLogic.Insert = authCheckLogic.Update;
+authCheckLogic.Save = authCheckLogic.Update;
+authCheckLogic.Delete = authCheckLogic.Update;
+authCheckLogic.reqList = authCheckLogic.reqData;
+
+exports.authCheck = function(reqData, result, req, res) {
+    var method = reqData.method;
+    var authData = bridge_config.loginMethod.authCheck[reqData.dataName];
+    if (authData) {
+
+        for (var key in authCheckLogic) {
+            if (method.indexOf(key) > -1) {
+                if(!authCheckLogic[key](authData, reqData, req)) {
+                    throw new Error('接近不可データー');
+                };
+            }
+        }
+        return true;
+    } else {
+        throw new Error('接近不可データー');
+    }
+
 }

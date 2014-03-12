@@ -12,15 +12,15 @@ exports.mongodbMethod = {
     db : {
         url: 'mongodb://ykcform:454545@ds041188.mongolab.com:41188/ykcform',
         user_dataName: 'login_user',
-        allow_dataName: ['mydata'],
     },
-    beforeFilter : [commonFilter.startLogger, loginFilter.loginCheck, loginFilter.addLastUpdate],
-    afterFilter : [commonFilter.endLogger]
+    beforeFilter : [commonFilter.startLogger, loginFilter.loginCheck, loginFilter.authCheck, loginFilter.addLastUpdate],
+    afterFilter : [commonFilter.endLogger],
 }
 
 exports.loginMethod = {
     module : require('./method.login'),
     db : exports.mongodbMethod.db,
     beforeFilter : [commonFilter.startLogger],
-    afterFilter : [commonFilter.endLogger]
+    afterFilter : [commonFilter.endLogger],
+    authCheck: {mydata : {}, ServiceTime: {save : 1, read : 1}},
 }

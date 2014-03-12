@@ -2,6 +2,51 @@
  * choish
  */
 (function(){
+    var root = this;
+    var Bridge = root.Bridge;
+    Bridge.fieldMapCache = {}
+
+    var buttonCreater = Bridge.buttonCreate = function(view, label, method) {
+        var $button = view['$' + method + 'Button'] = $('<input type="button" id="' + method + '" value="' + label + '" />')
+                    .click(function () {
+                            view[method].call(view, this);
+                    });
+        return $button;
+    };
+    
+    var createTag = Bridge.createTag = function(obj, metaData) {
+        var $rootTag = $("<div/>");
+        
+        if (metaData.render) {
+            // bridge objectの場合
+            attr.$area = $rootTag;
+            attr.render();
+        } else if (metaData instanceof jQuery) {
+            // jquery objectの場合
+            $rootTag.append(metaData.clone());
+        } else if (typeof metaData == "string") {
+            $rootTag.append(obj.parent[metaData]);
+        } else {
+            var $tempTag = null;
+            var attr = null;
+            
+            for (var tag in metaData) {
+                
+                attr = metaData[tag];
+                $tempTag = $("<" + tag + "/>").appendTo($rootTag);
+
+                for (var name in attr) {
+                    if (name.charAt(0) != '_') {
+                        $tempTag.attr(name, attr[name]);
+                    } else if (name == "_tag") {
+                        $rootTag.append(createTag(attr._tag));
+                    }
+                }
+            }
+        }
+        return $rootTag.children();
+    };
+
 
 	var Input = Bridge.Input = function(config) {
 		this.config = config || {};

@@ -1,27 +1,31 @@
 <div>
-    <div id="login" class="tmpl">
-        #if(!data.name) {#
+    <div id="login" class="br-tmpl">
+        ##if(!data.name) {##
         <input type="text" name="login_id" value=""/>
         <input type="password" name="password" value=""/>
-        <input type="submit" value="Sign In" data-event="#:model.login#"/>
-        #} else {#
-        <span>#=data.name#</span>
-        <input type="submit" value="Sign Out" data-event="#:model.logout#"/>
-        #}#
+        <input type="submit" value="Sign In" data-event="##:model.login##"/>
+        ##} else {##
+        <span>##=data.name##</span>
+        <input type="submit" value="Sign Out" data-event="##:model.logout##"/>
+        ##}##
     </div>
 
-    <div id="edit" class="tmpl">
-        <input type="hidden" name="_id" value="#=data._id#"/>
-        <input type="text" name="text" value="#=data.text#"/>
-        <input type="submit" value="修正" data-event="#:model.update#"/>
-        <input type="submit" value="新規追加" data-event="#:model.insert#"/>
+    <div id="edit" class="br-tmpl">
+        <input type="hidden" name="_id" value="##=data._id##"/>
+        <input type="text" name="text" value="##=data.text##"/>
+        <input type="submit" value="修正" data-event="##:model.update##"/>
+        <input type="submit" value="新規追加" data-event="##:model.insert##"/>
     </div>
 
-    <div id="list" class="tmpl">
+    <div id="list" class="br-tmpl">
         <ul>
-            #$.each(data || {} , function(ind, obj) {#
-                <li data-ind="#=ind#" data-id="#=obj._id#" data-event="#:model.oneline#">#=obj.text# <span data-event="#:model.lineDelete#"> delete </span></li>
-            #});#
+            ##$.each(data || {} , function(ind, obj) {##
+            <li>
+            <td>##=obj.text##</td>
+                <a href="#edit/##=obj._id##" data-ind="##=ind##" data-id="##=obj._id##" data-event="##:model.oneline##">##=obj.text##</a>
+                <a href="#delete/##=obj._id##" data-event="##:model.lineDelete##"> delete </a>
+            </li>
+            ##});##
         </ul>
     </div>
 </div>
