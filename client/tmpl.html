@@ -1,4 +1,8 @@
 <div>
+    <div id="message" class="br-tmpl">
+        <div>##=data.msg##</div>
+    </div>
+    
     <div id="login" class="br-tmpl">
         ##if(!data.name) {##
         <input type="text" name="login_id" value=""/>
@@ -11,21 +15,51 @@
     </div>
 
     <div id="edit" class="br-tmpl">
-        <input type="hidden" name="_id" value="##=data._id##"/>
-        <input type="text" name="text" value="##=data.text##"/>
-        <input type="submit" value="修正" data-event="##:model.update##"/>
+        <input type="date" name="serviceDate" value="##=data.serviceDate##"/>
+        <input type="time" step="1800" list="timeList" name="serviceTime" value="##=data.serviceTime##"/>
+        <datalist id="timeList">
+            <option value="01:00">
+            <option value="02:00">
+            <option value="03:00">
+            <option value="04:00">
+            <option value="05:00">
+            <option value="06:00">
+            <option value="07:00">
+            <option value="08:00">
+            <option value="09:00">
+            <option value="10:00">
+        </datalist>
+        本：<input type="number" name="calcBooks" value="##=data.calcBooks##"/>
+        雑誌：<input type="number" name="calcMagazines" value="##=data.calcMagazines##"/>
+        
+        <!--<input type="submit" value="修正" data-event="##:model.update##"/>-->
         <input type="submit" value="新規追加" data-event="##:model.insert##"/>
     </div>
 
     <div id="list" class="br-tmpl">
-        <ul>
-            ##$.each(data || {} , function(ind, obj) {##
-            <li>
-            <td>##=obj.text##</td>
-                <a href="#edit/##=obj._id##" data-ind="##=ind##" data-id="##=obj._id##" data-event="##:model.oneline##">##=obj.text##</a>
-                <a href="#delete/##=obj._id##" data-event="##:model.lineDelete##"> delete </a>
-            </li>
-            ##});##
-        </ul>
+        <table>
+            <thead>
+                <tr>
+                    <th>日付</th>
+                    <th>奉仕<br/>時間</th>
+                    <th>本</th>
+                    <th>雑誌</th>
+                    <th></th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                ##$.each(data || {} , function(ind, obj) {##
+                <tr>
+                    <td>##=obj.serviceDate##</td>
+                    <td>##=obj.serviceTime##</td>
+                    <td>##=obj.calcBooks##</td>
+                    <td>##=obj.calcMagazines##</td>
+                    <td><a href="#edit/##=obj._id##" data-ind="##=ind##" data-id="##=obj._id##" data-event="##:model.oneline##">修正</a></td>
+                    <td><a href="#delete/##=obj._id##" data-event="##:model.lineDelete##">削除</a></td>
+                </tr>
+                ##});##
+            </tbody>
+        </table>
     </div>
 </div>
