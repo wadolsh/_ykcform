@@ -2,7 +2,7 @@
   "name": "bridge.node.js",
   "version": "0.0.0",
   "description": "support bridge.js",
-  "main": "bridge.js",
+  "main": "bridge.node.js",
   "dependencies": {
     //"async": "~0.2.10",
     "express": "~3.4.8",
@@ -11,7 +11,7 @@
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node bridge.node.js"
   },
   "repository": {
     "type": "git",
