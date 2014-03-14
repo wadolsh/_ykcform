@@ -4,9 +4,9 @@
   "description": "support bridge.js",
   "main": "bridge.node.js",
   "dependencies": {
-    "async": "~0.2.10",
+    //"async": "~0.2.10",
     "express": "~3.4.8",
-    "socket.io": "~0.9.16"
+    //"socket.io": "~0.9.16"
   },
   "devDependencies": {},
   "scripts": {

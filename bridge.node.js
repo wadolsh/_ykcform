@@ -31,23 +31,12 @@ server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
 bridge_config = require('./server/bridge.config');
 var executer = require('./bridge');
 
-app.all('/test', function(req, res){
-    console.log("test");
-    //executer.process(req, res);
-    res.json({msg: 'tttt'});
-    
-});
-
-
 app.post('/bridge', function(req, res){
     console.log("bridge");
     executer.process(req, res);
 });
 
-/*
+
 app.all('/*', function(req, res){
-    console.log("bridge111");
     res.json({msg: "処理不可"});
 });
-*/
-
