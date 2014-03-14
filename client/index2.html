@@ -9,9 +9,7 @@
 </head>
 <body>
     
-    <div id="message" class="br-tmpl">
-        <div>##=data.msg##</div>
-    </div>
+    <div id="message" class="br-tmpl"></div>
     
     <div id="login" class="br-tmpl"></div>
 
@@ -19,16 +17,7 @@
 
     <div id="list" class="br-tmpl"></div>
 
-    <div id="result" class="br-tmpl"></div>
-    
-    <a href="https://www.google.com">google</a>
-    
-    <form method="post">
-        <input type="hidden" name="test" value="aaa0">
-        <input type="submit"/>
-    </form>
-    
-    
+
     <script src="js/jquery-2.1.0.min.js"></script>
     <script src="js/underscore.js"></script>
     <script src="js/bridge.core.js"></script>
@@ -49,9 +38,8 @@
 
 
 
-        var mydata = new Bridge.Connector({dataName : "mydata",
+        var mydata = new Bridge.Connector({dataName : "ServiceTime",
                     url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
-                    //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://ykcform.herokuapp.com/bridge" : "https://ykcform.herokuapp.com/bridge"});
         
         var listData = {};
         
@@ -140,14 +128,13 @@
             }
         };
 
-
-        Bridge.tmplTool.addTmpl('./tmpl.html');
+Bridge.tmplTool.addTmpl('./tmpl2.html');
 //Bridge.RouterTool.init();
 
 
 //model.listAreaReset();
         Bridge.tmplTool.resetAll();
-        //model.loginAreaReset();
+        model.loginAreaReset();
     </script>
 </body>
 </html>

@@ -9,7 +9,9 @@
 </head>
 <body>
     
-    <div id="message" class="br-tmpl"></div>
+    <div id="message" class="br-tmpl">
+        <div>##=data.msg##</div>
+    </div>
     
     <div id="login" class="br-tmpl"></div>
 
@@ -17,7 +19,10 @@
 
     <div id="list" class="br-tmpl"></div>
 
-
+    <div id="result" class="br-tmpl"></div>
+    
+    <a href="https://www.google.com">google</a>
+    
     <script src="js/jquery-2.1.0.min.js"></script>
     <script src="js/underscore.js"></script>
     <script src="js/bridge.core.js"></script>
@@ -38,7 +43,7 @@
 
 
 
-        var mydata = new Bridge.Connector({dataName : "ServiceTime",
+        var mydata = new Bridge.Connector({dataName : "mydata",
                     url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
         
         var listData = {};
@@ -128,7 +133,8 @@
             }
         };
 
-Bridge.tmplTool.addTmpl('./tmpl.html');
+
+        Bridge.tmplTool.addTmpl('./tmpl.html');
 //Bridge.RouterTool.init();
 
 

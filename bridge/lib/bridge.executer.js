@@ -2,7 +2,7 @@
 
 var customMethod = {};
 for(var key in bridge_config) {
-    //console.log("method module load = " + bridge_config[key].module);
+    //console.log("method module load = " + bridge_config[key].module.filename);
     
     var moduel = customMethod[key] = bridge_config[key].module;
     moduel.methodConfig = bridge_config[key];
@@ -12,7 +12,6 @@ for(var key in bridge_config) {
  * 入口
  */
 exports.process = function(req, res) {
-    //console.log('process');
     console.log(req.body.req);
     var reqDataArray = req.body.req;
     var resData = {};
