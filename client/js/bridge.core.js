@@ -471,26 +471,7 @@
         
         request : function(callBack) {
             var conn = this;
-            /*
-            $.ajax({
-                type: 'POST',
-                url: conn.url,
-                data: JSON.stringify(this.queueData),
-                contentType: 'application/json; charset=utf-8',
-                dataType: 'json',
-                success: function (data, textStatus, jqXHR) {
-                            if (conn.beforeFunc && !conn.beforeFunc(data, textStatus, jqXHR)) {
-                                return false;
-                            }
-                            callBack(data, textStatus, jqXHR);
-                            if (conn.afterFunc) {
-                                conn.afterFunc(data, textStatus, jqXHR);
-                            }
-                }
-            });
-            */
-            
-            $.post(this.url, {'req' : this.queueData}, function (data, textStatus, jqXHR) {
+            $.post(this.url, {req : this.queueData}, function (data, textStatus, jqXHR) {
                 if (conn.beforeFunc && !conn.beforeFunc(data, textStatus, jqXHR)) {
                     return false;
                 }
@@ -499,7 +480,6 @@
                     conn.afterFunc(data, textStatus, jqXHR);
                 }
             }, "json");
-            
             
             this.reset();
         },
