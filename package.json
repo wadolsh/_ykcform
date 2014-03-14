@@ -4,14 +4,14 @@
   "description": "support bridge.js",
   "main": "bridge.node.js",
   "dependencies": {
-    "async": "~0.2.10",
+    //"async": "~0.2.10",
     "express": "~3.4.8",
-    "socket.io": "~0.9.16"
+    //"socket.io": "~0.9.16"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node app.js"
+    "start": "node bridge.node.js"
   },
   "repository": {
     "type": "git",
