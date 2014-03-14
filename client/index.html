@@ -16,8 +16,8 @@
     <div id="login" class="br-tmpl"></div>
 
     <div id="edit" class="br-tmpl"></div>
-
-    <div id="list" class="br-tmpl"></div>
+	<br/>
+    <div id="serviceTable" class="br-tmpl"></div>
 
 
     <script src="js/jquery-2.1.0.min.js"></script>
@@ -43,6 +43,7 @@
             url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "http://ykcform.herokuapp.com/bridge" : "/bridge"});
 
         var listData = {};
+        var totalData = {};
         
         var model = {
                 oneline: {click: function(e) {
@@ -57,7 +58,8 @@
                         e.stopPropagation();
                         mydata.reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
                             var data = data['reqDelete'];
-                            $(e.target).parent('td').remove();
+                            //$(e.target).parents('td').remove();
+                            model.listAreaReset();
                         });
                         //alert(e.data.mark);
                 }},
@@ -119,13 +121,25 @@
                 mydata.reset().reqList('reqList', {}).request(function(data, textStatus, jqXHR) {
                     listData = data['reqList'];
                     model.messageAreaReset(data);
-                    Bridge.tmplTool.render('list', listData);
+                    Bridge.tmplTool.render('serviceTable', listData);
                 });
             },
             
             messageAreaReset: function(data) {
                 data = data || {};
                 Bridge.tmplTool.render('message', {msg : data.msg || data.error || data.warm});
+            },
+            resetTotal: function() {
+            	/*
+            	var $body = $('#serviceTable tbody');
+            	
+            	$('#totalServiceTime').html();
+            	$('#totalCalcBooks')
+            	$('#totalCalcMagazines')
+            	
+            	
+            	$('#serviceTable tbody ')
+            	*/
             }
         };
 

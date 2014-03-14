@@ -36,12 +36,12 @@
         <input type="submit" value="新規追加" data-event="##:model.insert##"/>
     </tmpl>
 
-    <script type="text/tmpl" id="list" class="br-tmpl">
-        <table>
+    <script type="text/tmpl" id="serviceTable" class="br-tmpl">
+        <table class="table table-bordered">
             <thead>
                 <tr>
                     <th>日付</th>
-                    <th>奉仕<br/>時間</th>
+                    <th>奉仕時間</th>
                     <th>本</th>
                     <th>雑誌</th>
                     <th></th>
@@ -49,8 +49,14 @@
                 </tr>
             </thead>
             <tbody>
+				##totalData={};##
                 ##$.each(data || {} , function(ind, obj) {##
                 <tr>
+					##
+					//totalData.totalServiceTime = totalData.totalServiceTime ? totalData.totalServiceTime + new Date(obj.serviceTime) : new Date(obj.serviceTime);
+					totalData.totalCalcBooks = totalData.totalCalcBooks ? totalData.totalCalcBooks + new Number(obj.calcBooks) : new Number(obj.calcBooks);
+					totalData.totalCalcMagazines = totalData.totalCalcMagazines ? totalData.totalCalcMagazines + new Number(obj.calcMagazines) : new Number(obj.calcMagazines);
+					##
                     <td>##=obj.serviceDate##</td>
                     <td>##=obj.serviceTime##</td>
                     <td>##=obj.calcBooks##</td>
@@ -60,6 +66,16 @@
                 </tr>
                 ##});##
             </tbody>
+            <tfoot>
+                <tr>
+                    <td></td>
+                    <td id="totalServiceTime">##=totalData.totalServiceTime##</td>
+                    <td id="totalCalcBooks">##=totalData.totalCalcBooks##</td>
+                    <td id="totalCalcMagazines">##=totalData.totalCalcMagazines##</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tfoot>
         </table>
     </script>
 </div>
