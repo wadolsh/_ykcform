@@ -36,7 +36,10 @@ var authCheckLogic = {
     },
     reqData : function(authData, reqData, req) {
         console.log('last_update_user insert !');
-        reqData.parm.last_update_user = req.session.user._id;
+        if (req.session && req.session.user) {
+        	reqData.parm.last_update_user = req.session.user._id;
+        }
+        return true;
     }
 }
 authCheckLogic.Insert = authCheckLogic.Update;
@@ -44,7 +47,7 @@ authCheckLogic.Save = authCheckLogic.Update;
 authCheckLogic.Delete = authCheckLogic.Update;
 authCheckLogic.reqList = authCheckLogic.reqData;
 
-exports.authCheck = function(reqData, result, req, res) {
+exports.authCheck = function(reqData, req, res) {
     var method = reqData.method;
     var authData = bridge_config.loginMethod.authCheck[reqData.dataName];
     if (authData) {

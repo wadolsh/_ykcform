@@ -2,10 +2,12 @@
 <html lang="ja">
 <head>
 <meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-<title>タイトル</title>
+<title>奉仕記録</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     
@@ -19,12 +21,13 @@
 
 
     <script src="js/jquery-2.1.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
     <script src="js/underscore.js"></script>
     <script src="js/bridge.core.js"></script>
     <script type="text/javascript">
     
         $.ajaxSetup({
-            async : false,
+            //async : false,
             complete : function(jqXHR, textStatus) {
             },
             error : function(jqXHR, textStatus, errorThrown ) {
@@ -35,7 +38,7 @@
             }
         });
 
-        var mydata = new Bridge.Connector({dataName : "mydata",
+        var mydata = new Bridge.Connector({dataName : "service_time",
             //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
             url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "http://ykcform.herokuapp.com/bridge" : "/bridge"});
 
@@ -54,7 +57,7 @@
                         e.stopPropagation();
                         mydata.reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
                             var data = data['reqDelete'];
-                            $(e.target).parent().remove();
+                            $(e.target).parent('td').remove();
                         });
                         //alert(e.data.mark);
                 }},

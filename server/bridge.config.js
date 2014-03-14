@@ -22,5 +22,5 @@ exports.loginMethod = {
     db : exports.mongodbMethod.db,
     beforeFilter : [commonFilter.startLogger],
     afterFilter : [commonFilter.endLogger],
-    authCheck: {mydata : {}, ServiceTime: {save : 1, read : 1}},
+    authCheck: {mydata : {}, service_time: {save : 1, read : 1}},
 }

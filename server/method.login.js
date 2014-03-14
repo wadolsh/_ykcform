@@ -14,7 +14,7 @@ exports.login = function(reqData, callback, req){
                     login_id: doc.login_id,
                     name: doc.name
                 };
-                console.log('login success!');
+                console.log('login success! ' + req.session.user);
                 callback(doc);
             } else {
                 console.log('login fail!');
@@ -34,5 +34,6 @@ exports.logout = function(reqData, callback, req){
 };
 
 exports.loginChecker = function(reqData, callback, req){
+	console.log('loginChecker!');
     callback(req.session.user || {});
 };
