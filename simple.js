@@ -1,0 +1,18 @@
+var http = require('http');
+var fs = require('fs');
+var server = http.createServer(function (req, res) {
+    
+  fs.readFile('./client/index.html',function (err, data){
+        res.writeHead(200, {'Content-Type': 'text/html','Content-Length':data.length});
+        res.write(data);
+        res.end();
+  });  
+
+  //res.writeHead(200, {'Content-Type': 'text/plain'});
+  //res.end();
+});
+
+server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
+  var addr = server.address();
+  console.log("Chat server listening at", addr.address + ":" + addr.port);
+});
