@@ -3,22 +3,27 @@
 <head>
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
 <meta name="apple-mobile-web-app-capable" content="yes" />
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>奉仕記録</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/my.css" rel="stylesheet">
 </head>
 <body>
     
-    <div id="message" class="br-tmpl"></div>
-    
-    <div id="login" class="br-tmpl"></div>
+	<div class="container">
+		<div id="message" class="br-tmpl "></div>
+		
+		<div class="panel panel-default">
+			<div class="panel-heading">ログイン</div>
+			<div id="login" class="br-tmpl form-signin panel-body" role="form"></div>
+		</div>
+		<div id="edit" class="panel panel-default br-tmpl"></div>
+		
 
-    <div id="edit" class="br-tmpl"></div>
-	<br/>
-    <div id="serviceTable" class="br-tmpl"></div>
-
+		<div id="serviceTable" class="panel panel-default table-responsive br-tmpl"></div>
+	</div>
 
     <script src="js/jquery-2.1.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
@@ -46,33 +51,34 @@
         var totalData = {};
         
         var model = {
-                oneline: {click: function(e) {
-                        e.stopPropagation();
-                        mydata.reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
-                            var data = data['eventData'];
-                            Bridge.tmplTool.render('edit', data);
-                        });
-                        //alert(e.data.mark);
-                }},
-                lineDelete: {click: function(e) {
-                        e.stopPropagation();
-                        mydata.reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
-                            var data = data['reqDelete'];
-                            //$(e.target).parents('td').remove();
-                            model.listAreaReset();
-                        });
-                        //alert(e.data.mark);
-                }},
-                            submit: {click: function(e) {
-                var template = $(e.target).parent('.br-tmpl');
-                var obj = Bridge.tmplTool.editor(template);
-                mydata.reqSave('reqSave', obj.data).request(function(data) {
-                    var data = data['reqSave'];
-                    model.listAreaReset();
-                });
-            }},
+			oneline: {click: function(e) {
+					e.stopPropagation();
+					mydata.reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
+						var data = data['eventData'];
+						Bridge.tmplTool.render('edit', data);
+					});
+					//alert(e.data.mark);
+			}},
+			lineDelete: {click: function(e) {
+					e.stopPropagation();
+					mydata.reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
+						var data = data['reqDelete'];
+						//$(e.target).parents('td').remove();
+						model.listAreaReset();
+					});
+					//alert(e.data.mark);
+			}},
+			submit: {click: function(e) {
+					var template = $(e.target).parents('.br-tmpl');
+					var obj = Bridge.tmplTool.editor(template);
+					mydata.reqSave('reqSave', obj.data).request(function(data) {
+						var data = data['reqSave'];
+						model.listAreaReset();
+					});
+			}},
+			
             insert: {click: function(e) {
-                var template = $(e.target).parent('.br-tmpl');
+                var template = $(e.target).parents('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template, {
                     text : {validateRule : {isNullAble : false}}
                 });
@@ -91,6 +97,10 @@
                     model.listAreaReset();
                 });
             }},
+			searchMonthChange: {change: function(e) {
+				model.listAreaReset();
+			}},
+			
             login: {click: function(e) {
                 var template = $(e.target).parent('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template);
@@ -98,6 +108,7 @@
                     console.log(data['reqExecLogin']);
                     model.listAreaReset();
                     model.loginAreaReset();
+
                 });
             }},
             logout: {click: function(e) {
@@ -105,23 +116,30 @@
                 var obj = Bridge.tmplTool.editor(template);
                 mydata.reqExecMethod('reqExecLogout', 'logout', obj.data).request(function(data) {
                     console.log(data['reqExecLogout']);
-                    model.listAreaReset();
-                    model.loginAreaReset();
+                    Bridge.tmplTool.reset({login: {}, edit: null, serviceTable: null});
                 });
             }},
             
             loginAreaReset: function() {
                 mydata.reqExecMethod('loginChecker', 'loginChecker').request(function(data) {
                     Bridge.tmplTool.render('login', data.loginChecker);
-                    model.listAreaReset();
+					if (data.loginChecker._id) {
+						model.listAreaReset();
+						Bridge.tmplTool.render('edit', {});
+					}
                 });
             },
             
             listAreaReset: function() {
-                mydata.reset().reqList('reqList', {}).request(function(data, textStatus, jqXHR) {
+				var serviceDateMonth = $('#serviceDateMonth').val();
+				var param = {$query: {}, $orderby: {serviceDate : 1}};
+				if (serviceDateMonth) {
+					param.$query = {serviceDate: {$regex : serviceDateMonth}};
+				}
+                mydata.reset().reqList('reqList', param).request(function(data, textStatus, jqXHR) {
                     listData = data['reqList'];
                     model.messageAreaReset(data);
-                    Bridge.tmplTool.render('serviceTable', listData);
+                    Bridge.tmplTool.render('serviceTable', {searchMonth : serviceDateMonth, list : listData});
                 });
             },
             
@@ -129,6 +147,8 @@
                 data = data || {};
                 Bridge.tmplTool.render('message', {msg : data.msg || data.error || data.warm});
             },
+			
+			
             resetTotal: function() {
             	/*
             	var $body = $('#serviceTable tbody');
@@ -148,7 +168,7 @@ Bridge.tmplTool.addTmpl('./tmpl.html');
 
 
 //model.listAreaReset();
-        Bridge.tmplTool.resetAll();
+        //Bridge.tmplTool.resetAll();
         model.loginAreaReset();
     </script>
 </body>

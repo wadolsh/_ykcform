@@ -276,7 +276,17 @@
             for (var key in this.cache) {
                 this.cache[key](initData[key] ? initData[key] : {});
             }
-        }
+        },
+		
+		reset : function(initData) {
+            for (var key in initData) {
+				if (initData[key] == null) {
+					document.getElementById(key).innerHTML = '';
+				} else {
+					this.cache[key](initData[key] ? initData[key] : {});
+				}
+            }
+		}
         
     }.addTmpl($('.br-tmpl'));
 

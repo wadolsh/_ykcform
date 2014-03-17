@@ -5,77 +5,129 @@
     
     <tmpl id="login" class="br-tmpl">
         ##if(!data.name) {##
-        <input type="text" name="login_id" value=""/>
-        <input type="password" name="password" value=""/>
-        <input type="submit" value="Sign In" data-event="##:model.login##"/>
+        <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
+        <input type="password" name="password" value="" class="form-control" placeholder="パスワード"/>
+        <button data-event="##:model.login##" class="btn btn-lg btn-primary btn-block">Sign In</button>
         ##} else {##
         <span>##=data.name##</span>
-        <input type="submit" value="Sign Out" data-event="##:model.logout##"/>
+        <button data-event="##:model.logout##" class="btn btn-primary">Sign Out</button>
         ##}##
     </tmpl>
 
     <tmpl id="edit" class="br-tmpl">
-        <input type="date" name="serviceDate" value="##=data.serviceDate##"/>
-        <input type="time" step="1800" list="timeList" name="serviceTime" value="##=data.serviceTime##"/>
-        <datalist id="timeList">
-            <option value="01:00">
-            <option value="02:00">
-            <option value="03:00">
-            <option value="04:00">
-            <option value="05:00">
-            <option value="06:00">
-            <option value="07:00">
-            <option value="08:00">
-            <option value="09:00">
-            <option value="10:00">
-        </datalist>
-        本：<input type="number" name="calcBooks" value="##=data.calcBooks##"/>
-        雑誌：<input type="number" name="calcMagazines" value="##=data.calcMagazines##"/>
-        
-        <!--<input type="submit" value="修正" data-event="##:model.update##"/>-->
-        <input type="submit" value="新規追加" data-event="##:model.insert##"/>
+		<div class="panel-heading">入力</div>
+		<div class=" form-horizontal form-edit panel-body" role="form">
+			<div class="form-group">
+				<label for="serviceDate" class="col-lg-1 control-label">日付</label>
+				<div class="col-lg-3">
+				  <input type="date" class="form-control" id="serviceDate" name="serviceDate" value="##=data.serviceDate##" placeholder="日付">
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="serviceTime" class="col-lg-1 control-label">記録時間</label>
+				<div class="col-lg-3">
+					<input type="time" step="1800" list="timeList" class="form-control" id="serviceTime" name="serviceTime"  value="##=data.serviceTime##" placeholder="日付">
+					<datalist id="timeList">
+						<option value="01:00">
+						<option value="01:30">
+						<option value="02:00">
+						<option value="02:30">
+						<option value="03:00">
+						<option value="03:30">
+						<option value="04:00">
+						<option value="04:30">
+						<option value="05:00">
+						<option value="05:30">
+						<option value="06:00">
+						<option value="06:30">
+						<option value="07:00">
+						<option value="07:30">
+						<option value="08:00">
+						<option value="08:30">
+						<option value="09:00">
+						<option value="09:30">
+						<option value="10:00">
+					</datalist>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="calcBooks" class="col-lg-1 control-label">本</label>
+				<div class="col-lg-1">
+					<input type="number" id="calcBooks" name="calcBooks" value="##=data.calcBooks##" class="form-control"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="calcMagazines" class="col-lg-1 control-label">雑誌</label>
+				<div class="col-lg-1">
+					<input type="number" id="calcMagazines" name="calcMagazines" value="##=data.calcMagazines##" class="form-control"/>
+				</div>
+			</div>
+			<div class="form-group">
+				<label for="serviceComment" class="col-lg-1 control-label">コメント</label>
+				<div class="col-lg-10">
+				  <textarea class="form-control" id="serviceComment" name="serviceComment" value="##=data.serviceComment##"></textarea>
+				</div>
+			</div>
+			<div class="form-group">
+				<div class="col-lg-offset-1 col-lg-10">
+					<button data-event="##:model.insert##" class="btn btn-primary">新規追加</button>
+				</div>
+			</div>
+		</div>
     </tmpl>
 
     <script type="text/tmpl" id="serviceTable" class="br-tmpl">
-        <table class="table table-bordered">
+		<div class="panel-heading">奉仕記録</div>
+		<div class="panel-body">
+			<input id="serviceDateMonth" type="month" value="##=data.searchMonth##" data-event="##:model.searchMonthChange##"/>
+		</div>
+		<table class=" table table-bordered">
             <thead>
-                <tr>
+                <tr class="active">
+					<th></th>
                     <th>日付</th>
                     <th>奉仕時間</th>
                     <th>本</th>
                     <th>雑誌</th>
-                    <th></th>
-                    <th></th>
+					<th>コメント</th>
                 </tr>
             </thead>
             <tbody>
 				##totalData={};##
-                ##$.each(data || {} , function(ind, obj) {##
+                ##$.each(data.list || {} , function(ind, obj) {##
                 <tr>
 					##
-					//totalData.totalServiceTime = totalData.totalServiceTime ? totalData.totalServiceTime + new Date(obj.serviceTime) : new Date(obj.serviceTime);
+					var tmpTime = obj.serviceTime ? obj.serviceTime.split(":") : "0:0";
+					totalData.hour = totalData.hour ? totalData.hour + new Number(tmpTime[0]) : new Number(tmpTime[0]);
+					totalData.minute = totalData.minute ? totalData.minute + new Number(tmpTime[1]) : new Number(tmpTime[1]);
+					
 					totalData.totalCalcBooks = totalData.totalCalcBooks ? totalData.totalCalcBooks + new Number(obj.calcBooks) : new Number(obj.calcBooks);
 					totalData.totalCalcMagazines = totalData.totalCalcMagazines ? totalData.totalCalcMagazines + new Number(obj.calcMagazines) : new Number(obj.calcMagazines);
 					##
+                    <td>
+						<div class="btn-group">
+							<button data-ind="##=ind##" data-id="##=obj._id##" data-event="##:model.oneline##" class="btn btn-default">修正</button>
+							<button data-event="##:model.lineDelete##" class="btn btn-default">削除</button>
+						</div>
+					</td>
                     <td>##=obj.serviceDate##</td>
                     <td>##=obj.serviceTime##</td>
                     <td>##=obj.calcBooks##</td>
                     <td>##=obj.calcMagazines##</td>
-                    <td><a href="#edit/##=obj._id##" data-ind="##=ind##" data-id="##=obj._id##" data-event="##:model.oneline##">修正</a></td>
-                    <td><a href="#delete/##=obj._id##" data-event="##:model.lineDelete##">削除</a></td>
+					<td>##=obj.serviceComment##</td>
                 </tr>
                 ##});##
             </tbody>
             <tfoot>
-                <tr>
-                    <td></td>
-                    <td id="totalServiceTime">##=totalData.totalServiceTime##</td>
-                    <td id="totalCalcBooks">##=totalData.totalCalcBooks##</td>
-                    <td id="totalCalcMagazines">##=totalData.totalCalcMagazines##</td>
-                    <td></td>
-                    <td></td>
+                <tr class="active">
+					<th></th>
+                    <th>総計 >></th>
+                    <th id="totalServiceTime">##=Math.floor(totalData.hour + (totalData.minute / 60))##:##=(totalData.minute % 60)##</th>
+                    <th id="totalCalcBooks">##=totalData.totalCalcBooks##</th>
+                    <th id="totalCalcMagazines">##=totalData.totalCalcMagazines##</th>
+                    <th></th>
                 </tr>
             </tfoot>
-        </table>
+		</table>
     </script>
 </div>
