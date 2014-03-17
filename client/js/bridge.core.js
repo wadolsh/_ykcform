@@ -196,7 +196,7 @@
             var data = {};
             var inputConfig = null;
             var inputObj = null;
-            $html.find('input[name]').each(function(ind, input) {
+            $html.find('input[name], textarea[name], select[name]').each(function(ind, input) {
                 inputConfig = config[input.name] || {};
                 inputObj = {
                     target: input,
