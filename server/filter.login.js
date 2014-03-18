@@ -23,7 +23,7 @@ var authCheckLogic = {
         if (authData.save) {
             var user = req.session.user;
             if (authData.save == 1 && user) {
-                if (!user.memberType && user.memberType < authData.save) {
+                if (!user.memberType || user.memberType < authData.save) {
                     req.query = {last_update_user : user.id};
                 }
                 return true;
@@ -38,6 +38,22 @@ var authCheckLogic = {
         console.log('last_update_user insert !');
         if (req.session && req.session.user) {
         	reqData.parm.last_update_user = req.session.user._id;
+        }
+        if (authData.read) {
+            var user = req.session.user;
+            if (authData.read == 1 && user) {
+                if (!user.memberType || user.memberType < authData.read) {
+                    if(reqData.parm.$query) {
+                        reqData.parm.$query.last_update_user = user._id;
+                    } else {
+                        reqData.parm.last_update_user = user._id;
+                    }
+                }
+                return true;
+            } else if (user.memberType > authData.read) {
+                return true;
+            }
+            return false;
         }
         return true;
     }

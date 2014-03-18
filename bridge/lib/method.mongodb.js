@@ -10,7 +10,10 @@ var newId = function() {
     return new ObjectID().toHexString();
 };
 
-
+var idName = null;
+exports.init = function(config) {
+    idName = config.db.idName;
+}
 
 /*
 var Db = require('mongodb').Db,
@@ -26,16 +29,15 @@ var Db = require('mongodb').Db,
     assert = require('assert');
 */
 
-
-
-
 /**
  * 1件取得
  */
 exports.reqData = function(reqData, callback){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
-        db.collection(reqData.dataName).findOne({_id : reqData.id}, function (err, docs) {
+        var query = {};
+        query[idName] = reqData[idName];
+        db.collection(reqData.dataName).findOne(query, function (err, docs) {
             if(err) throw err;
             callback(docs);
         });
@@ -59,7 +61,7 @@ exports.reqInsert = function(reqData, callback){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
         // id採番
-        reqData.data['_id'] = newId();
+        reqData.data[idName] = newId();
         db.collection(reqData.dataName).insert(reqData.data, {w:1}, function (err, docs) {
             if(err) throw err;
             callback(docs[0]);
@@ -71,8 +73,8 @@ exports.reqUpdate = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
         var query = req.query ? req.query : {};
-        query['_id'] = reqData.data._id;
-        delete reqData.data._id;
+        query[idName] = reqData.data[idName];
+        delete reqData.data[idName];
         db.collection(reqData.dataName).update(query, {$set : reqData.data}, function (err, docs) {
             if(err) throw err;
 
@@ -88,12 +90,12 @@ exports.reqUpdate = function(reqData, callback, req){
 exports.reqSave = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
-        
-        if(reqData.data._id) {
+        var id = reqData.data[idName];
+        if(id) {
             //update
             var query = req.query ? req.query : {};
-            query['_id'] = reqData.data._id;
-            delete reqData.data._id;
+            query[idName] = id;
+            delete reqData.data[idName];
             db.collection(reqData.dataName).update(query, {$set : reqData.data}, function (err, docs) {
                 if(err) throw err;
 
@@ -117,8 +119,10 @@ exports.reqSave = function(reqData, callback, req){
 exports.reqDelete = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
-        var query = req.query ? req.query : {};
-        query['_id'] = reqData.id;
+        var query = reqData.query ? reqData.query : {};
+        query[idName] = reqData[idName];
+        console.log(reqData);
+        console.log(query);
         db.collection(reqData.dataName).remove(query, {w:1}, function (err, docs) {
             if(err) throw err;
             callback(docs);

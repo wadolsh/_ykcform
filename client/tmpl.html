@@ -15,64 +15,67 @@
     </tmpl>
 
     <tmpl id="edit" class="br-tmpl">
-		<div class="panel-heading">入力</div>
-		<div class=" form-horizontal form-edit panel-body" role="form">
-			<div class="form-group">
-				<label for="serviceDate" class="col-lg-1 control-label">日付</label>
-				<div class="col-lg-3">
-				  <input type="date" class="form-control" id="serviceDate" name="serviceDate" value="##=data.serviceDate##" placeholder="日付">
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="serviceTime" class="col-lg-1 control-label">記録時間</label>
-				<div class="col-lg-3">
-					<input type="time" step="1800" list="timeList" class="form-control" id="serviceTime" name="serviceTime"  value="##=data.serviceTime##" placeholder="日付">
-					<datalist id="timeList">
-						<option value="01:00">
-						<option value="01:30">
-						<option value="02:00">
-						<option value="02:30">
-						<option value="03:00">
-						<option value="03:30">
-						<option value="04:00">
-						<option value="04:30">
-						<option value="05:00">
-						<option value="05:30">
-						<option value="06:00">
-						<option value="06:30">
-						<option value="07:00">
-						<option value="07:30">
-						<option value="08:00">
-						<option value="08:30">
-						<option value="09:00">
-						<option value="09:30">
-						<option value="10:00">
-					</datalist>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="calcBooks" class="col-lg-1 control-label">本</label>
-				<div class="col-lg-1">
-					<input type="number" id="calcBooks" name="calcBooks" value="##=data.calcBooks##" class="form-control"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="calcMagazines" class="col-lg-1 control-label">雑誌</label>
-				<div class="col-lg-1">
-					<input type="number" id="calcMagazines" name="calcMagazines" value="##=data.calcMagazines##" class="form-control"/>
-				</div>
-			</div>
-			<div class="form-group">
-				<label for="serviceComment" class="col-lg-1 control-label">コメント</label>
-				<div class="col-lg-10">
-				  <textarea class="form-control" id="serviceComment" name="serviceComment" value="##=data.serviceComment##"></textarea>
-				</div>
-			</div>
-			<div class="form-group">
-				<div class="col-lg-offset-1 col-lg-10">
-					<button data-event="##:model.insert##" class="btn btn-primary">新規追加</button>
-				</div>
-			</div>
+        <button data-toggle="collapse" data-parent="#edit" href="#editArea" class="btn btn-primary">入力</button>
+        <div class="panel panel-default">
+    		
+    		<div id="editArea" class="form-horizontal form-edit panel-body collapse" role="form">
+    			<div class="form-group">
+    				<label for="serviceDate" class="col-lg-1 control-label">日付</label>
+    				<div class="col-lg-3">
+    				  <input type="date" class="form-control" id="serviceDate" name="serviceDate" value="##=data.serviceDate##" placeholder="日付">
+    				</div>
+    			</div>
+    			<div class="form-group">
+    				<label for="serviceTime" class="col-lg-1 control-label">記録時間</label>
+    				<div class="col-lg-3">
+    					<input type="time" step="1800" list="timeList" class="form-control" id="serviceTime" name="serviceTime"  value="##=data.serviceTime##" placeholder="日付">
+    					<datalist id="timeList">
+    						<option value="01:00">
+    						<option value="01:30">
+    						<option value="02:00">
+    						<option value="02:30">
+    						<option value="03:00">
+    						<option value="03:30">
+    						<option value="04:00">
+    						<option value="04:30">
+    						<option value="05:00">
+    						<option value="05:30">
+    						<option value="06:00">
+    						<option value="06:30">
+    						<option value="07:00">
+    						<option value="07:30">
+    						<option value="08:00">
+    						<option value="08:30">
+    						<option value="09:00">
+    						<option value="09:30">
+    						<option value="10:00">
+    					</datalist>
+    				</div>
+    			</div>
+    			<div class="form-group">
+    				<label for="calcBooks" class="col-lg-1 control-label">本</label>
+    				<div class="col-lg-1">
+    					<input type="number" id="calcBooks" name="calcBooks" value="##=data.calcBooks##" class="form-control"/>
+    				</div>
+    			</div>
+    			<div class="form-group">
+    				<label for="calcMagazines" class="col-lg-1 control-label">雑誌</label>
+    				<div class="col-lg-1">
+    					<input type="number" id="calcMagazines" name="calcMagazines" value="##=data.calcMagazines##" class="form-control"/>
+    				</div>
+    			</div>
+    			<div class="form-group">
+    				<label for="serviceComment" class="col-lg-1 control-label">コメント</label>
+    				<div class="col-lg-10">
+    				  <textarea class="form-control" id="serviceComment" name="serviceComment" value="##=data.serviceComment##"></textarea>
+    				</div>
+    			</div>
+    			<div class="form-group">
+    				<div class="col-lg-offset-1 col-lg-10">
+    					<button data-event="##:model.insert##" class="btn btn-primary">新規追加</button>
+    				</div>
+    			</div>
+    		</div>
 		</div>
     </tmpl>
 
@@ -105,10 +108,8 @@
 					totalData.totalCalcMagazines = totalData.totalCalcMagazines ? totalData.totalCalcMagazines + new Number(obj.calcMagazines) : new Number(obj.calcMagazines);
 					##
                     <td>
-						<div class="btn-group">
-							<button data-ind="##=ind##" data-id="##=obj._id##" data-event="##:model.oneline##" class="btn btn-default">修正</button>
-							<button data-event="##:model.lineDelete##" class="btn btn-default">削除</button>
-						</div>
+						<button data-ind="##=ind##" data-id="##=obj._id##" data-event="##:model.oneline##" class="btn btn-default btn-sm">修正</button>
+						<button data-event="##:model.lineDelete##" class="btn btn-default btn-sm">削除</button>
 					</td>
                     <td>##=obj.serviceDate##</td>
                     <td>##=obj.serviceTime##</td>
@@ -122,7 +123,7 @@
                 <tr class="active">
 					<th></th>
                     <th>総計 >></th>
-                    <th id="totalServiceTime">##=Math.floor(totalData.hour + (totalData.minute / 60))##:##=(totalData.minute % 60)##</th>
+                    <th id="totalServiceTime">##=Math.floor(totalData.hour + (totalData.minute / 60)) || '00'##:##=(totalData.minute % 60) || '00'##</th>
                     <th id="totalCalcBooks">##=totalData.totalCalcBooks##</th>
                     <th id="totalCalcMagazines">##=totalData.totalCalcMagazines##</th>
                     <th></th>
