@@ -124,6 +124,23 @@
 				model.listAreaReset();
 			}},
 			
+			signup: {click: function(e) {
+			    Bridge.tmplTool.render('login', {isSignup: true});
+			}},
+			signupInsert: {click: function(e) {
+                mydata.reqExecMethod('reqExecSignup', 'signup', obj.data).request(function(data) {
+                    if (data['reqExecSignup']._id) {
+                        console.log(data['reqExecLogin']);
+                        model.listAreaReset();
+                        model.loginAreaReset();
+                    } else {
+                        model.messageAreaReset(data['reqExecSignup']);
+                    }
+                });			    
+			}},
+			signupCancel: {click: function(e) {
+			    Bridge.tmplTool.render('login', {isSignup: false});
+			}},
             login: {click: function(e) {
                 var template = $(e.target).parent('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template);
