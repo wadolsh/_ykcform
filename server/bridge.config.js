@@ -28,3 +28,4 @@ exports.loginMethod = {
     afterFilter : [commonFilter.endLogger],
     authCheck: {mydata : {}, service_time: {save : 1, read : 1}},
 }
+exports.loginMethod.module.init(exports.loginMethod);

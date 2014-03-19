@@ -9,11 +9,12 @@
             <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
             <input type="password" name="password" value="" class="form-control" placeholder="パスワード"/>
             <input type="password" name="password2" value="" class="form-control" placeholder="パスワード確認"/>
-            
+            <input type="text" name="name" value="" class="form-control" placeholder="お名前"/>
             <input type="email" name="email" value="" class="form-control" placeholder="E-mail"/>
+            <br/>
             <button data-event="##:model.signupInsert##" class="btn btn-primary">登録</button>
             <button data-event="##:model.signupCancel##" class="btn">キャンセル</button>
-        ##} else if(!data.name) {##
+        ##} else if(!data._id) {##
         <a href="#" data-event="##:model.signup##" class="">ユーザー登録</a>
         <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
         <input type="password" name="password" value="" class="form-control" placeholder="パスワード"/>
