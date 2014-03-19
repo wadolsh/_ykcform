@@ -8,22 +8,18 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 <title>奉仕記録</title>
 <link href="css/bootstrap.min.css" rel="stylesheet">
-<link href="css/my.css" rel="stylesheet">
+<link href="css/app.css" rel="stylesheet">
 </head>
 <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
-
-            <div class="panel panel-default">
-    			<div id="login" class="br-tmpl form-signin panel-body" role="form"></div>
-    		</div>
-
+    		<div id="login" class="br-tmpl form-signin panel-body navbar-right" role="form"></div>
             <div id="message" class="br-tmpl "></div>
-    		<div id="edit" class="br-tmpl"></div>
         </div>
     </nav>
     
 	<div class="container">
+	    <div id="edit" class="br-tmpl"></div>
 		<div id="serviceTable" class="panel panel-default table-responsive br-tmpl"></div>
 	</div>
 
@@ -49,7 +45,7 @@
 
         var mydata = new Bridge.Connector({dataName : "service_time",
             //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
-            url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "http://ykcform.herokuapp.com/bridge" : "/bridge"});
+            url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://ykcform.herokuapp.com/bridge" : "/bridge"});
 
         var listData = {};
         var totalData = {};
