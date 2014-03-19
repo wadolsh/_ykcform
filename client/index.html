@@ -45,22 +45,27 @@
 
         var mydata = new Bridge.Connector({dataName : "service_time",
             //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
-            url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://ykcform.herokuapp.com/bridge" : "/bridge"});
+            url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "//ykcform.herokuapp.com/bridge" : "/bridge"});
 
         var listData = {};
         var totalData = {};
         
         var model = {
-			oneline: {click: function(e) {
+			lineEdit: {click: function(e) {
 					e.stopPropagation();
 					mydata.reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
 						var data = data['eventData'];
 						Bridge.tmplTool.render('edit', data);
+						$('#editArea').collapse('show');
 					});
 					//alert(e.data.mark);
 			}},
 			lineDelete: {click: function(e) {
 					e.stopPropagation();
+					if (!confirm(e.data.serviceDate + ' の記録を作成してもよろしいでしょか？')) {
+					    return false;
+					}
+					
 					mydata.reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
 						var data = data['reqDelete'];
 						//$(e.target).parents('td').remove();
@@ -77,20 +82,34 @@
 					});
 			}},
 			
-            insert: {click: function(e) {
+            save: {click: function(e) {
                 var template = $(e.target).parents('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template, {
-                    text : {validateRule : {isNullAble : false}}
+                    serviceDate : {validateRule : {label: '日付', isNullAble : false}},
+                    serviceTime : {validateRule : {label: '記録時間', isNullAble : false}},
+                    renderMessage : function(strArray) {
+                        $(this.target).after('<span>' + strArray.join('<br/>') + '</span>')
+                        .parents('.form-group').addClass('has-error');
+                    },
+                    clearError : function(strArray) {
+                        var $target = $(this.target);
+                        $target.next('span').remove();
+                        $target.parents('.form-group').removeClass('has-error');
+                    }
                 });
                 if (obj.validate()) {
-                    delete obj.data._id;
-                    mydata.reqInsert('reqInsert', obj.data).request(function(data) {
+                    //delete obj.data._id;
+                    mydata.reqSave('reqSave', obj.data).request(function(data) {
                         model.listAreaReset();
+                        Bridge.tmplTool.render('edit', {});
                     });
                 }
-
+            }},
+            saveCancel: {click: function(e) {
+                Bridge.tmplTool.render('edit', {});
             }},
             update: {click: function(e) {
+                
                 var template = $(e.target).parent('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template);
                 mydata.reqUpdate('reqInsert', obj.data._id, obj.data).request(function(data) {
@@ -100,14 +119,22 @@
 			searchMonthChange: {change: function(e) {
 				model.listAreaReset();
 			}},
+			searchMonthClear: {click: function(e) {
+			    $('#serviceDateMonth').val(null);
+				model.listAreaReset();
+			}},
 			
             login: {click: function(e) {
                 var template = $(e.target).parent('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template);
                 mydata.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
-                    console.log(data['reqExecLogin']);
-                    model.listAreaReset();
-                    model.loginAreaReset();
+                    if (data['reqExecLogin']._id) {
+                        console.log(data['reqExecLogin']);
+                        model.listAreaReset();
+                        model.loginAreaReset();
+                    } else {
+                        model.messageAreaReset(data['reqExecLogin']);
+                    }
 
                 });
             }},

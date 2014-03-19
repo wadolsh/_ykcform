@@ -5,6 +5,7 @@
     
     <tmpl id="login" class="br-tmpl">
         ##if(!data.name) {##
+        <a href="#" data-event="" class="">ユーザー登録</a>
         <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
         <input type="password" name="password" value="" class="form-control" placeholder="パスワード"/>
         <button data-event="##:model.login##" class="btn btn-lg btn-primary btn-block">Sign In</button>
@@ -15,17 +16,18 @@
     </tmpl>
 
     <tmpl id="edit" class="br-tmpl">
-
-        
         <div class="panel panel-default">
     		<div class="panel-heading" data-toggle="collapse" data-parent="#edit" href="#editArea">
-                <span class="glyphicon glyphicon-pencil"></span>&nbsp;&nbsp;<span>入力</span>
+                <span class="glyphicon glyphicon-pencil"></span>
+                &nbsp;&nbsp;<span>入力</span>
+                ##=(data._id ? ' << 編集モード >>' : '')##
             </div>
     		<div id="editArea" class="form-horizontal form-edit panel-body collapse" role="form">
+    		    <input type="hidden" name="_id" value="##=data._id##">
     			<div class="form-group">
     				<label for="serviceDate" class="col-lg-1 control-label">日付</label>
     				<div class="col-lg-3">
-    				  <input type="date" class="form-control" id="serviceDate" name="serviceDate" value="##=data.serviceDate##" placeholder="日付">
+    				    <input type="date" class="form-control" id="serviceDate" name="serviceDate" value="##=data.serviceDate##" placeholder="日付">
     				</div>
     			</div>
     			<div class="form-group">
@@ -70,12 +72,13 @@
     			<div class="form-group">
     				<label for="serviceComment" class="col-lg-1 control-label">コメント</label>
     				<div class="col-lg-10">
-    				  <textarea class="form-control" id="serviceComment" name="serviceComment" value="##=data.serviceComment##"></textarea>
+    				  <textarea class="form-control" id="serviceComment" name="serviceComment">##=data.serviceComment##</textarea>
     				</div>
     			</div>
     			<div class="form-group">
     				<div class="col-lg-offset-1 col-lg-10">
-    					<button data-event="##:model.insert##" class="btn btn-primary">新規追加</button>
+    					<button data-event="##:model.save##" class="btn btn-primary">登録</button>
+    					<button data-event="##:model.saveCancel##" class="btn">キャンセル</button>
     				</div>
     			</div>
     		</div>
@@ -86,6 +89,7 @@
 		<div class="panel-heading">奉仕記録</div>
 		<div class="panel-body">
 			<input id="serviceDateMonth" type="month" value="##=data.searchMonth##" data-event="##:model.searchMonthChange##"/>
+			&nbsp;&nbsp;<span id="searchMonthClear" class="glyphicon glyphicon-remove" data-event="##:model.searchMonthClear##">
 		</div>
 		<table class=" table table-bordered">
             <thead>
@@ -111,7 +115,7 @@
 					totalData.totalCalcMagazines = totalData.totalCalcMagazines ? totalData.totalCalcMagazines + new Number(obj.calcMagazines) : new Number(obj.calcMagazines);
 					##
                     <td>
-						<button data-ind="##=ind##" data-id="##=obj._id##" data-event="##:model.oneline##" class="btn btn-default btn-xs">修正</button>
+						<button data-ind="##=ind##" data-id="##=obj._id##" data-event="##:model.lineEdit##" class="btn btn-default btn-xs">修正</button>
 						<button data-event="##:model.lineDelete##" class="btn btn-default btn-xs">削除</button>
 					</td>
                     <td>##=obj.serviceDate##</td>

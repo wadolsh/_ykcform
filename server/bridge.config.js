@@ -3,6 +3,7 @@ console.log('bridge.config file path = ' + module.filename);
 var commonFilter = require('../bridge/lib/filter.common');
 var loginFilter = require('./filter.login');
 
+
 exports.commonMethod = {
     module : require('../bridge/lib/method.common'),
 }
@@ -17,6 +18,7 @@ exports.mongodbMethod = {
     beforeFilter : [commonFilter.startLogger, loginFilter.loginCheck, loginFilter.authCheck, loginFilter.addLastUpdate],
     afterFilter : [commonFilter.endLogger],
 }
+loginFilter.init(exports.mongodbMethod);
 exports.mongodbMethod.module.init(exports.mongodbMethod);
 
 exports.loginMethod = {

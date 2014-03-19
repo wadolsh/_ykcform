@@ -224,6 +224,9 @@
                         var message = null;
                         //var result
                         for (var ruleName in this.validateRule) {
+                            if (!this.validateTool[ruleName]) {
+                                continue;
+                            }
                             message = this.validateTool[ruleName].call(this, {label : this.validateRule.label}, this.val(), this.validateRule[ruleName]);
                             if (message) {
                                 messages.push(message);
@@ -263,7 +266,7 @@
                     for (var ind in this.inputObjList) {
                         inputObj = this.inputObjList[ind];
                         if (inputObj.validate) {
-                            result = result && inputObj.validate();
+                            result = inputObj.validate() && result;
                         }
                     }
                     return result;

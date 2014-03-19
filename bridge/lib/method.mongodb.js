@@ -106,7 +106,7 @@ exports.reqSave = function(reqData, callback, req){
                 callback(reqData.data);
             });
         } else {
-            reqData.data['_id'] = newId();
+            reqData.data[idName] = newId();
             db.collection(reqData.dataName).insert(reqData.data, {w:1}, function (err, docs) {
                 if(err) throw err;
                 callback(docs[0]);

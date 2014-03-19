@@ -1,3 +1,9 @@
+var idName = null;
+exports.init = function(config) {
+    idName = config.db.idName;
+}
+
+
 exports.loginCheck = function(reqData, req, res) {
     if (!req.session.user) {
         console.log('user session is not existed!');
@@ -12,7 +18,7 @@ exports.addLastUpdate = function(reqData, req) {
         || method.indexOf('Save') > 0) {
         
         if (req.session.user) {
-            reqData.data.last_update_user = req.session.user._id;
+            reqData.data.last_update_user = req.session.user[idName];
         }
         reqData.data.last_update_date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
     }
@@ -24,7 +30,7 @@ var authCheckLogic = {
             var user = req.session.user;
             if (authData.save == 1 && user) {
                 if (!user.memberType || user.memberType < authData.save) {
-                    req.query = {last_update_user : user.id};
+                    req.query = {last_update_user : user[idName]};
                 }
                 return true;
             } else if (user.memberType > authData.save) {
@@ -37,16 +43,16 @@ var authCheckLogic = {
     reqData : function(authData, reqData, req) {
         console.log('last_update_user insert !');
         if (req.session && req.session.user) {
-        	reqData.parm.last_update_user = req.session.user._id;
+        	reqData.parm.last_update_user = req.session.user[idName];
         }
         if (authData.read) {
             var user = req.session.user;
             if (authData.read == 1 && user) {
                 if (!user.memberType || user.memberType < authData.read) {
                     if(reqData.parm.$query) {
-                        reqData.parm.$query.last_update_user = user._id;
+                        reqData.parm.$query.last_update_user = user[idName];
                     } else {
-                        reqData.parm.last_update_user = user._id;
+                        reqData.parm.last_update_user = user[idName];
                     }
                 }
                 return true;
