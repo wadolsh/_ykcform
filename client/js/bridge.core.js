@@ -198,8 +198,11 @@
             var data = {};
             var inputConfig = null;
             var inputObj = null;
-            $html.find('input[name], textarea[name], select[name]').each(function(ind, input) {
+            $html.find(':input[name]').each(function(ind, input) {
                 inputConfig = config[input.name] || {};
+                if (input.type == "radio" && !input.checked) {
+                    return;
+                }
                 inputObj = {
                     target: input,
                     name: input.name,
@@ -207,7 +210,13 @@
                     validateRule: inputConfig.validateRule,
                     
                     val: inputConfig.val || config.val || function () {
-                        return this.target.value;
+                        var target = this.target;
+                        if (target.type == "checkbox") {
+                            return target.checked ? (target.value || true) : (target.value ? '' : false);
+                        } else if (target.type == "radio") {
+                            return target.checked ? (target.value || true) : null;
+                        }
+                        return target.value;
                     },
                     clearError: inputConfig.clearError || config.clearError || function() {
                         
@@ -340,7 +349,7 @@
             localStorage[key] = JSON.stringify(data);
         },
         get: function(key) {
-            return JSON.parse(localStorage[key]);
+            return JSON.parse(localStorage[key] || null);
         }
     };
 

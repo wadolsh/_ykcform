@@ -15,6 +15,7 @@
         <div class="container">
     		<div id="login" class="br-tmpl form-signin panel-body navbar-right" role="form">
                 <script type="text/tmpl" data-tmpl-id="login">
+                
                     ##if(data.isSignup) {##
                         <h3>ユーザー登録</h3>
                         <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
@@ -29,6 +30,7 @@
                     <a href="#" data-event="##:model.signup##" class="">ユーザー登録</a>
                     <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
                     <input type="password" name="password" value="" class="form-control" placeholder="パスワード"/>
+                    <label><input type="checkbox" name="keep_login" value="checked" ##=data.keep_login##/>ログイン保存</label>
                     <button data-event="##:model.login##" class="btn btn-lg btn-primary btn-block">Sign In</button>
                     ##} else {##
                     <span>##=data.name##</span>
@@ -320,6 +322,7 @@
             login: {click: function(e) {
                 var template = $(e.target).parent('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template);
+                Bridge.localStorageTool.push('keepLogin', obj.data.keep_login);
                 mydata.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
                     if (data['reqExecLogin']._id) {
                         console.log(data['reqExecLogin']);
@@ -336,18 +339,20 @@
                 var obj = Bridge.tmplTool.editor(template);
                 mydata.reqExecMethod('reqExecLogout', 'logout', obj.data).request(function(data) {
                     console.log(data['reqExecLogout']);
-                    Bridge.tmplTool.reset({login: {}, edit: null, serviceTable: null});
+                    Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, edit: null, serviceTable: null});
                 });
             }},
             
             loginAreaReset: function() {
                 mydata.reqExecMethod('loginChecker', 'loginChecker').request(function(data) {
+                    data.loginChecker['keep_login'] = Bridge.localStorageTool.get('keepLogin');
                     Bridge.tmplTool.render('login', data.loginChecker);
 					if (data.loginChecker._id) {
 						model.listAreaReset();
 						Bridge.tmplTool.render('edit', {});
 					}
                 });
+
             },
             
             listAreaReset: function() {
@@ -366,20 +371,6 @@
             messageAreaReset: function(data) {
                 data = data || {};
                 Bridge.tmplTool.render('message', {msg : data.msg || data.error || data.warm});
-            },
-			
-			
-            resetTotal: function() {
-            	/*
-            	var $body = $('#serviceTable tbody');
-            	
-            	$('#totalServiceTime').html();
-            	$('#totalCalcBooks')
-            	$('#totalCalcMagazines')
-            	
-            	
-            	$('#serviceTable tbody ')
-            	*/
             }
         };
 
@@ -389,7 +380,11 @@ Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
 
 //model.listAreaReset();
         //Bridge.tmplTool.resetAll();
-        model.loginAreaReset();
+        if (Bridge.localStorageTool.get('keepLogin')) {
+            model.loginAreaReset();
+        } else {
+            Bridge.tmplTool.render('login', {});
+        }
     </script>
 </body>
 </html>
