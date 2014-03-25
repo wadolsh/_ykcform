@@ -159,8 +159,10 @@
             var tmpl = this;
             if (obj instanceof jQuery) {
                 obj.each(function(ind, ele) {
-                    tmpl.cache[ele.id] = template($('#' + ele.id), ele.innerHTML);
-                    ele.innerHTML = '';
+                    var tmpl_id = ele.dataset['tmplId'];
+                    var $tmpl_container = $('#' + tmpl_id);
+                    tmpl.cache[tmpl_id] = template($tmpl_container, ele.innerHTML);
+                    $tmpl_container[0].innerHTML = '';
                 });
             } else {
                 /*
@@ -291,7 +293,7 @@
             }
 		}
         
-    }.addTmpl($('.br-tmpl'));
+    };
 
 
     var RouterTool = Bridge.RouterTool = {

@@ -13,14 +13,174 @@
 <body>
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
-    		<div id="login" class="br-tmpl form-signin panel-body navbar-right" role="form"></div>
-            <div id="message" class="br-tmpl "></div>
+    		<div id="login" class="br-tmpl form-signin panel-body navbar-right" role="form">
+                <script type="text/tmpl" data-tmpl-id="login">
+                    ##if(data.isSignup) {##
+                        <h3>ユーザー登録</h3>
+                        <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
+                        <input type="password" name="password" value="" class="form-control" placeholder="パスワード"/>
+                        <input type="password" name="password2" value="" class="form-control" placeholder="パスワード確認"/>
+                        <input type="text" name="name" value="" class="form-control" placeholder="お名前"/>
+                        <input type="email" name="email" value="" class="form-control" placeholder="E-mail"/>
+                        <br/>
+                        <button data-event="##:model.signupInsert##" class="btn btn-primary">登録</button>
+                        <button data-event="##:model.signupCancel##" class="btn">キャンセル</button>
+                    ##} else if(!data._id) {##
+                    <a href="#" data-event="##:model.signup##" class="">ユーザー登録</a>
+                    <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
+                    <input type="password" name="password" value="" class="form-control" placeholder="パスワード"/>
+                    <button data-event="##:model.login##" class="btn btn-xs btn-primary btn-block">Sign In</button>
+                    ##} else {##
+                    <span>##=data.name##</span>
+                    <button data-event="##:model.logout##" class="btn btn-primary btn-xs">Sign Out</button>
+                    ##}##
+                </script>
+    		</div>
+            <div id="message" class="br-tmpl ">
+                <script type="text/tmpl" data-tmpl-id="message">
+                    <div>##=data.msg##</div>
+                </script>
+            </div>
         </div>
     </nav>
     
 	<div class="container">
-	    <div id="edit" class="br-tmpl"></div>
-		<div id="serviceTable" class="panel panel-default table-responsive br-tmpl"></div>
+	    <div id="edit" class="br-tmpl">
+	        <script type="text/tmpl" data-tmpl-id="edit">
+                <div class="panel panel-default">
+            		<div class="panel-heading" data-toggle="collapse" data-parent="#edit" href="#editArea">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        &nbsp;&nbsp;<span>入力</span>
+                        ##=(data._id ? ' << 編集モード >>' : '')##
+                    </div>
+            		<div id="editArea" class="form-horizontal form-edit panel-body collapse" role="form">
+            		    <input type="hidden" name="_id" value="##=data._id##">
+            			<div class="row">
+                			<div class="form-group col-md-6">
+                				<label for="serviceDate" class="col-xs-2 col-md-3 col-lg-3 control-label">日付</label>
+                				<div class="col-xs-4 col-md-6">
+                				    <input type="date" class="form-control" id="serviceDate" name="serviceDate" value="##=data.serviceDate##" placeholder="日付">
+                				</div>
+                			</div>
+                			<div class="form-group col-md-6">
+                				<label for="serviceTime" class="col-xs-2 col-md-3 col-lg-3 control-label">記録時間</label>
+                				<div class="col-xs-4 col-md-6">
+                					<input type="time" step="1800" list="timeList" class="form-control" id="serviceTime" name="serviceTime"  value="##=data.serviceTime##" placeholder="日付">
+                					<datalist id="timeList">
+                						<option value="01:00">
+                						<option value="01:30">
+                						<option value="02:00">
+                						<option value="02:30">
+                						<option value="03:00">
+                						<option value="03:30">
+                						<option value="04:00">
+                						<option value="04:30">
+                						<option value="05:00">
+                						<option value="05:30">
+                						<option value="06:00">
+                						<option value="06:30">
+                						<option value="07:00">
+                						<option value="07:30">
+                						<option value="08:00">
+                						<option value="08:30">
+                						<option value="09:00">
+                						<option value="09:30">
+                						<option value="10:00">
+                					</datalist>
+                				</div>
+                			</div>
+                		</div>
+                		<div class="row">
+                			<div class="form-group col-md-6 col-lg-6">
+                				<label for="calcBooks" class="col-xs-2 col-md-3 col-lg-3 control-label">本</label>
+                				<div class="col-xs-4 col-md-4">
+                					<input type="number" id="calcBooks" name="calcBooks" value="##=data.calcBooks##" class="form-control"/>
+                				</div>
+                			</div>
+                			<div class="form-group col-md-6 col-lg-6">
+                				<label for="calcMagazines" class="col-xs-2 col-md-3 col-lg-3 control-label">雑誌</label>
+                				<div class="col-xs-4 col-md-4">
+                					<input type="number" id="calcMagazines" name="calcMagazines" value="##=data.calcMagazines##" class="form-control"/>
+                				</div>
+                			</div>
+                		</div>
+                        <div class="row">
+                			<div class="form-group col-md-6 col-lg-6">
+                				<label for="serviceComment" class="col-xs-2 col-md-3 col-lg-3 control-label">コメント</label>
+                				<div class="col-xs-10 col-md-9 col-lg-9">
+                				  <textarea class="form-control" id="serviceComment" name="serviceComment">##=data.serviceComment##</textarea>
+                				</div>
+                			</div>
+                        </div>
+                		<div class="row">
+                			<div class="form-group col-md-12">
+                				<div class="col-xs-offset-1 col-xs-10">
+                					<button data-event="##:model.save##" class="btn btn-primary">登録</button>
+                					<button data-event="##:model.saveCancel##" class="btn">キャンセル</button>
+                				</div>
+                			</div>
+                		</div>
+            		</div>
+        		</div>
+            </script>
+	    </div>
+	    
+		<div id="serviceTable" class="panel panel-default table-responsive br-tmpl">
+		    <script type="text/tmpl" data-tmpl-id="serviceTable">
+        		<div class="panel-heading">奉仕記録</div>
+        		<div class="panel-body">
+        			<input id="serviceDateMonth" type="month" value="##=data.searchMonth##" data-event="##:model.searchMonthChange##"/>
+        			&nbsp;&nbsp;<span id="searchMonthClear" class="glyphicon glyphicon-remove" data-event="##:model.searchMonthClear##">
+        		</div>
+        		<table class=" table table-bordered">
+                    <thead>
+                        <tr class="active">
+        					<th></th>
+                            <th>日付</th>
+                            <th>奉仕時間</th>
+                            <th>本</th>
+                            <th>雑誌</th>
+        					<th>コメント</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        				##totalData={};##
+                        ##$.each(data.list || {} , function(ind, obj) {##
+                        <tr>
+        					##
+        					var tmpTime = obj.serviceTime ? obj.serviceTime.split(":") : "0:0";
+        					totalData.hour = totalData.hour ? totalData.hour + new Number(tmpTime[0]) : new Number(tmpTime[0]);
+        					totalData.minute = totalData.minute ? totalData.minute + new Number(tmpTime[1]) : new Number(tmpTime[1]);
+        					
+        					totalData.totalCalcBooks = totalData.totalCalcBooks ? totalData.totalCalcBooks + new Number(obj.calcBooks) : new Number(obj.calcBooks);
+        					totalData.totalCalcMagazines = totalData.totalCalcMagazines ? totalData.totalCalcMagazines + new Number(obj.calcMagazines) : new Number(obj.calcMagazines);
+        					##
+                            <td>
+        						<button data-ind="##=ind##" data-id="##=obj._id##" data-event="##:model.lineEdit##" class="btn btn-default btn-xs">修正</button>
+        						<button data-event="##:model.lineDelete##" class="btn btn-default btn-xs">削除</button>
+        					</td>
+                            <td>##=obj.serviceDate##</td>
+                            <td>##=obj.serviceTime##</td>
+                            <td>##=obj.calcBooks##</td>
+                            <td>##=obj.calcMagazines##</td>
+        					<td>##=obj.serviceComment##</td>
+                        </tr>
+                        ##});##
+                    </tbody>
+                    <tfoot>
+                        <tr class="active">
+        					<th></th>
+                            <th>総計 >></th>
+                            <th id="totalServiceTime">##=Math.floor(totalData.hour + (totalData.minute / 60)) || '00'##:##=(totalData.minute % 60) || '00'##</th>
+                            <th id="totalCalcBooks">##=totalData.totalCalcBooks##</th>
+                            <th id="totalCalcMagazines">##=totalData.totalCalcMagazines##</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+        		</table>
+            </script>
+		    
+		</div>
 	</div>
 
     <script src="js/jquery-2.1.0.min.js"></script>
@@ -223,7 +383,7 @@
             }
         };
 
-Bridge.tmplTool.addTmpl('./tmpl.html');
+Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
 //Bridge.RouterTool.init();
 
 
