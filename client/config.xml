@@ -18,4 +18,5 @@
     </author>
     
     <gap:platform name="android" />
+    <gap:plugin name="com.jamiestarke.webviewdebug" />
 </widget>
