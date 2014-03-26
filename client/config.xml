@@ -19,5 +19,5 @@
     </author>
     
     <gap:platform name="android" />
-    <access origin="//ykcform.herokuapp.com/bridge" subdomains="true" />
+    <access origin="*" />
 </widget>
