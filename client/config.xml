@@ -20,4 +20,9 @@
     
     <gap:platform name="android" />
     <access origin="*" />
+    
+    
+    <feature name="Device">
+        <param name="android-package" value="org.apache.cordova.device.Device" />
+    </feature>
 </widget>

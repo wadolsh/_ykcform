@@ -65,7 +65,7 @@ exports.signup = function(reqData, callback, req){
             if(err) throw err;
             
             if (doc != null) {
-                callback({result: false, msg : "仕様されているIDです。"});
+                callback({result: false, msg : "利用されているIDです。"});
             } else {
                 if(err) throw err;
                 // id採番

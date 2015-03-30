@@ -27,8 +27,9 @@ exports.addLastUpdate = function(reqData, req) {
 var authCheckLogic = {
     Update : function(authData, reqData, req) {
         if (authData.save) {
-            var user = req.session.user;
-            if (authData.save == 1 && user) {
+            var user = req.session.user;if (authData.read == 0 && user) {
+                return true;
+            } else if (authData.save == 1 && user) {
                 if (!user.memberType || user.memberType < authData.save) {
                     req.query = {last_update_user : user[idName]};
                 }
@@ -47,7 +48,9 @@ var authCheckLogic = {
         }
         if (authData.read) {
             var user = req.session.user;
-            if (authData.read == 1 && user) {
+            if (authData.read == 0 && user) {
+                return true;
+            } else if (authData.read == 1 && user) {
                 if (!user.memberType || user.memberType < authData.read) {
                     if(reqData.parm.$query) {
                         reqData.parm.$query.last_update_user = user[idName];

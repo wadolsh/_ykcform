@@ -26,6 +26,6 @@ exports.loginMethod = {
     db : exports.mongodbMethod.db,
     beforeFilter : [commonFilter.startLogger],
     afterFilter : [commonFilter.endLogger],
-    authCheck: {mydata : {}, service_time: {save : 1, read : 1}},
+    authCheck: {mydata : {}, service_time: {save : 1, read : 1}, find_service: {save : 1, read : 0}},
 }
 exports.loginMethod.module.init(exports.loginMethod);
