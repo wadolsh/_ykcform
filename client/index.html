@@ -384,7 +384,7 @@
                 var obj = Bridge.tmplTool.editor(template);
                 commonConn.reqExecMethod('reqExecLogout', 'logout', obj.data).request(function(data) {
                     console.log(data['reqExecLogout']);
-                    Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, edit: null, serviceTable: null});
+                    Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, serviceTimeEdit: null, serviceTable: null, findServiceTable: null});
                 });
             }},
             
