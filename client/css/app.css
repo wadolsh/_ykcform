@@ -61,3 +61,13 @@ body {
   margin-right: auto;
   margin-left: auto;
 }
+
+.navbar-right {
+  float: right!important;
+  margin-right: -15px;
+}
+
+.navbar-left {
+  float: left!important;
+  margin-left: -13px;
+}
