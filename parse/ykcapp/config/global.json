@@ -1,0 +1,14 @@
+{
+    "applications": {
+        "_default": {
+            "link": "ykcapp"
+        }, 
+        "ykcapp": {
+            "applicationId": "vwq8p9y2Lem8baKzHYpkoHFiKHtanFUl1KPNrvQ4", 
+            "masterKey": "r0klMlylLAIRnm0mcPYxO5mFEeOXSevLIGuS9gqy"
+        }
+    }, 
+    "global": {
+        "parseVersion": "1.4.0"
+    }
+}
