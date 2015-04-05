@@ -197,15 +197,15 @@
             		    <input type="hidden" name="_id" value="##=data._id##">
             			<div class="row">
                 			<div class="form-group col-sm-4">
-                				<label for="findServiceDate" class="">登録日</label>
-                				<input type="date" class="form-control" id="findServiceDate" name="findServiceDate" value="##=data.findServiceDate##" placeholder="日付">
+                				<label class="">登録日</label>
+                				<input type="date" class="form-control" name="findServiceDate" value="##=data.findServiceDate##" placeholder="日付">
 
                 			</div>
                 		</div>
                 		<div class="row">
                 		    <div class="form-group col-sm-4">
-                				<label for="findServiceFindFrom" class="">情報元</label>
-            					<input type="text" id="findServiceFindFrom" name="findServiceFindFrom" list="findServiceFindFromList" value="##=data.findServiceFindFrom##" class="form-control"/>
+                				<label class="">情報元</label>
+            					<input type="text" name="findServiceFindFrom" list="findServiceFindFromList" value="##=data.findServiceFindFrom##" class="form-control"/>
             					<datalist id="findServiceFindFromList">
                                     <option value="電話帳">
                                     <option value="ゼンリン">
@@ -213,8 +213,8 @@
                                 </datalist>
                 			</div>
                 			<div class="form-group col-sm-4">
-                				<label for="findServiceDate" class="">地図:市区</label>
-            				    <input type="text" class="form-control" id="findServiceMapKu" name="findServiceMapKu" list="findServiceMapKuList" value="##=data.findServiceMapKu##" placeholder="地図:市区">
+                				<label class="">地図:市区</label>
+            				    <input type="text" class="form-control" name="findServiceMapKu" list="findServiceMapKuList" value="##=data.findServiceMapKu##" placeholder="地図:市区">
             					<datalist id="findServiceMapKuList">
 <option value="横浜市鶴見区">横浜市鶴見区</option>
 <option value="横浜市神奈川区">横浜市神奈川区</option>
@@ -277,33 +277,33 @@
                                 </datalist>
                 			</div>
                 			<div class="form-group col-sm-4">
-                				<label for="findServiceFindFrom" class="">ページ</label>
-            					<input type="text" id="findServiceMapPage" name="findServiceMapPage" list="findServiceMapPageList" value="##=data.findServiceMapPage##" class="form-control"/>
+                				<label class="">ページ</label>
+            					<input type="text" name="findServiceMapPage" list="findServiceMapPageList" value="##=data.findServiceMapPage##" class="form-control"/>
             					<datalist id="findServiceMapPageList">
                                 </datalist>
                 			</div>
                 		</div>
                 		<div class="row">
                 			<div class="form-group col-sm-8">
-                				<label for="findServiceAddress" class="">住所</label>
+                				<label class="">住所</label>
                 				<div class="row">
                 				    <div class="col-sm-6">
-                				        <input type="text" id="findServiceAddress1" name="findServiceAddress1" value="##=data.findServiceAddress1##" class="form-control" placeholder="都道府県"/>
+                				        <input type="text" name="findServiceAddress1" value="##=data.findServiceAddress1##" class="form-control" placeholder="都道府県"/>
                 				    </div>
                 				</div>
                 				<div class="row">
                 				    <div class="col-sm-6">
-                				        <input type="text" id="findServiceAddress2" name="findServiceAddress2" value="##=data.findServiceAddress2##" class="form-control" placeholder="市区"/>
+                				        <input type="text" name="findServiceAddress2" value="##=data.findServiceAddress2##" class="form-control" placeholder="市区"/>
                 				    </div>
                 				</div>
                 				<div class="row">	
                 				    <div class="col-sm-12">
-                				        <input type="text" id="findServiceAddress3" name="findServiceAddress3" value="##=data.findServiceAddress3##" class="form-control" placeholder="町村"/>
+                				        <input type="text" name="findServiceAddress3" value="##=data.findServiceAddress3##" class="form-control" placeholder="町村"/>
                 				    </div>
                 				</div>
                 				<div class="row">
                 				    <div class="col-sm-12">
-                				        <input type="text" id="findServiceAddress4" name="findServiceAddress4" value="##=data.findServiceAddress4##" class="form-control" placeholder="建物名"/>
+                				        <input type="text" name="findServiceAddress4" value="##=data.findServiceAddress4##" class="form-control" placeholder="建物名"/>
                 			        </div>
                 			    </div>
                 			</div>
@@ -358,7 +358,7 @@
             						<button data-event="##:findServiceModel.lineDelete##" class="btn btn-default btn-xs">削除</button>
             					</td>
                                 <td>##=obj.findServiceDate##</td>
-                                <td>##=obj.findServiceFindFrom## ##=obj.findServiceMapKu##</td>
+                                <td>##=obj.findServiceFindFrom## ##=obj.findServiceMapKu## ##=obj.findServiceMapPage#</td>
                                 <td>##=obj.findServiceAddress1####=obj.findServiceAddress2####=obj.findServiceAddress3####=obj.findServiceAddress4##</td>
                                 <td>##=obj.findServiceName##</td>
             					<td>##=obj.findServiceComment##</td>
@@ -626,7 +626,9 @@
                 var obj = Bridge.tmplTool.editor(template, {
                     findServiceDate : {validateRule : {label: '登録日', isNullAble : false}},
                     findServiceFindFrom : {validateRule : {label: '情報元', isNullAble : false}},
-                    findServiceAddress : {validateRule : {label: '住所', isNullAble : false}},
+                    findServiceAddress1 : {validateRule : {label: '住所', isNullAble : false}},
+                    findServiceAddress2 : {validateRule : {label: '住所', isNullAble : false}},
+                    findServiceAddress3 : {validateRule : {label: '住所', isNullAble : false}},
                     renderMessage : function(strArray) {
                         $(this.target).after('<span>' + strArray.join('<br/>') + '</span>')
                         .parents('.form-group').addClass('has-error');

@@ -48,3 +48,16 @@ body {
 .table {
 	background-color: white;
 }
+
+@media (min-width: 768px) {
+  .container {
+    width: 96%;
+  }
+}
+
+.container {
+  padding-right: 4px;
+  padding-left: 4px;
+  margin-right: auto;
+  margin-left: auto;
+}
