@@ -67,7 +67,7 @@ var beforeFilter = function(configKey, reqData, req, res) {
 
     if (filters) {
         for(var ind in filters) {
-            console.log("beforeFilter - " + ind);
+            //console.log("beforeFilter - " + ind);
             filters[ind](reqData, req, res);
         }
     }

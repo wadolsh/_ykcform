@@ -27,8 +27,11 @@ exports.addLastUpdate = function(reqData, req) {
 var authCheckLogic = {
     Update : function(authData, reqData, req) {
         if (authData.save) {
-            var user = req.session.user;if (authData.read == 0 && user) {
+            var user = req.session.user;
+            var dataName = reqData.dataName;
+            if (authData.read == 0 && user) {
                 return true;
+            /*
             } else if (authData.save == 1 && user) {
                 if (!user.memberType || user.memberType < authData.save) {
                     req.query = {last_update_user : user[idName]};
@@ -37,19 +40,30 @@ var authCheckLogic = {
             } else if (user.memberType > authData.save) {
                 return true;
             }
+            */
+            } else if (authData.save == 1 && user) {
+                if (!user.auth || !user.auth[dataName] || user.auth[dataName].save < authData.save) {
+                    req.query = {last_update_user : user[idName]};
+                }
+                return true;
+            } else if (user.auth && user.auth[dataName] && user.auth[dataName].save > authData.save) {
+                return true;
+            }
             return false;
         }
         return true;
     },
     reqData : function(authData, reqData, req) {
-        console.log('last_update_user insert !');
         if (req.session && req.session.user) {
+            console.log('last_update_user insert !');
         	reqData.parm.last_update_user = req.session.user[idName];
         }
         if (authData.read) {
             var user = req.session.user;
+            var dataName = reqData.dataName;
             if (authData.read == 0 && user) {
                 return true;
+            /*
             } else if (authData.read == 1 && user) {
                 if (!user.memberType || user.memberType < authData.read) {
                     if(reqData.parm.$query) {
@@ -60,6 +74,19 @@ var authCheckLogic = {
                 }
                 return true;
             } else if (user.memberType > authData.read) {
+                return true;
+            }
+            */
+            } else if (authData.read == 1 && user) {
+                if (!user.auth || !user.auth[dataName] || user.auth[dataName].read < authData.read) {
+                    if(reqData.parm.$query) {
+                        reqData.parm.$query.last_update_user = user[idName];
+                    } else {
+                        reqData.parm.last_update_user = user[idName];
+                    }
+                }
+                return true;
+            } else if (user.auth && user.auth[dataName] && user.auth[dataName].read > authData.read) {
                 return true;
             }
             return false;

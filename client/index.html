@@ -247,8 +247,10 @@
             					totalData.findServiceTotalCount = totalData.findServiceTotalCount ? totalData.findServiceTotalCount + 1 : 1;
             					##
                                 <td>
+                                ## if (commonModel._id == obj.last_update_user) {##
             						<button data-ind="##=ind##" data-id="##=obj._id##" data-event="##:findServiceModel.lineEdit##" class="btn btn-default btn-xs">修正</button>
             						<button data-event="##:findServiceModel.lineDelete##" class="btn btn-default btn-xs">削除</button>
+            					##}##
             					</td>
                                 <td>##=obj.findServiceDate##</td>
                                 <td>##=obj.findServiceFindFrom## ##=obj.findServiceMapKu## ##=obj.findServiceMapPage##</td>
@@ -304,6 +306,7 @@
                          ?  ((document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1) ? "https:" : "") + "//ykcform.herokuapp.com/bridge" : "/bridge"});
         
         var commonModel = {
+            _id : null,
 			signup: {click: function(e) {
 			    Bridge.tmplTool.render('login', {isSignup: true});
 			}},
@@ -325,7 +328,8 @@
                 
 			    if (obj.validate()) {
                     commonConn.reqExecMethod('reqExecSignup', 'signup', obj.data).request(function(data) {
-                        if (data['reqExecSignup']._id) {
+                        
+                        if (cdata['reqExecSignup'][Bridge.idName]) {
                             Bridge.tmplTool.render('login', {isSignup: false});
                             commonModel.messageAreaReset({msg : 'ユーザーを登録しました。'});
                         } else {
@@ -342,7 +346,8 @@
                 var obj = Bridge.tmplTool.editor(template);
                 Bridge.localStorageTool.push('keepLogin', obj.data.keep_login);
                 commonConn.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
-                    if (data['reqExecLogin']._id) {
+                    commonModel._id = data['reqExecLogin'][Bridge.idName];
+                    if (commonModel._id) {
                         console.log(data['reqExecLogin']);
                         findServiceModel.listAreaReset();
                         commonModel.loginAreaReset();
@@ -372,7 +377,8 @@
                 commonConn.reqExecMethod('loginChecker', 'loginChecker').request(function(data) {
                     data.loginChecker['keep_login'] = Bridge.localStorageTool.get('keepLogin');
                     Bridge.tmplTool.render('login', data.loginChecker);
-					if (data.loginChecker._id) {
+					if (data.loginChecker[Bridge.idName]) {
+					    commonModel._id = data.loginChecker[Bridge.idName];
 						findServiceModel.listAreaReset();
 						//Bridge.tmplTool.render('serviceTimeEdit', {});
 					}
