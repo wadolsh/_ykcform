@@ -78,7 +78,7 @@ var authCheckLogic = {
             }
             */
             } else if (authData.read == 1 && user) {
-                if (!user.auth || !user.auth[dataName] || user.auth[dataName].read < authData.read) {
+                if (!user._auth || !user._auth[dataName] || user._auth[dataName].read < authData.read) {
                     if(reqData.parm.$query) {
                         reqData.parm.$query.last_update_user = user[idName];
                     } else {
@@ -86,7 +86,7 @@ var authCheckLogic = {
                     }
                 }
                 return true;
-            } else if (user.auth && user.auth[dataName] && user.auth[dataName].read > authData.read) {
+            } else if (user._auth && user._auth[dataName] && user._auth[dataName].read > authData.read) {
                 return true;
             }
             return false;
