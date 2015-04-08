@@ -42,11 +42,11 @@ var authCheckLogic = {
             }
             */
             } else if (authData.save == 1 && user) {
-                if (!user.auth || !user.auth[dataName] || user.auth[dataName].save < authData.save) {
+                if (!user._auth || !user._auth[dataName] || user._auth[dataName].save < authData.save) {
                     req.query = {last_update_user : user[idName]};
                 }
                 return true;
-            } else if (user.auth && user.auth[dataName] && user.auth[dataName].save > authData.save) {
+            } else if (user._auth && user._auth[dataName] && user._auth[dataName].save > authData.save) {
                 return true;
             }
             return false;

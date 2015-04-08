@@ -23,7 +23,8 @@ exports.login = function(reqData, callback, req){
                 req.session.user = {
                     _id: doc._id,
                     login_id: doc.login_id,
-                    name: doc.name
+                    name: doc.name,
+                    _auth: doc._auth
                 };
                 console.log('login success! ' + req.session.user);
                 callback(doc);
