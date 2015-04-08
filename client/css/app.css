@@ -71,3 +71,38 @@ body {
   float: left!important;
   margin-left: -13px;
 }
+
+.navbar-brand {
+  float: left!important;
+  padding: 5px 15px;
+}
+.navbar-header {
+  width: 100%;
+}
+
+.modal-dialog .progress {
+  margin-bottom: 0px;
+}
+
+
+
+.modal {
+  text-align: center;
+}
+
+.modal:before {
+  display: inline-block;
+  vertical-align: middle;
+  content: " ";
+  height: 100%;
+}
+
+.modal-dialog {
+  display: inline-block;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.panel-heading .btn {
+    margin-top: -4px;
+}

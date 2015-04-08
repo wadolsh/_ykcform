@@ -29,7 +29,7 @@ var authCheckLogic = {
         if (authData.save) {
             var user = req.session.user;
             var dataName = reqData.dataName;
-            if (authData.read == 0 && user) {
+            if (authData.save == 0 && user) {
                 return true;
             /*
             } else if (authData.save == 1 && user) {

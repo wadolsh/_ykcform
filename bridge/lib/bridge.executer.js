@@ -79,7 +79,7 @@ var afterFilter = function(configKey, reqData, result, req, res) {
     var filters = bridge_config[configKey].afterFilter;
     if (filters) {
         for(var ind in filters) {
-            console.log("afterFilter - " + ind);
+            //console.log("afterFilter - " + ind);
             filters[ind](reqData, result, req, res);
         }
     }
