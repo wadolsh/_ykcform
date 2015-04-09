@@ -285,7 +285,11 @@
             					</td>
                                 <td>##=obj.findServiceDate##</td>
                                 <td>##=obj.findServiceFindFrom## ##=obj.findServiceMapKu## ##=obj.findServiceMapPage##</td>
-                                <td>##=obj.findServiceAddress1####=obj.findServiceAddress2####=obj.findServiceAddress3####=obj.findServiceAddress4##</td>
+                                <td>
+                                    <a href="http://maps.google.co.jp/maps?q=##=obj.findServiceAddress1####=obj.findServiceAddress2####=obj.findServiceAddress3##" target="gmap">
+                                        ##=obj.findServiceAddress1####=obj.findServiceAddress2####=obj.findServiceAddress3####=obj.findServiceAddress4##
+                                    </a>
+                                </td>
                                 <td>##=obj.findServiceName##</td>
             					<td>##=obj.findServiceComment##</td>
                             </tr>
@@ -482,7 +486,7 @@
 					e.stopPropagation();
                     
                     var address = '';
-                    $('#findServiceAddress1, #findServiceAddress2, #findServiceAddress3, #findServiceAddress4').each(function(idx, obj) {
+                    $('#findServiceAddress1, #findServiceAddress2, #findServiceAddress3').each(function(idx, obj) {
                         address += obj.value;
                     })
                     findServiceModel.geocoding.latLngByAddress(address, function(latLng){
