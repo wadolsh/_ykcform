@@ -173,12 +173,12 @@
                 				<label class="">住所</label>
                 				<div class="row">
                 				    <div class="col-sm-6">
-                				        <input type="text" id="findServiceAddress1" name="findServiceAddress1" value="##=data.findServiceAddress1##" class="form-control" placeholder="都道府県"/>
+                				        <input type="text" id="findServiceAddress1" name="findServiceAddress1" value="##=data.findServiceAddress1 || '神奈川県'##" class="form-control" placeholder="都道府県"/>
                 				    </div>
                 				</div>
                 				<div class="row">
                 				    <div class="col-sm-6">
-                				        <input type="text" id="findServiceAddress2" name="findServiceAddress2" value="##=data.findServiceAddress2##" class="form-control" placeholder="市区"/>
+                				        <input type="text" list="findServiceMapKuList" id="findServiceAddress2" name="findServiceAddress2" value="##=data.findServiceAddress2##" class="form-control" placeholder="市区"/>
                 				    </div>
                 				</div>
                 				<div class="row">	
@@ -375,7 +375,8 @@
                     password2 : {validateRule : {label: 'パスワード確認', isNullAble : false}},
                     //email : {validateRule : {label: 'E-mail', patterns : 'email'}},
                     renderMessage : function(strArray) {
-                        Bridge.tmplTool.render('message', {msg : strArray.join('<br/>')});
+                        //Bridge.tmplTool.render('message', {msg : strArray.join('<br/>')});
+                        alert(strArray.join('\n'));
                     },
                     clearError : function(strArray) {
 

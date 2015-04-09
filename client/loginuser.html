@@ -190,7 +190,7 @@
 		</div>
     </div>
     
-    <div id="loadingModal" class="modal fade" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true">
+    <div id="loadingModal" class="modal" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="progress">
@@ -230,7 +230,8 @@
 
         var table_list = {
             login_user: "ユーザー",
-            find_service: "探し奉仕"
+            find_service: "探し奉仕",
+            find_service_plan: "探し奉仕管理表"
         }
         
         var auth_type = {
@@ -264,7 +265,8 @@
                     password2 : {validateRule : {label: 'パスワード確認', isNullAble : false}},
                     //email : {validateRule : {label: 'E-mail', patterns : 'email'}},
                     renderMessage : function(strArray) {
-                        Bridge.tmplTool.render('message', {msg : strArray.join('<br/>')});
+                        //Bridge.tmplTool.render('message', {msg : strArray.join('<br/>')});
+                        alert(strArray.join('\n'));
                     },
                     clearError : function(strArray) {
 
@@ -293,7 +295,7 @@
                 commonConn.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
                     commonModel._id = data['reqExecLogin'][Bridge.idName];
                     if (commonModel._id) {
-                        console.log(data['reqExecLogin']);
+                        //console.log(data['reqExecLogin']);
                         loginUserModel.listAreaReset();
                         commonModel.loginAreaReset();
                     } else {
@@ -306,7 +308,7 @@
                 var template = $(e.target).parent('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template);
                 commonConn.reqExecMethod('reqExecLogout', 'logout', obj.data).request(function(data) {
-                    console.log(data['reqExecLogout']);
+                    //console.log(data['reqExecLogout']);
                     Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, loginUserTable: null});
                 });
             }},

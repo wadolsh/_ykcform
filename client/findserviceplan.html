@@ -72,7 +72,7 @@
     	<div id="findServicePlanTable" class="panel panel-default br-tmpl">
 		    <script type="text/tmpl" data-tmpl-id="findServicePlanTable">
         		<div class="panel-heading">
-        		    ユーザー情報
+        		    探し奉仕管理表
                     <button type="button" class="btn btn-default btn-sm pull-right">
                         <span class="glyphicon glyphicon-align-left" aria-hidden="true"></span>
                     </button>
@@ -81,33 +81,53 @@
                  	<div id="findServicePlanEditArea" class="form-edit panel-body" role="form">
             		    <input type="hidden" name="##=Bridge.idName##" value="##=data[Bridge.idName]##">
                 		<div class="row">
-                		    <div class="form-group col-sm-4">
-                				<label class="">ID</label>
-            					<input type="text" name="login_id" value="##=data.login_id##" class="form-control"/>
+                			<div class="form-group col-sm-3">
+                				<label class="">区域</label>
+            				    <select name="findServicePlan_kuName" value="" class="form-control">
+            				        <option value=""></option>
+            				        ##for(var key in ku_list) {##
+            				            <option value="##=key##" ##=(key==data.findServicePlan_kuName) ? 'selected="selected"' : ""##>##=key##</option>
+            				        ##}##
+            				    </select>
                 			</div>
-                			<div class="form-group col-sm-4">
-                				<label class="">名前</label>
-            				    <input type="text" name="name" value="##=data.name##" class="form-control">
+                			<div class="form-group col-sm-3">
+                				<label class="">探し区分</label>
+            				    <select name="findServicePlan_findType" value="" class="form-control">
+            				        <option value=""></option>
+            				        ##for(var key in find_type) {##
+            				            <option value="##=key##" ##=(key==data.findServicePlan_findType) ? 'selected="selected"' : ""##>##=key##</option>
+            				        ##}##
+            				    </select>
                 			</div>
-                			<div class="form-group col-sm-4">
-                				<label class="">E-MAIL</label>
-            					<input type="text" name="email"  value="##=data.email##" class="form-control"/>
+                        </div>
+                		<div class="row">
+                		    <div class="form-group col-sm-2">
+                				<label class="">地図番号FROM</label>
+            					<input type="number" min="0" name="findServicePlan_numFrom" value="##=data.findServicePlan_numFrom##" class="form-control"/>
+                			</div>
+                			<div class="form-group col-sm-2">
+                				<label class="">地図番号TO</label>
+            				    <input type="number" min="0" name="findServicePlan_numTo" value="##=data.findServicePlan_numTo##" class="form-control">
+                			</div>
+                			<div class="form-group col-sm-2">
+                				<label class="">日付</label>
+            				    <input type="date" name="findServicePlan_date" value="##=data.findServicePlan_date##" class="form-control">
                 			</div>
                 		</div>
+                		<div class="row">
+                			<div class="form-group col-sm-4">
+                				<label class="">奉仕者</label>
+            				    <input type="text" name="findServicePlan_minName" value="##=data.findServicePlan_minName##" class="form-control">
+                			</div>
+                        </div>
                         <div class="row">
                 			<div class="form-group col-sm-12">
                 				<label class="">コメント</label>
-                				<textarea class="form-control" rows="3" name="comment">##=data.comment##</textarea>
+                				<textarea class="form-control" rows="3" name="findServicePlan_comment">##=data.findServicePlan_comment##</textarea>
                 			</div>
                         </div>
                         <div class="row">
                 			<div class="form-group col-sm-3">
-                				<label class=""><権限></label>
-                				##for(var key in table_list) {##
-                				    ##for(var key2 in auth_type) {##
-                				        <label> ##=table_list[key]## # ##=key2## :</label> <input type="number" min="0" max="10" name="_auth.##=key##.##=key2##" value="##=(data._auth && data._auth[key]) ? data._auth[key][key2] : ''##" class="form-control">
-                				    ##}##
-                				##}##
                 			</div>
                         </div>
                 		<div class="row">
@@ -122,20 +142,14 @@
         		</div>
         		<div class="panel-heading">
         		    <div class="row">
-                        <div class="form-group col-sm-4">
-                            <label class="">名前</label>
-                            <input type="text" id="search_findServicePlanName" value="" class="form-control"/>
-            			</div>
-            			<div class="form-group col-sm-2">
-            			    <label class="sr-only"></label>
-            			    <button class="btn btn-default" type="submit" data-event="##:findServicePlanModel.listAreaReset##">検索</button>
-            			</div>
         			</div>
         		</div>
-        		<div class="table-responsive">
+        		<div class="_table-responsive">
+        		    ##$.each(data.tableList || {} , function(typeKey, typeData) {##
         		    <div class="row">
+        		        ##$.each(typeData || {} , function(kuKey, kuData) {##
                 	    <div class="col-sm-4">
-                		
+                	        <label>##=typeKey## - ##=kuKey##</label>
                     		<table class="table table-bordered">
                                 <thead>
                                     <tr class="active">
@@ -147,7 +161,7 @@
                                 </thead>
                                 <tbody>
                     				##totalData={};##
-                                    ##$.each(data.list || {} , function(ind, obj) {##
+                                    ##$.each(kuData.dataList || {} , function(ind, obj) {##
                                     <tr>
                     					##
                     					//var tmpTime = obj.serviceTime ? obj.serviceTime.split(":") : "0:0";
@@ -164,7 +178,7 @@
                     						<button data-event="##:findServicePlanModel.lineDelete##" class="btn btn-default btn-xs">削除</button>
                     					##//}##
                     					</td>
-                                        <td>##=obj.findServicePlan_numFrom##~##=obj.findServicePlan_numTo##</td>
+                                        <td>##=obj.findServicePlan_numFrom## ~ ##=obj.findServicePlan_numTo##</td>
                                         <td>##=obj.findServicePlan_date##</td>
                                         <td>##=obj.findServicePlan_minName##</td>
                                     </tr>
@@ -172,19 +186,18 @@
                                 </tbody>
                                 <tfoot>
                                     <tr class="active">
-                    					<th></th>
-                                        <th>総計 >></th>
-                                        <th id="findServicePlanTotalCount">##=totalData.findServicePlanTotalCount##</th>
-                                        <th></th>
-                                        <th></th>
+                    					<th>総計 >></th>
+                    					<th id="findServicePlanTotalCount">##=totalData.findServicePlanTotalCount##</th>
                                         <th></th>
                                         <th></th>
                                     </tr>
                                 </tfoot>
                     		</table>
-                		
                 		</div>
+                	    ##});##
             		</div>
+            		<hr/>
+            		##});##
             	</div>
 		    </script>
 		</div>
@@ -228,9 +241,48 @@
             }
         });
 
-        var ku_list = [
-            "川崎区", "中原区", "高津区", "宮前区", "麻生区", "鶴見区(102)", "中区", "南区", "神奈川区"	
-        ]
+        var find_type = {
+            "住宅地図": null,
+            "アパート・マンション": null
+        };
+        var ku_list = {
+            "川崎市川崎区": {
+                pageLimit: 0,
+                dataList: []
+            },
+            "川崎市中原区": {
+                pageLimit: 0,
+                dataList: []
+            },
+            "川崎市高津区": {
+                pageLimit: 0,
+                dataList: []
+            },
+            "川崎市宮前区": {
+                pageLimit: 0,
+                dataList: []
+            },
+            "川崎市麻生区": {
+                pageLimit: 0,
+                dataList: []
+            },
+            "川崎市鶴見区": {
+                pageLimit: 0,
+                dataList: []
+            },
+            "横浜市中区": {
+                pageLimit: 0,
+                dataList: []
+            },
+            "横浜市南区": {
+                pageLimit: 0,
+                dataList: []
+            },
+            "横浜市神奈川区": {
+                pageLimit: 0,
+                dataList: []
+            }
+        };
         
 
 
@@ -259,7 +311,8 @@
                     password2 : {validateRule : {label: 'パスワード確認', isNullAble : false}},
                     //email : {validateRule : {label: 'E-mail', patterns : 'email'}},
                     renderMessage : function(strArray) {
-                        Bridge.tmplTool.render('message', {msg : strArray.join('<br/>')});
+                        //Bridge.tmplTool.render('message', {msg : strArray.join('<br/>')});
+                        alert(strArray.join('\n'));
                     },
                     clearError : function(strArray) {
 
@@ -268,7 +321,6 @@
                 
 			    if (obj.validate()) {
                     commonConn.reqExecMethod('reqExecSignup', 'signup', obj.data).request(function(data) {
-                        
                         if (cdata['reqExecSignup'][Bridge.idName]) {
                             Bridge.tmplTool.render('login', {isSignup: false});
                             commonModel.messageAreaReset({msg : 'ユーザーを登録しました。'});
@@ -288,7 +340,6 @@
                 commonConn.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
                     commonModel._id = data['reqExecLogin'][Bridge.idName];
                     if (commonModel._id) {
-                        console.log(data['reqExecLogin']);
                         findServicePlanModel.listAreaReset();
                         commonModel.loginAreaReset();
                     } else {
@@ -301,7 +352,6 @@
                 var template = $(e.target).parent('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template);
                 commonConn.reqExecMethod('reqExecLogout', 'logout', obj.data).request(function(data) {
-                    console.log(data['reqExecLogout']);
                     Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, findServicePlanTable: null});
                 });
             }},
@@ -377,11 +427,11 @@
             save: {click: function(e) {
                 var template = $(e.target).parents('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template, {
-                    findServicePlanDate : {validateRule : {label: '登録日', isNullAble : false}},
-                    findServicePlanFindFrom : {validateRule : {label: '情報元', isNullAble : false}},
-                    findServicePlanAddress1 : {validateRule : {label: '住所', isNullAble : false}},
-                    findServicePlanAddress2 : {validateRule : {label: '住所', isNullAble : false}},
-                    findServicePlanAddress3 : {validateRule : {label: '住所', isNullAble : false}},
+                    findServicePlan_date : {validateRule : {label: '日付', isNullAble : false}},
+                    findServicePlan_kuName : {validateRule : {label: '区域', isNullAble : false}},
+                    findServicePlan_findType : {validateRule : {label: '区分', isNullAble : false}},
+                    findServicePlan_numFrom : {validateRule : {label: '地図番号FROM', isNullAble : false}},
+                    findServicePlan_numTo : {validateRule : {label: '地図番号TO', isNullAble : false}},
                     renderMessage : function(strArray) {
                         $(this.target).after('<span>' + strArray.join('<br/>') + '</span>')
                         .parent().addClass('has-error');
@@ -424,10 +474,9 @@
 				var search_findServicePlanName = $('#search_findServicePlanName').val();
 				var searchParm = {$query: {}, $orderby: {findServicePlanDate : 1}};
 				
-				if (search_findServicePlanName) {
-                    searchParm.$query['findServicePlanFindFrom'] = {$regex : search_findServicePlanName};
-				}
-				
+				//if (search_findServicePlanName) {
+                //    searchParm.$query['findServicePlanFindFrom'] = {$regex : search_findServicePlanName};
+				//}
 				//if (serviceDateMonth) {
 				//	param.$query = {serviceDate: {$regex : serviceDateMonth}};
 				//}
@@ -435,6 +484,16 @@
                     findServicePlanModel.listData = data['reqList'];
                     data.list = data['reqList'];
                     commonModel.messageAreaReset(data);
+                    var temp = null;
+                    var findType = Bridge.clone(find_type);
+                    for (var key in findType) {
+                        findType[key] = $.extend(true, {}, ku_list);
+                    }
+                    for(var ind in data.list) {
+                        temp = data.list[ind];
+                        findType[temp.findServicePlan_findType][temp.findServicePlan_kuName].dataList.push(temp);
+                    }
+                    data.tableList = findType;
                     Bridge.tmplTool.render('findServicePlanTable', data);
                 });
             },
