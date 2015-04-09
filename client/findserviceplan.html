@@ -156,7 +156,7 @@
                     					<th style="width:96px;"></th>
                                         <th>地図番号</th>
                                         <th>日付</th>
-                                        <th>名前</th>
+                                        <th>奉仕者</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -473,7 +473,7 @@
             listAreaReset: function(data) {
 				//var serviceDateMonth = $('#dat').val();
 				var search_findServicePlanName = $('#search_findServicePlanName').val();
-				var searchParm = {$query: {}, $orderby: {findServicePlanDate : 1}};
+				var searchParm = {$query: {}, $orderby: {findServicePlan_numFrom : 1}};
 				
 				//if (search_findServicePlanName) {
                 //    searchParm.$query['findServicePlanFindFrom'] = {$regex : search_findServicePlanName};
