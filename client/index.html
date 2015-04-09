@@ -311,7 +311,7 @@
 		</div>
     </div>
     
-    <div id="loadingModal" class="modal fade" data-keyboard="false" tabindex="-1" role="dialog" aria-labelledby="loadingModalLabel" aria-hidden="true">
+    <div id="loadingModal" class="modal" data-keyboard="false" tabindex="-1" role="dialog">
         <div class="modal-dialog modal-sm">
             <div class="modal-content">
                 <div class="progress">
@@ -341,7 +341,8 @@
                 $('#loadingModal').modal('hide');
             },
             error : function(jqXHR, textStatus, errorThrown ) {
-                $('#loadingModal').modal('hide');
+                console.log('error');
+                //$('#loadingModal').modal('hide');
                 if (jqXHR.status == 404) {
                     Bridge.msg("サーバーとの通信時にエラーが発生しました。");
                 }
@@ -400,10 +401,11 @@
                 var template = $(e.target).parent('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template);
                 Bridge.localStorageTool.push('keepLogin', obj.data.keep_login);
+                //Bridge.sessionStorageTool.push('keepLogin', obj.data.keep_login);
                 commonConn.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
                     commonModel._id = data['reqExecLogin'][Bridge.idName];
                     if (commonModel._id) {
-                        console.log(data['reqExecLogin']);
+                        //console.log(data['reqExecLogin']);
                         findServiceModel.listAreaReset();
                         commonModel.loginAreaReset();
                     } else {
@@ -416,7 +418,7 @@
                 var template = $(e.target).parent('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template);
                 commonConn.reqExecMethod('reqExecLogout', 'logout', obj.data).request(function(data) {
-                    console.log(data['reqExecLogout']);
+                    //console.log(data['reqExecLogout']);
                     Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, findServiceTable: null});
                 });
             }},
@@ -527,7 +529,7 @@
                             //func(results[0].geometry.location);
                             func(results[0].geometry.location);
                         } else {
-                            console.log('Geocode失敗: ' + status  + '：' + address);
+                            //console.log('Geocode失敗: ' + status  + '：' + address);
                             //mapTools.geocoding.latLngByAddress(address, func);
                             func(null);
                         }

@@ -8,7 +8,7 @@
     var Bridge = root.Bridge = {};
     
     var log = root.log = function(str) {
-        console.log(str);
+        //console.log(str);
     };
     
     var push             = Array.prototype.push,
@@ -353,6 +353,15 @@
         }
     };
 
+    var sessionStorageTool = Bridge.sessionStorageTool = {
+        push: function(key, data) {
+            sessionStorage[key] = JSON.stringify(data);
+        },
+        get: function(key) {
+            return JSON.parse(sessionStorage[key] || null);
+        }
+    };
+    
     
     /**
      * jsonの場合子も拡張する
