@@ -17,6 +17,13 @@ exports.addLastUpdate = function(reqData, req) {
         || method.indexOf('Insert') > 0
         || method.indexOf('Save') > 0) {
         
+        if (!reqData.data[idName]) {
+            if (req.session.user) {
+                reqData.data.first_update_user = req.session.user[idName];
+            }
+            reqData.data.first_update_date = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+        }
+        
         if (req.session.user) {
             reqData.data.last_update_user = req.session.user[idName];
         }

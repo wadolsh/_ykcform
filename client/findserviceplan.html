@@ -132,7 +132,7 @@
         		    <div class="row">
         		        ##$.each(typeData || {} , function(kuKey, kuData) {##
                 	    <div class="col-sm-4">
-                	        <label>##=typeKey## - ##=kuKey##</label>
+                	        <label>##=typeKey## - ##=kuKey##(##=kuData.pageLimit##)</label>
                     		<table class="table table-bordered">
                                 <thead>
                                     <tr class="active">
@@ -213,11 +213,11 @@
         };
         var ku_list = {
             "川崎市川崎区": {
-                pageLimit: 0,
+                pageLimit: 80,
                 dataList: []
             },
             "川崎市中原区": {
-                pageLimit: 0,
+                pageLimit: 55,
                 dataList: []
             },
             "川崎市高津区": {
@@ -232,7 +232,7 @@
                 pageLimit: 0,
                 dataList: []
             },
-            "川崎市鶴見区": {
+            "横浜市鶴見区": {
                 pageLimit: 0,
                 dataList: []
             },

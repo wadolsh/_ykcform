@@ -57,10 +57,10 @@
         		<div class="panel-heading">
         		    探し記録
                     <button type="button" class="btn btn-default btn-sm pull-right ##=data.editMode=='new' ? 'hidden': ''##" data-event="##:findServiceModel.addNew##">
-                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 新規追加
                     </button>
                     <button type="button" class="btn btn-default btn-sm pull-right ##=(!data.editMode) ? 'hidden': ''##" data-event="##:findServiceModel.listArea##">
-                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span>
+                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 一覧
                     </button>
         		</div>
 ##if(data.editMode) {##
@@ -243,7 +243,7 @@
         			</div>
         		</div>
         		<div class="table-responsive">
-            		<table class=" table table-bordered">
+            		<table class="table table-bordered">
                         <thead>
                             <tr class="active">
             					<th style="width:92px;"></th>
@@ -252,26 +252,25 @@
                                 <th>住所</th>
                                 <th>お名前</th>
             					<th>コメント</th>
+            					##if(findServiceModel.getAuth(1)) {##
+            					<th>登録者</th>
+            					##}##
                             </tr>
                         </thead>
                         <tbody>
             				##totalData={};##
                             ##$.each(data.list || {} , function(ind, obj) {##
-                            <tr>
+                            <tr class="##=(commonModel._id == obj.last_update_user) ? '' : ''##">
             					##
-            					//var tmpTime = obj.serviceTime ? obj.serviceTime.split(":") : "0:0";
-            					//totalData.hour = totalData.hour ? totalData.hour + new Number(tmpTime[0]) : new Number(tmpTime[0]);
-            					//totalData.minute = totalData.minute ? totalData.minute + new Number(tmpTime[1]) : new Number(tmpTime[1]);
-            					
-            					//totalData.totalCalcBooks = totalData.totalCalcBooks ? totalData.totalCalcBooks + new Number(obj.calcBooks) : new Number(obj.calcBooks);
-            					//totalData.totalCalcMagazines = totalData.totalCalcMagazines ? totalData.totalCalcMagazines + new Number(obj.calcMagazines) : new Number(obj.calcMagazines);
             					totalData.findServiceTotalCount = totalData.findServiceTotalCount ? totalData.findServiceTotalCount + 1 : 1;
             					##
                                 <td>
-                                ## if (commonModel._id == obj.last_update_user) {##
+                                    ##if (commonModel._id == obj.last_update_user || (commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service.save > 1)) {##
             						<button data-ind="##=ind##" data-id="##=obj[Bridge.idName]##" data-event="##:findServiceModel.lineEdit##" class="btn btn-default btn-xs">修正</button>
             						<button data-event="##:findServiceModel.lineDelete##" class="btn btn-default btn-xs">削除</button>
-            					##}##
+            					    ##}##
+            					    <button data-event="##:findServiceModel.setToNew##" class="btn btn-xs ##=(obj.isNew==1) ? 'btn-success' : 'btn-default'##" ##if(!findServiceModel.getAuth(1)) {## disabled="disabled" ##}##>新規</button>
+            					    <button data-event="##:findServiceModel.setToDuplicate##" class="btn btn-xs ##=(obj.isNew==2) ? 'btn-success' : 'btn-default'##" ##if(!findServiceModel.getAuth(1)) {## disabled="disabled" ##}##>既存</button>
             					</td>
                                 <td>##=obj.findServiceDate##</td>
                                 <td>##=obj.findServiceFindFrom## ##=obj.findServiceMapKu## ##=obj.findServiceMapPage##</td>
@@ -282,6 +281,9 @@
                                 </td>
                                 <td>##=obj.findServiceName##</td>
             					<td>##=obj.findServiceComment##</td>
+            					##if(findServiceModel.getAuth(1)) {##
+            					<td>##=obj.first_update_user##</td>
+            					##}##
                             </tr>
                             ##});##
                         </tbody>
@@ -292,7 +294,10 @@
                                 <th id="findServiceTotalCount">##=totalData.findServiceTotalCount##</th>
                                 <th id=""></th>
                                 <th id=""></th>
-                                <th></th>
+                                <th id=""></th>
+            					##if(findServiceModel.getAuth(1)) {##
+            					<th></th>
+            					##}##
                             </tr>
                         </tfoot>
             		</table>
@@ -477,6 +482,23 @@
                 });
             }},
             */
+            
+            setToNew: {click: function(e) {
+                findServiceConn.reqUpdate('reqUpdate', e.data._id, {isNew: e.data.isNew == 1 ? 0 : 1}).request(function(data) {
+                    commonModel.messageAreaReset(data);
+                    findServiceModel.listAreaReset();
+                });
+            }},
+            setToDuplicate: {click: function(e) {
+                findServiceConn.reqUpdate('reqUpdate', e.data._id, {isNew: e.data.isNew == 2 ? 0 : 2}).request(function(data) {
+                    commonModel.messageAreaReset(data);
+                    findServiceModel.listAreaReset();
+                });
+            }},
+            
+            getAuth: function(level) {
+                return commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service.save > level;
+            },
             
 			listArea: {click: function(e) {
 				findServiceModel.listAreaReset();

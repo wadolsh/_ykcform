@@ -57,7 +57,7 @@ var commonModel = {
                     commonModel.messageAreaReset(data['reqExecSignup']);
                 }
             });
-	    }		    
+	    }
 	}},
 	signupCancel: {click: function(e) {
 	    Bridge.tmplTool.render('login', {isSignup: false});
@@ -106,6 +106,7 @@ var commonModel = {
             data.loginChecker['keep_login'] = Bridge.localStorageTool.get('keepLogin');
 			if (data.loginChecker[Bridge.idName]) {
 			    commonModel._id = data.loginChecker[Bridge.idName];
+			    commonModel._auth = data.loginChecker._auth;
 				Bridge.tmplTool.render('loginUser', data['loginChecker']);
 				commonModel.loginCheckerAfter(data.loginChecker);
 			} else {
