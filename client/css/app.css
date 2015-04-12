@@ -103,6 +103,6 @@ body {
   vertical-align: middle;
 }
 
-.panel-heading .btn {
+.panel-heading .btn-sm {
     margin-top: -4px;
 }

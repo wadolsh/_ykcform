@@ -14,34 +14,51 @@
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
         <div class="container">
             <div class="navbar-header">
-                <a class="navbar-brand" >
-                    <img alt="Brand" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAA81BMVEX///9VPnxWPXxWPXxWPXxWPXxWPXxWPXz///9hSYT6+vuFc6BXPn37+vz8+/z9/f2LeqWMe6aOfqiTg6uXiK5bQ4BZQX9iS4VdRYFdRYJfSINuWI5vWY9xXJF0YJR3Y5Z4ZZd5ZZd6Z5h9apq0qcW1qsW1q8a6sMqpnLyrn76tocCvpMGwpMJoUoprVYxeRoJjS4abjLGilLemmbrDutDFvdLPx9nX0eDa1OLb1uPd1+Td2OXe2eXh3Ofj3+nk4Orl4evp5u7u7PLv7fPx7/T08vb08/f19Pf29Pj39vn6+fuEcZ9YP35aQn/8/P1ZQH5fR4PINAOdAAAAB3RSTlMAIWWOw/P002ipnAAAAPhJREFUeF6NldWOhEAUBRvtRsfdfd3d3e3/v2ZPmGSWZNPDqScqqaSBSy4CGJbtSi2ubRkiwXRkBo6ZdJIApeEwoWMIS1JYwuZCW7hc6ApJkgrr+T/eW1V9uKXS5I5GXAjW2VAV9KFfSfgJpk+w4yXhwoqwl5AIGwp4RPgdK3XNHD2ETYiwe6nUa18f5jYSxle4vulw7/EtoCdzvqkPv3bn7M0eYbc7xFPXzqCrRCgH0Hsm/IjgTSb04W0i7EGjz+xw+wR6oZ1MnJ9TWrtToEx+4QfcZJ5X6tnhw+nhvqebdVhZUJX/oFcKvaTotUcvUnY188ue/n38AunzPPE8yg7bAAAAAElFTkSuQmCC">
-                </a>
-        		<div id="menu" class="br-tmpl panel-body navbar-left" role="form">
-        		    <script type="text/tmpl" data-tmpl-id="menu">
-            		    <select data-event="##:commonModel.viewport##" id="viewport-scale">
-                            ##
-                            var sv = 0;
-                            var selected = false;
-                            var value = localStorage['viewport_scale'] || 1;
-                            commonModel.viewport.setScale(value);
-                            for (var i=150; i > 49; i=i-5) {
-                                sv = i / 100;
-                                selected = value == sv;
-                            ##
-                                <option value="##=sv##" ##=selected ? 'selected="selected"' : ""##>x ##=sv##</option>
-                            ##}##
-                        </select>
-                    </script>
-        		</div>
-        		<div id="loginUser" class="br-tmpl panel-body navbar-right" role="form">
-                    <script type="text/tmpl" data-tmpl-id="loginUser">
-                        ##if(data.name) {##
-                        <span>##=data.name##</span>
-                        <button data-event="##:commonModel.logout##" class="btn btn-primary btn-xs">Sign Out</button>
+              <a class="navbar-brand" >
+                <img alt="Brand" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAA81BMVEX///9VPnxWPXxWPXxWPXxWPXxWPXxWPXz///9hSYT6+vuFc6BXPn37+vz8+/z9/f2LeqWMe6aOfqiTg6uXiK5bQ4BZQX9iS4VdRYFdRYJfSINuWI5vWY9xXJF0YJR3Y5Z4ZZd5ZZd6Z5h9apq0qcW1qsW1q8a6sMqpnLyrn76tocCvpMGwpMJoUoprVYxeRoJjS4abjLGilLemmbrDutDFvdLPx9nX0eDa1OLb1uPd1+Td2OXe2eXh3Ofj3+nk4Orl4evp5u7u7PLv7fPx7/T08vb08/f19Pf29Pj39vn6+fuEcZ9YP35aQn/8/P1ZQH5fR4PINAOdAAAAB3RSTlMAIWWOw/P002ipnAAAAPhJREFUeF6NldWOhEAUBRvtRsfdfd3d3e3/v2ZPmGSWZNPDqScqqaSBSy4CGJbtSi2ubRkiwXRkBo6ZdJIApeEwoWMIS1JYwuZCW7hc6ApJkgrr+T/eW1V9uKXS5I5GXAjW2VAV9KFfSfgJpk+w4yXhwoqwl5AIGwp4RPgdK3XNHD2ETYiwe6nUa18f5jYSxle4vulw7/EtoCdzvqkPv3bn7M0eYbc7xFPXzqCrRCgH0Hsm/IjgTSb04W0i7EGjz+xw+wR6oZ1MnJ9TWrtToEx+4QfcZJ5X6tnhw+nhvqebdVhZUJX/oFcKvaTotUcvUnY188ue/n38AunzPPE8yg7bAAAAAElFTkSuQmCC">
+              </a>
+    		<div id="menu" class="br-tmpl panel-body navbar-left" role="form">
+    		    <script type="text/tmpl" data-tmpl-id="menu">
+        		    <select data-event="##:commonModel.viewport##" id="viewport-scale">
+                        ##
+                        var sv = 0;
+                        var selected = false;
+                        var value = localStorage['viewport_scale'] || 1;
+                        commonModel.viewport.setScale(value);
+                        for (var i=150; i > 49; i=i-5) {
+                            sv = i / 100;
+                            selected = value == sv;
+                        ##
+                            <option value="##=sv##" ##=selected ? 'selected="selected"' : ""##>x ##=sv##</option>
                         ##}##
-                    </script>
-        		</div>
+                    </select>
+                </script>
+    		</div>
+    		<div id="login" class="br-tmpl form-signin panel-body navbar-right" role="form">
+                <script type="text/tmpl" data-tmpl-id="login">
+                
+                    ##if(data.isSignup) {##
+                        <h3>ユーザー登録</h3>
+                        <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
+                        <input type="password" name="password" value="" class="form-control" placeholder="パスワード"/>
+                        <input type="password" name="password2" value="" class="form-control" placeholder="パスワード確認"/>
+                        <input type="text" name="name" value="" class="form-control" placeholder="お名前"/>
+                        <input type="email" name="email" value="" class="form-control" placeholder="E-mail"/>
+                        <br/>
+                        <button data-event="##:commonModel.signupInsert##" class="btn btn-primary">登録</button>
+                        <button data-event="##:commonModel.signupCancel##" class="btn">キャンセル</button>
+                    ##} else if(!data[Bridge.idName]) {##
+                    <a href="#" data-event="##:commonModel.signup##" class="">ユーザー登録</a>
+                    <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
+                    <input type="password" name="password" value="" class="form-control" placeholder="パスワード"/>
+                    <label><input type="checkbox" name="keep_login" value="checked" ##=data.keep_login##/>ログイン保存</label>
+                    <button data-event="##:commonModel.login##" class="btn btn-lg btn-primary btn-block">Sign In</button>
+                    ##} else {##
+                    <span>##=data.name##</span>
+                    <button data-event="##:commonModel.logout##" class="btn btn-primary btn-xs">Sign Out</button>
+                    ##}##
+                </script>
+    		</div>
     		</div>
             <div id="message" class="br-tmpl">
                 <script type="text/tmpl" data-tmpl-id="message">
@@ -199,13 +216,31 @@
         </div>
     </div>
     
+    
+    
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDejNEedWnONLDewIynvzf6Wv-aI4sd3eU&amp;sensor=true"></script>
     <script src="js/jquery-2.1.0.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/underscore.js"></script>
     <script src="js/bridge.core.js"></script>
-    <script src="js/app.js"></script>
     <script type="text/javascript">
+    
+        $.ajaxSetup({
+            //async : false,
+            beforeSend : function(jqXHR, textStatus) {
+                $('#loadingModal').modal('show');
+            },
+            complete : function(jqXHR, textStatus) {
+                $('#loadingModal').modal('hide');
+            },
+            error : function(jqXHR, textStatus, errorThrown ) {
+                $('#loadingModal').modal('hide');
+                if (jqXHR.status == 404) {
+                    Bridge.msg("サーバーとの通信時にエラーが発生しました。");
+                }
+                log(textStatus + " : " + errorThrown);
+            }
+        });
 
         var find_type = {
             "住宅地図": null,
@@ -250,16 +285,102 @@
             }
         };
         
-        commonModel.loginCheckerAfter = function(data) {
-            findServiceModel.listAreaReset();
-        }
-        commonModel.logoutAfter = function(data) {
-            //Bridge.tmplTool.reset({loginUser: null, findService: null});
-            location.href = "/";
-        }
-        commonModel.loginCheckerFail = function(data) {
-            location.href = "/";
-        }
+
+
+        //## Bridge
+        Bridge.idName = '_id';
+
+        var listData = {};
+        var totalData = {};
+
+        var commonConn = new Bridge.Connector({
+            //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
+            url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+                         ?  ((document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1) ? "https:" : "") + "//ykcform.herokuapp.com/bridge" : "/bridge"});
+        
+        var commonModel = {
+            _id : null,
+			signup: {click: function(e) {
+			    Bridge.tmplTool.render('login', {isSignup: true});
+			}},
+			signupInsert: {click: function(e) {
+    			var template = $(e.target).parents('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template, {
+                    login_id : {validateRule : {label: 'ID', isNullAble : false}},
+                    name : {validateRule : {label: 'ID', isNullAble : false}},
+                    password : {validateRule : {label: 'パスワード', isNullAble : false}},
+                    password2 : {validateRule : {label: 'パスワード確認', isNullAble : false}},
+                    //email : {validateRule : {label: 'E-mail', patterns : 'email'}},
+                    renderMessage : function(strArray) {
+                        //Bridge.tmplTool.render('message', {msg : strArray.join('<br/>')});
+                        alert(strArray.join('\n'));
+                    },
+                    clearError : function(strArray) {
+
+                    }
+                });
+                
+			    if (obj.validate()) {
+                    commonConn.reqExecMethod('reqExecSignup', 'signup', obj.data).request(function(data) {
+                        if (cdata['reqExecSignup'][Bridge.idName]) {
+                            Bridge.tmplTool.render('login', {isSignup: false});
+                            commonModel.messageAreaReset({msg : 'ユーザーを登録しました。'});
+                        } else {
+                            commonModel.messageAreaReset(data['reqExecSignup']);
+                        }
+                    });
+			    }		    
+			}},
+			signupCancel: {click: function(e) {
+			    Bridge.tmplTool.render('login', {isSignup: false});
+			}},
+            login: {click: function(e) {
+                var template = $(e.target).parent('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                Bridge.localStorageTool.push('keepLogin', obj.data.keep_login);
+                commonConn.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
+                    commonModel._id = data['reqExecLogin'][Bridge.idName];
+                    if (commonModel._id) {
+                        findServicePlanModel.listAreaReset();
+                        commonModel.loginAreaReset();
+                    } else {
+                        commonModel.messageAreaReset(data['reqExecLogin']);
+                    }
+
+                });
+            }},
+            logout: {click: function(e) {
+                var template = $(e.target).parent('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                commonConn.reqExecMethod('reqExecLogout', 'logout', obj.data).request(function(data) {
+                    Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, findServicePlanTable: null});
+                });
+            }},
+            viewport: {change: function(e) {
+                var value = e.target.value;
+                localStorage['viewport_scale'] = e.target.value;
+                $('meta[name="viewport"]').attr('content', 'width=device-width, initial-scale=' + value + ', maximum-scale=' + value + ', user-scalable=no');
+            }, setScale: function(value) {
+                $('meta[name="viewport"]').attr('content', 'width=device-width, initial-scale=' + value + ', maximum-scale=' + value + ', user-scalable=no');
+            }},
+            
+            loginAreaReset: function() {
+                commonConn.reqExecMethod('loginChecker', 'loginChecker').request(function(data) {
+                    data.loginChecker['keep_login'] = Bridge.localStorageTool.get('keepLogin');
+                    Bridge.tmplTool.render('login', data.loginChecker);
+					if (data.loginChecker[Bridge.idName]) {
+					    commonModel._id = data.loginChecker[Bridge.idName];
+						findServicePlanModel.listAreaReset();
+						//Bridge.tmplTool.render('serviceTimeEdit', {});
+					}
+                });
+            },
+            
+            messageAreaReset: function(data) {
+                data = data || {};
+                Bridge.tmplTool.render('message', {msg : data.msg || data.error || data.warm});
+            }
+        };
 
         var findServicePlanConn = new Bridge.Connector({dataName : "find_service_plan",
             //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
@@ -382,11 +503,11 @@
         Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
         Bridge.tmplTool.render('menu', {});
         
-        //if (Bridge.localStorageTool.get('keepLogin')) {
-            commonModel.loginChecker();
-        //} else {
-        //    location.href = "/";
-        //}
+        if (Bridge.localStorageTool.get('keepLogin')) {
+            commonModel.loginAreaReset();
+        } else {
+            Bridge.tmplTool.render('login', {});
+        }
     </script>
 </body>
 </html>

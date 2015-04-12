@@ -14,6 +14,9 @@ exports.init = function(config) {
 exports.login = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
+        if (!reqData.data.login_id || !reqData.data.password) {
+            callback({result: false, warm : "login失敗"});
+        }
         db.collection(exports.methodConfig.db.user_dataName)
             .findOne({login_id : reqData.data.login_id, password: sha256(reqData.data.password)}, function (err, doc) {
 

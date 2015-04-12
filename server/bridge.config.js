@@ -39,6 +39,14 @@ exports.loginMethod = {
                 , service_time: {save : 1, read : 1}
                 , find_service: {save : 1, read : 0}
                 , find_service_plan: {save : 1, read : 1}
+                , app_setting: {save : 1, read : 0}
     }
 }
 exports.loginMethod.module.init(exports.loginMethod);
+
+exports.ykcformMethod = {
+    module : require('./method.ykcform'),
+    db : exports.mongodbMethod.db,
+    beforeFilter : [orignChecker, commonFilter.startLogger, loginFilter.loginCheck, loginFilter.authCheck, loginFilter.addLastUpdate],
+    afterFilter : [commonFilter.endLogger],
+}

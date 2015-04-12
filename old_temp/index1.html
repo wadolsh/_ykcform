@@ -1,0 +1,154 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=1" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>タイトル</title>
+</head>
+<body>
+    
+    <div id="message" class="br-tmpl">
+        <div>##=data.msg##</div>
+    </div>
+    
+    <div id="login" class="br-tmpl"></div>
+
+    <div id="edit" class="br-tmpl"></div>
+
+    <div id="list" class="br-tmpl"></div>
+
+    <div id="result" class="br-tmpl"></div>
+    
+    <a href="https://www.google.com">google</a>
+    
+    <form method="post">
+        <input type="hidden" name="test" value="aaa0">
+        <input type="submit"/>
+    </form>
+    
+    
+    <script src="js/jquery-2.1.0.min.js"></script>
+    <script src="js/underscore.js"></script>
+    <script src="js/bridge.core.js"></script>
+    <script type="text/javascript">
+    
+        $.ajaxSetup({
+            async : false,
+            complete : function(jqXHR, textStatus) {
+            },
+            error : function(jqXHR, textStatus, errorThrown ) {
+                if (jqXHR.status == 404) {
+                    Bridge.msg("サーバーとの通信時にエラーが発生しました。");
+                }
+                log(textStatus + " : " + errorThrown);
+            }
+        });
+
+
+
+
+        var mydata = new Bridge.Connector({dataName : "mydata",
+                    //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
+                    url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://ykcform.herokuapp.com/bridge" : "/bridge"});
+        
+        var listData = {};
+        
+        var model = {
+                oneline: {click: function(e) {
+                        e.stopPropagation();
+                        mydata.reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
+                            var data = data['eventData'];
+                            Bridge.tmplTool.render('edit', data);
+                        });
+                        //alert(e.data.mark);
+                }},
+                lineDelete: {click: function(e) {
+                        e.stopPropagation();
+                        mydata.reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
+                            var data = data['reqDelete'];
+                            $(e.target).parent().remove();
+                        });
+                        //alert(e.data.mark);
+                }},
+                            submit: {click: function(e) {
+                var template = $(e.target).parent('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                mydata.reqSave('reqSave', obj.data).request(function(data) {
+                    var data = data['reqSave'];
+                    model.listAreaReset();
+                });
+            }},
+            insert: {click: function(e) {
+                var template = $(e.target).parent('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template, {
+                    text : {validateRule : {isNullAble : false}}
+                });
+                if (obj.validate()) {
+                    delete obj.data._id;
+                    mydata.reqInsert('reqInsert', obj.data).request(function(data) {
+                        model.listAreaReset();
+                    });
+                }
+
+            }},
+            update: {click: function(e) {
+                var template = $(e.target).parent('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                mydata.reqUpdate('reqInsert', obj.data._id, obj.data).request(function(data) {
+                    model.listAreaReset();
+                });
+            }},
+            login: {click: function(e) {
+                var template = $(e.target).parent('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                mydata.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
+                    console.log(data['reqExecLogin']);
+                    model.listAreaReset();
+                    model.loginAreaReset();
+                });
+            }},
+            logout: {click: function(e) {
+                var template = $(e.target).parent('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                mydata.reqExecMethod('reqExecLogout', 'logout', obj.data).request(function(data) {
+                    console.log(data['reqExecLogout']);
+                    model.listAreaReset();
+                    model.loginAreaReset();
+                });
+            }},
+            
+            loginAreaReset: function() {
+                mydata.reqExecMethod('loginChecker', 'loginChecker').request(function(data) {
+                    Bridge.tmplTool.render('login', data.loginChecker);
+                    model.listAreaReset();
+                });
+            },
+            
+            listAreaReset: function() {
+                mydata.reset().reqList('reqList', {}).request(function(data, textStatus, jqXHR) {
+                    listData = data['reqList'];
+                    model.messageAreaReset(data);
+                    Bridge.tmplTool.render('list', listData);
+                });
+            },
+            
+            messageAreaReset: function(data) {
+                data = data || {};
+                Bridge.tmplTool.render('message', {msg : data.msg || data.error || data.warm});
+            }
+        };
+
+
+        Bridge.tmplTool.addTmpl('./tmpl1.html');
+//Bridge.RouterTool.init();
+
+
+//model.listAreaReset();
+        Bridge.tmplTool.resetAll();
+        //model.loginAreaReset();
+    </script>
+</body>
+</html>

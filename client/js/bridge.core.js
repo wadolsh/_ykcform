@@ -349,7 +349,11 @@
             localStorage[key] = JSON.stringify(data);
         },
         get: function(key) {
-            return JSON.parse(localStorage[key] || null);
+            try {
+                return JSON.parse(localStorage[key] || null);
+            } catch(e) {
+                return null;
+            }
         }
     };
 
@@ -358,7 +362,12 @@
             sessionStorage[key] = JSON.stringify(data);
         },
         get: function(key) {
-            return JSON.parse(sessionStorage[key] || null);
+            try {
+                return JSON.parse(sessionStorage[key] || null);
+            } catch(e) {
+                return null;
+            }
+            
         }
     };
     

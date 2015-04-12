@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>記録</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/app.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+    		<div id="login" class="br-tmpl form-signin panel-body navbar-right" role="form">
+                <script type="text/tmpl" data-tmpl-id="login">
+                
+                    ##if(data.isSignup) {##
+                        <h3>ユーザー登録</h3>
+                        <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
+                        <input type="password" name="password" value="" class="form-control" placeholder="パスワード"/>
+                        <input type="password" name="password2" value="" class="form-control" placeholder="パスワード確認"/>
+                        <input type="text" name="name" value="" class="form-control" placeholder="お名前"/>
+                        <input type="email" name="email" value="" class="form-control" placeholder="E-mail"/>
+                        <br/>
+                        <button data-event="##:commonModel.signupInsert##" class="btn btn-primary">登録</button>
+                        <button data-event="##:commonModel.signupCancel##" class="btn">キャンセル</button>
+                    ##} else if(!data._id) {##
+                    <a href="#" data-event="##:commonModel.signup##" class="">ユーザー登録</a>
+                    <input type="text" name="login_id" value="" class="form-control" placeholder="ID"/>
+                    <input type="password" name="password" value="" class="form-control" placeholder="パスワード"/>
+                    <label><input type="checkbox" name="keep_login" value="checked" ##=data.keep_login##/>ログイン保存</label>
+                    <button data-event="##:commonModel.login##" class="btn btn-lg btn-primary btn-block">Sign In</button>
+                    ##} else {##
+                    <span>##=data.name##</span>
+                    <button data-event="##:commonModel.logout##" class="btn btn-primary btn-xs">Sign Out</button>
+                    ##}##
+                </script>
+    		</div>
+            <div id="message" class="br-tmpl ">
+                <script type="text/tmpl" data-tmpl-id="message">
+                    <div>##=data.msg##</div>
+                </script>
+            </div>
+        </div>
+    </nav>
+    
+	<div class="container hide">
+	    <div id="serviceTimeEdit" class="br-tmpl">
+	        <script type="text/tmpl" data-tmpl-id="serviceTimeEdit">
+                <div class="panel panel-default">
+            		<div class="panel-heading" data-toggle="collapse" data-parent="#edit" href="#editArea">
+                        <span class="glyphicon glyphicon-pencil"></span>
+                        &nbsp;&nbsp;<span>入力</span>
+                        ##=(data._id ? ' << 編集モード >>' : '')##
+                    </div>
+            		<div id="editArea" class="form-horizontal form-edit panel-body collapse" role="form">
+            		    <input type="hidden" name="_id" value="##=data._id##">
+            			<div class="row">
+                			<div class="form-group col-sm-6">
+                				<label for="serviceDate" class="col-xs-4 col-md-3 col-lg-3 control-label">日付</label>
+                				<div class="col-xs-6 col-md-6">
+                				    <input type="date" class="form-control" id="serviceDate" name="serviceDate" value="##=data.serviceDate##" placeholder="日付">
+                				</div>
+                			</div>
+                			<div class="form-group col-sm-6">
+                				<label for="serviceTime" class="col-xs-4 col-md-3 col-lg-3 control-label">記録時間</label>
+                				<div class="col-xs-6 col-md-6">
+                					<input type="time" step="1800" list="timeList" class="form-control" id="serviceTime" name="serviceTime"  value="##=data.serviceTime##" placeholder="日付">
+                					<datalist id="timeList">
+                						<option value="01:00">
+                						<option value="01:30">
+                						<option value="02:00">
+                						<option value="02:30">
+                						<option value="03:00">
+                						<option value="03:30">
+                						<option value="04:00">
+                						<option value="04:30">
+                						<option value="05:00">
+                						<option value="05:30">
+                						<option value="06:00">
+                						<option value="06:30">
+                						<option value="07:00">
+                						<option value="07:30">
+                						<option value="08:00">
+                						<option value="08:30">
+                						<option value="09:00">
+                						<option value="09:30">
+                						<option value="10:00">
+                					</datalist>
+                				</div>
+                			</div>
+                		</div>
+                		<div class="row">
+                			<div class="form-group col-sm-6">
+                				<label for="calcBooks" class="col-xs-4 col-md-3 col-lg-3 control-label">本</label>
+                				<div class="col-xs-6 col-sm-4">
+                					<input type="number" id="calcBooks" name="calcBooks" value="##=data.calcBooks##" class="form-control"/>
+                				</div>
+                			</div>
+                			<div class="form-group col-sm-6">
+                				<label for="calcMagazines" class="col-xs-4 col-md-3 col-lg-3 control-label">雑誌</label>
+                				<div class="col-xs-6 col-sm-4">
+                					<input type="number" id="calcMagazines" name="calcMagazines" value="##=data.calcMagazines##" class="form-control"/>
+                				</div>
+                			</div>
+                		</div>
+                        <div class="row">
+                			<div class="form-group col-md-6">
+                				<label for="serviceComment" class="col-xs-4 col-sm-2 col-md-3 col-lg-3 control-label">コメント</label>
+                				<div class="col-xs-12 col-sm-12 col-md-9 col-lg-9">
+                				  <textarea class="form-control" id="serviceComment" name="serviceComment">##=data.serviceComment##</textarea>
+                				</div>
+                			</div>
+                        </div>
+                		<div class="row">
+                			<div class="form-group col-md-12">
+                				<div class="col-xs-offset-1 col-xs-10">
+                					<button data-event="##:serviceTimeModel.save##" class="btn btn-primary">登録</button>
+                					<button data-event="##:serviceTimeModel.saveCancel##" class="btn">キャンセル</button>
+                				</div>
+                			</div>
+                		</div>
+            		</div>
+        		</div>
+            </script>
+	    </div>
+	    
+		<div id="serviceTable" class="panel panel-default table-responsive br-tmpl hide">
+		    <script type="text/tmpl" data-tmpl-id="serviceTable">
+        		<div class="panel-heading">奉仕記録</div>
+        		<div class="panel-body">
+        			<input id="serviceDateMonth" type="month" value="##=data.searchMonth##" data-event="##:serviceTimeModel.searchMonthChange##"/>
+        			&nbsp;&nbsp;<span id="searchMonthClear" class="glyphicon glyphicon-remove" data-event="##:serviceTimeModel.searchMonthClear##">
+        		</div>
+        		<table class=" table table-bordered">
+                    <thead>
+                        <tr class="active">
+        					<th></th>
+                            <th>日付</th>
+                            <th>奉仕時間</th>
+                            <th>本</th>
+                            <th>雑誌</th>
+        					<th>コメント</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+        				##totalData={};##
+                        ##$.each(data.list || {} , function(ind, obj) {##
+                        <tr>
+        					##
+        					var tmpTime = obj.serviceTime ? obj.serviceTime.split(":") : "0:0";
+        					totalData.hour = totalData.hour ? totalData.hour + new Number(tmpTime[0]) : new Number(tmpTime[0]);
+        					totalData.minute = totalData.minute ? totalData.minute + new Number(tmpTime[1]) : new Number(tmpTime[1]);
+        					
+        					totalData.totalCalcBooks = totalData.totalCalcBooks ? totalData.totalCalcBooks + new Number(obj.calcBooks) : new Number(obj.calcBooks);
+        					totalData.totalCalcMagazines = totalData.totalCalcMagazines ? totalData.totalCalcMagazines + new Number(obj.calcMagazines) : new Number(obj.calcMagazines);
+        					##
+                            <td>
+        						<button data-ind="##=ind##" data-id="##=obj._id##" data-event="##:serviceTimeModel.lineEdit##" class="btn btn-default btn-xs">修正</button>
+        						<button data-event="##:serviceTimeModel.lineDelete##" class="btn btn-default btn-xs">削除</button>
+        					</td>
+                            <td>##=obj.serviceDate##</td>
+                            <td>##=obj.serviceTime##</td>
+                            <td>##=obj.calcBooks##</td>
+                            <td>##=obj.calcMagazines##</td>
+        					<td>##=obj.serviceComment##</td>
+                        </tr>
+                        ##});##
+                    </tbody>
+                    <tfoot>
+                        <tr class="active">
+        					<th></th>
+                            <th>総計 >></th>
+                            <th id="totalServiceTime">##=Math.floor(totalData.hour + (totalData.minute / 60)) || '00'##:##=(totalData.minute % 60) || '00'##</th>
+                            <th id="totalCalcBooks">##=totalData.totalCalcBooks##</th>
+                            <th id="totalCalcMagazines">##=totalData.totalCalcMagazines##</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+        		</table>
+            </script>
+		    
+		</div>
+		
+
+		
+	</div>
+
+    <div class="container" id="findService">
+    	<div id="findServiceTable" class="panel panel-default br-tmpl">
+		    <script type="text/tmpl" data-tmpl-id="findServiceTable">
+        		<div class="panel-heading">探し記録</div>
+        		<div class="panel-body">
+                 	<div id="findServiceEditArea" class="form-edit panel-body" role="form">
+            		    <input type="hidden" name="_id" value="##=data._id##">
+            			<div class="row">
+                			<div class="form-group col-sm-4">
+                				<label class="">登録日</label>
+                				<input type="date" class="form-control" name="findServiceDate" value="##=data.findServiceDate##" placeholder="日付">
+
+                			</div>
+                		</div>
+                		<div class="row">
+                		    <div class="form-group col-sm-4">
+                				<label class="">情報元</label>
+            					<input type="text" name="findServiceFindFrom" list="findServiceFindFromList" value="##=data.findServiceFindFrom##" class="form-control"/>
+            					<datalist id="findServiceFindFromList">
+                                    <option value="電話帳">
+                                    <option value="ゼンリン">
+                                    <option value="その他">
+                                </datalist>
+                			</div>
+                			<div class="form-group col-sm-4">
+                				<label class="">地図:市区</label>
+            				    <input type="text" class="form-control" name="findServiceMapKu" list="findServiceMapKuList" value="##=data.findServiceMapKu##" placeholder="地図:市区">
+            					<datalist id="findServiceMapKuList">
+<option value="横浜市鶴見区">横浜市鶴見区</option>
+<option value="横浜市神奈川区">横浜市神奈川区</option>
+<option value="横浜市西区">横浜市西区</option>
+<option value="横浜市中区">横浜市中区</option>
+<option value="横浜市南区">横浜市南区</option>
+<option value="横浜市保土ヶ谷区">横浜市保土ヶ谷区</option>
+<option value="横浜市磯子区">横浜市磯子区</option>
+<option value="横浜市金沢区">横浜市金沢区</option>
+<option value="横浜市港北区">横浜市港北区</option>
+<option value="横浜市戸塚区">横浜市戸塚区</option>
+<option value="横浜市港南区">横浜市港南区</option>
+<option value="横浜市旭区">横浜市旭区</option>
+<option value="横浜市緑区">横浜市緑区</option>
+<option value="横浜市瀬谷区">横浜市瀬谷区</option>
+<option value="横浜市栄区">横浜市栄区</option>
+<option value="横浜市泉区">横浜市泉区</option>
+<option value="横浜市青葉区">横浜市青葉区</option>
+<option value="横浜市都筑区">横浜市都筑区</option>
+<option value="川崎市川崎区">川崎市川崎区</option>
+<option value="川崎市幸区">川崎市幸区</option>
+<option value="川崎市中原区">川崎市中原区</option>
+<option value="川崎市高津区">川崎市高津区</option>
+<option value="川崎市多摩区">川崎市多摩区</option>
+<option value="川崎市宮前区">川崎市宮前区</option>
+<option value="川崎市麻生区">川崎市麻生区</option>
+<option value="相模原市緑区">相模原市緑区</option>
+<option value="相模原市中央区">相模原市中央区</option>
+<option value="相模原市南区">相模原市南区</option>
+<option value="横須賀市">横須賀市</option>
+<option value="平塚市">平塚市</option>
+<option value="鎌倉市">鎌倉市</option>
+<option value="藤沢市">藤沢市</option>
+<option value="小田原市">小田原市</option>
+<option value="茅ヶ崎市">茅ヶ崎市</option>
+<option value="逗子市">逗子市</option>
+<option value="三浦市">三浦市</option>
+<option value="秦野市">秦野市</option>
+<option value="厚木市">厚木市</option>
+<option value="大和市">大和市</option>
+<option value="伊勢原市">伊勢原市</option>
+<option value="海老名市">海老名市</option>
+<option value="座間市">座間市</option>
+<option value="南足柄市">南足柄市</option>
+<option value="綾瀬市">綾瀬市</option>
+<option value="三浦郡葉山町">三浦郡葉山町</option>
+<option value="高座郡寒川町">高座郡寒川町</option>
+<option value="中郡大磯町">中郡大磯町</option>
+<option value="中郡二宮町">中郡二宮町</option>
+<option value="足柄上郡中井町">足柄上郡中井町</option>
+<option value="足柄上郡大井町">足柄上郡大井町</option>
+<option value="足柄上郡松田町">足柄上郡松田町</option>
+<option value="足柄上郡山北町">足柄上郡山北町</option>
+<option value="足柄上郡開成町">足柄上郡開成町</option>
+<option value="足柄下郡箱根町">足柄下郡箱根町</option>
+<option value="足柄下郡真鶴町">足柄下郡真鶴町</option>
+<option value="足柄下郡湯河原町">足柄下郡湯河原町</option>
+<option value="愛甲郡愛川町">愛甲郡愛川町</option>
+<option value="愛甲郡清川村">愛甲郡清川村</option>
+                                </datalist>
+                			</div>
+                			<div class="form-group col-sm-4">
+                				<label class="">ページ</label>
+            					<input type="text" name="findServiceMapPage" list="findServiceMapPageList" value="##=data.findServiceMapPage##" class="form-control"/>
+            					<datalist id="findServiceMapPageList">
+                                </datalist>
+                			</div>
+                		</div>
+                		<div class="row">
+                			<div class="form-group col-sm-8">
+                				<label class="">住所</label>
+                				<div class="row">
+                				    <div class="col-sm-6">
+                				        <input type="text" name="findServiceAddress1" value="##=data.findServiceAddress1##" class="form-control" placeholder="都道府県"/>
+                				    </div>
+                				</div>
+                				<div class="row">
+                				    <div class="col-sm-6">
+                				        <input type="text" name="findServiceAddress2" value="##=data.findServiceAddress2##" class="form-control" placeholder="市区"/>
+                				    </div>
+                				</div>
+                				<div class="row">	
+                				    <div class="col-sm-12">
+                				        <input type="text" name="findServiceAddress3" value="##=data.findServiceAddress3##" class="form-control" placeholder="町村"/>
+                				    </div>
+                				</div>
+                				<div class="row">
+                				    <div class="col-sm-12">
+                				        <input type="text" name="findServiceAddress4" value="##=data.findServiceAddress4##" class="form-control" placeholder="建物名"/>
+                			        </div>
+                			    </div>
+                			</div>
+                			<div class="form-group col-sm-4">
+                				<label for="findServiceName" class="">お名前</label>
+                				<input type="text" id="findServiceName" name="findServiceName" value="##=data.findServiceName##" class="form-control"/>
+                			</div>
+                		</div>
+                        <div class="row">
+                			<div class="form-group col-sm-12">
+                				<label for="findServiceComment" class="">コメント</label>
+                				<textarea class="form-control" rows="3" id="findServiceComment" name="findServiceComment">##=data.findServiceComment##</textarea>
+                			</div>
+                        </div>
+                		<div class="row">
+                			<div class="form-group col-md-12">
+                				<div class="col-xs-12">
+                					<button data-event="##:findServiceModel.save##" class="btn btn-primary">登録</button>
+                					<button data-event="##:findServiceModel.saveCancel##" class="btn">キャンセル</button>
+                				</div>
+                			</div>
+                		</div>
+            		</div>
+        		</div>
+        		<div class="table-responsive">
+            		<table class=" table table-bordered">
+                        <thead>
+                            <tr class="active">
+            					<th></th>
+                                <th>登録日</th>
+                                <th>情報元</th>
+                                <th>住所</th>
+                                <th>お名前</th>
+            					<th>コメント</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+            				##totalData={};##
+                            ##$.each(data.list || {} , function(ind, obj) {##
+                            <tr>
+            					##
+            					//var tmpTime = obj.serviceTime ? obj.serviceTime.split(":") : "0:0";
+            					//totalData.hour = totalData.hour ? totalData.hour + new Number(tmpTime[0]) : new Number(tmpTime[0]);
+            					//totalData.minute = totalData.minute ? totalData.minute + new Number(tmpTime[1]) : new Number(tmpTime[1]);
+            					
+            					//totalData.totalCalcBooks = totalData.totalCalcBooks ? totalData.totalCalcBooks + new Number(obj.calcBooks) : new Number(obj.calcBooks);
+            					//totalData.totalCalcMagazines = totalData.totalCalcMagazines ? totalData.totalCalcMagazines + new Number(obj.calcMagazines) : new Number(obj.calcMagazines);
+            					totalData.findServiceTotalCount = totalData.findServiceTotalCount ? totalData.findServiceTotalCount + 1 : 1;
+            					##
+                                <td>
+            						<button data-ind="##=ind##" data-id="##=obj._id##" data-event="##:findServiceModel.lineEdit##" class="btn btn-default btn-xs">修正</button>
+            						<button data-event="##:findServiceModel.lineDelete##" class="btn btn-default btn-xs">削除</button>
+            					</td>
+                                <td>##=obj.findServiceDate##</td>
+                                <td>##=obj.findServiceFindFrom## ##=obj.findServiceMapKu## ##=obj.findServiceMapPage##</td>
+                                <td>##=obj.findServiceAddress1####=obj.findServiceAddress2####=obj.findServiceAddress3####=obj.findServiceAddress4##</td>
+                                <td>##=obj.findServiceName##</td>
+            					<td>##=obj.findServiceComment##</td>
+                            </tr>
+                            ##});##
+                        </tbody>
+                        <tfoot>
+                            <tr class="active">
+            					<th></th>
+                                <th>総計 >></th>
+                                <th id="findServiceTotalCount">##=totalData.findServiceTotalCount##</th>
+                                <th id=""></th>
+                                <th id=""></th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+            		</table>
+            	</div>
+		    </script>
+		</div>
+    </div>
+    
+    <script src="js/jquery-2.1.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/underscore.js"></script>
+    <script src="js/bridge.core.js"></script>
+    <script type="text/javascript">
+    
+        $.ajaxSetup({
+            //async : false,
+            complete : function(jqXHR, textStatus) {
+            },
+            error : function(jqXHR, textStatus, errorThrown ) {
+                if (jqXHR.status == 404) {
+                    Bridge.msg("サーバーとの通信時にエラーが発生しました。");
+                }
+                log(textStatus + " : " + errorThrown);
+            }
+        });
+        
+        Bridge.idName = '_id';
+
+
+        var listData = {};
+        var totalData = {};
+
+        var commonConn = new Bridge.Connector({
+            //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
+            url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+                         ?  ((document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1) ? "https:" : "") + "//ykcform.herokuapp.com/bridge" : "/bridge"});
+
+
+        var commonModel = {
+			signup: {click: function(e) {
+			    Bridge.tmplTool.render('login', {isSignup: true});
+			}},
+			signupInsert: {click: function(e) {
+    			var template = $(e.target).parents('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template, {
+                    login_id : {validateRule : {label: 'ID', isNullAble : false}},
+                    name : {validateRule : {label: 'ID', isNullAble : false}},
+                    password : {validateRule : {label: 'パスワード', isNullAble : false}},
+                    password2 : {validateRule : {label: 'パスワード確認', isNullAble : false}},
+                    //email : {validateRule : {label: 'E-mail', patterns : 'email'}},
+                    renderMessage : function(strArray) {
+                        Bridge.tmplTool.render('message', {msg : strArray.join('<br/>')});
+                    },
+                    clearError : function(strArray) {
+
+                    }
+                });
+                
+			    if (obj.validate()) {
+                    commonConn.reqExecMethod('reqExecSignup', 'signup', obj.data).request(function(data) {
+                        if (data['reqExecSignup']._id) {
+                            Bridge.tmplTool.render('login', {isSignup: false});
+                            commonModel.messageAreaReset({msg : 'ユーザーを登録しました。'});
+                        } else {
+                            commonModel.messageAreaReset(data['reqExecSignup']);
+                        }
+                    });
+			    }		    
+			}},
+			signupCancel: {click: function(e) {
+			    Bridge.tmplTool.render('login', {isSignup: false});
+			}},
+            login: {click: function(e) {
+                var template = $(e.target).parent('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                Bridge.localStorageTool.push('keepLogin', obj.data.keep_login);
+                commonConn.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
+                    if (data['reqExecLogin']._id) {
+                        console.log(data['reqExecLogin']);
+                        findServiceModel.listAreaReset();
+                        commonModel.loginAreaReset();
+                    } else {
+                        commonModel.messageAreaReset(data['reqExecLogin']);
+                    }
+
+                });
+            }},
+            logout: {click: function(e) {
+                var template = $(e.target).parent('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                commonConn.reqExecMethod('reqExecLogout', 'logout', obj.data).request(function(data) {
+                    console.log(data['reqExecLogout']);
+                    Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, serviceTimeEdit: null, serviceTable: null, findServiceTable: null});
+                });
+            }},
+            
+            loginAreaReset: function() {
+                commonConn.reqExecMethod('loginChecker', 'loginChecker').request(function(data) {
+                    data.loginChecker['keep_login'] = Bridge.localStorageTool.get('keepLogin');
+                    Bridge.tmplTool.render('login', data.loginChecker);
+					if (data.loginChecker._id) {
+						findServiceModel.listAreaReset();
+						//Bridge.tmplTool.render('serviceTimeEdit', {});
+					}
+                });
+
+            },
+            
+            messageAreaReset: function(data) {
+                data = data || {};
+                Bridge.tmplTool.render('message', {msg : data.msg || data.error || data.warm});
+            }
+        };
+
+        var serviceTimeConn = new Bridge.Connector({dataName : "service_time",
+            //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
+            url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+                         ?  ((document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1) ? "https:" : "") + "//ykcform.herokuapp.com/bridge" : "/bridge"});
+
+
+        var serviceTimeModel = {
+			lineEdit: {click: function(e) {
+					e.stopPropagation();
+					serviceTimeConn.reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
+						var data = data['eventData'];
+						Bridge.tmplTool.render('serviceTimeEdit', data);
+						$('#editArea').collapse('serviceTimeEdit');
+					});
+					//alert(e.data.mark);
+			}},
+			lineDelete: {click: function(e) {
+					e.stopPropagation();
+					if (!confirm(e.data.serviceDate + ' の記録を削除してもよろしいでしょか？')) {
+					    return false;
+					}
+					
+					serviceTimeConn.reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
+						var data = data['reqDelete'];
+						//$(e.target).parents('td').remove();
+						model.listAreaReset();
+					});
+					//alert(e.data.mark);
+			}},
+			submit: {click: function(e) {
+					var template = $(e.target).parents('.br-tmpl');
+					var obj = Bridge.tmplTool.editor(template);
+					serviceTimeConn.reqSave('reqSave', obj.data).request(function(data) {
+						var data = data['reqSave'];
+						model.listAreaReset();
+					});
+			}},
+			
+            save: {click: function(e) {
+                var template = $(e.target).parents('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template, {
+                    serviceDate : {validateRule : {label: '日付', isNullAble : false}},
+                    serviceTime : {validateRule : {label: '記録時間', isNullAble : false}},
+                    renderMessage : function(strArray) {
+                        $(this.target).after('<span>' + strArray.join('<br/>') + '</span>')
+                        .parents('.form-group').addClass('has-error');
+                    },
+                    clearError : function(strArray) {
+                        var $target = $(this.target);
+                        $target.next('span').remove();
+                        $target.parents('.form-group').removeClass('has-error');
+                    }
+                });
+                if (obj.validate()) {
+                    //delete obj.data._id;
+                    serviceTimeConn.reqSave('reqSave', obj.data).request(function(data) {
+                        serviceTimeModel.listAreaReset();
+                        Bridge.tmplTool.render('serviceTimeEdit', {});
+                    });
+                }
+            }},
+            saveCancel: {click: function(e) {
+                Bridge.tmplTool.render('serviceTimeEdit', {});
+            }},
+            update: {click: function(e) {
+                
+                var template = $(e.target).parent('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                serviceTimeConn.reqUpdate('reqInsert', obj.data._id, obj.data).request(function(data) {
+                    serviceTimeModel.listAreaReset();
+                });
+            }},
+			searchMonthChange: {change: function(e) {
+				serviceTimeModel.listAreaReset();
+			}},
+			searchMonthClear: {click: function(e) {
+			    $('#serviceDateMonth').val(null);
+				serviceTimeModel.listAreaReset();
+			}},
+			
+            listAreaReset: function() {
+				var serviceDateMonth = $('#serviceDateMonth').val();
+				var param = {$query: {}, $orderby: {serviceDate : 1}};
+				if (serviceDateMonth) {
+					param.$query = {serviceDate: {$regex : serviceDateMonth}};
+				}
+                serviceTimeConn.reset().reqList('reqList', param).request(function(data, textStatus, jqXHR) {
+                    listData = data['reqList'];
+                    commonModel.messageAreaReset(data);
+                    Bridge.tmplTool.render('findServiceTable', {searchMonth : serviceDateMonth, list : listData});
+                });
+            },
+        };
+
+
+        var findServiceConn = new Bridge.Connector({dataName : "find_service",
+            //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
+            url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+                         ?  ((document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1) ? "https:" : "") + "//ykcform.herokuapp.com/bridge" : "/bridge"});
+
+
+
+        var findServiceModel = {
+			lineEdit: {click: function(e) {
+					e.stopPropagation();
+					findServiceConn.reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
+						var data = data['eventData'];
+						data.list = findServiceModel.listData;
+						Bridge.tmplTool.render('findServiceTable', data);
+					});
+					//alert(e.data.mark);
+			}},
+			lineDelete: {click: function(e) {
+					e.stopPropagation();
+					if (!confirm(e.data.findServiceAddress + ' の記録を削除してもよろしいでしょか？')) {
+					    return false;
+					}
+					
+					findServiceConn.reqDelete('reqDelete', e.data._id).request(function(data, textStatus, jqXHR) {
+						var data = data['reqDelete'];
+						//$(e.target).parents('td').remove();
+						findServiceModel.listAreaReset();
+					});
+					//alert(e.data.mark);
+			}},
+			submit: {click: function(e) {
+					var template = $(e.target).parents('.br-tmpl');
+					var obj = Bridge.tmplTool.editor(template);
+					findServiceConn.reqSave('reqSave', obj.data).request(function(data) {
+						var data = data['reqSave'];
+						findServiceModel.listAreaReset();
+					});
+			}},
+			
+            save: {click: function(e) {
+                var template = $(e.target).parents('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template, {
+                    findServiceDate : {validateRule : {label: '登録日', isNullAble : false}},
+                    findServiceFindFrom : {validateRule : {label: '情報元', isNullAble : false}},
+                    findServiceAddress1 : {validateRule : {label: '住所', isNullAble : false}},
+                    findServiceAddress2 : {validateRule : {label: '住所', isNullAble : false}},
+                    findServiceAddress3 : {validateRule : {label: '住所', isNullAble : false}},
+                    renderMessage : function(strArray) {
+                        $(this.target).after('<span>' + strArray.join('<br/>') + '</span>')
+                        .parents('.form-group').addClass('has-error');
+                    },
+                    clearError : function(strArray) {
+                        var $target = $(this.target);
+                        $target.next('span').remove();
+                        $target.parents('.form-group').removeClass('has-error');
+                    }
+                });
+                if (obj.validate()) {
+                    //delete obj.data._id;
+                    findServiceConn.reqSave('reqSave', obj.data).request(function(data) {
+                        findServiceModel.listAreaReset();
+                    });
+                }
+            }},
+            saveCancel: {click: function(e) {
+                //Bridge.tmplTool.render('edit', {});
+            }},
+            update: {click: function(e) {
+                
+                var template = $(e.target).parent('.br-tmpl');
+                var obj = Bridge.tmplTool.editor(template);
+                findServiceConn.reqUpdate('reqInsert', obj.data._id, obj.data).request(function(data) {
+                    findServiceModel.listAreaReset();
+                });
+            }},
+
+            listAreaReset: function() {
+				//var serviceDateMonth = $('#dat').val();
+				var param = {$query: {}, $orderby: {serviceDateMonth : 1}};
+				//if (serviceDateMonth) {
+				//	param.$query = {serviceDate: {$regex : serviceDateMonth}};
+				//}
+                findServiceConn.reset().reqList('reqList', param).request(function(data, textStatus, jqXHR) {
+                    findServiceModel.listData = data['reqList'];
+                    commonModel.messageAreaReset(data);
+                    Bridge.tmplTool.render('findServiceTable', {list : findServiceModel.listData});
+                });
+            },
+        };
+
+        Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
+
+        if (Bridge.localStorageTool.get('keepLogin')) {
+            commonModel.loginAreaReset();
+        } else {
+            Bridge.tmplTool.render('login', {});
+        }
+    </script>
+</body>
+</html>
