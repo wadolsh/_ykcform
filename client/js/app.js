@@ -125,3 +125,60 @@ var commonModel = {
         Bridge.tmplTool.render('message', {msg : data.msg || data.error || data.warm});
     }
 };
+
+
+
+// 사용할 앱의 Javascript 키를 설정해 주세요.
+//Kakao.init('382dceda7b32285d170ea4549494be1b');
+var kakaoModel = {
+    logout: {click: function(e) {
+        Kakao.Auth.logout();
+        commonModel.logoutAfter();
+    }},
+    logoutAfter: function(data) {
+        //Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, mainMenu: null});
+    },
+
+    loginChecker: function() {
+        //Kakao.Auth.getStatus(function(statusObj) {
+        //   
+        //});
+        Kakao.API.request({
+            url: '/v1/user/me',
+            success: function(res) {
+                commonModel._id = res.id;
+			    //commonModel._auth = data.loginChecker._auth;
+                Bridge.sessionStorageTool.push('kakaoUser', res);
+                Bridge.tmplTool.render('loginUser', {name: res.properties.nickname});
+                Bridge.tmplTool.reset({login: null});
+				kakaoModel.loginCheckerAfter(res);
+            },
+            fail: function(error) {
+                alert(JSON.stringify(error));
+                Bridge.tmplTool.render('login', {kakaoLogin: true});
+                // 카카오 로그인 버튼을 생성합니다.
+                Kakao.Auth.createLoginButton({
+                    container: '#kakao-login-btn',
+                    success: function(authObj) {
+                        Bridge.sessionStorageTool.push('authObj', authObj);
+			            kakaoModel.loginCheckerFail(authObj);
+                    },
+                    fail: function(err) {
+                        alert(JSON.stringify(err))
+                    }
+                });
+            }
+        });
+
+    },
+    loginCheckerAfter: function(data) {
+        //Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, mainMenu: null});
+    },
+    loginCheckerFail: function(data) {
+        //Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, mainMenu: null});
+    },
+    messageAreaReset: function(data) {
+        data = data || {};
+        Bridge.tmplTool.render('message', {msg : data.msg || data.error || data.warm});
+    }
+};

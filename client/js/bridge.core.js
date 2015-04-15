@@ -98,7 +98,7 @@
             if (func) {
                 source += "';\nvar funcId = (funcIdCount++);\n__p+='";
                 source += "'+\nfuncId\n'";
-                source += "';\nfuncArray[funcId] = {func: " + func + ", data: this};\n__p+='";
+                source += "';\nfuncArray[funcId] = {func: " + func + ", data: this, data2:'" + JSON.stringify(data) +"'};\n__p+='";
             }
             if (evaluate) {
                 source += "';\n" + evaluate + "\n__p+='";
@@ -123,7 +123,7 @@
         }
 
         if (data) {
-            var html = render(data, _);
+            var html = render.call(data, data, _);
             $area.html($(html));
             $.each(funcArray, function(key, obj) {
                 var $element = $area.find('[data-event="' + key + '"]');
@@ -135,7 +135,7 @@
         }
         
         var template = function(data) {
-            var html = render.call(this, data, _);
+            var html = render.call(data, data, _);
             $area.html($(html));
             $.each(funcArray, function(key, obj) {
                 var $element = $area.find('[data-event="' + key + '"]');
@@ -183,12 +183,15 @@
             return this;
         },
         
-        render: function(id, data) {
+        render: function(id, data, callback) {
             var ele = document.getElementById(id)
             //ele.innerHTML = Bridge.tmpl($('#' + id), tmplTool.cache[id], data);
             var $html = tmplTool.cache[id](data);
-            
             RouterTool.add(id, data);
+            
+            if (callback) {
+                callback(data, $html);
+            }
             return $html;
         },
         
@@ -491,6 +494,10 @@
         this.idName = config.idName || Bridge.idName || "id";
         this.baseParm = config.baseParm;
         
+        if (config.hasError) {
+            this.hasError = config.hasError;
+        }
+        
         this.beforeFunc = config.beforeFunc;
         this.afterFunc = config.afterFunc;
         
@@ -510,13 +517,20 @@
             this.dataName = this.config.dataName || Bridge.dataName;
             return this;
         },
-        
+        hasError : function() {
+          return false;  
+        },
         request : function(callBack) {
             var conn = this;
             $.post(this.url, {req : this.queueData}, function (data, textStatus, jqXHR) {
                 if (conn.beforeFunc && !conn.beforeFunc(data, textStatus, jqXHR)) {
                     return false;
                 }
+                
+                if (conn.hasError(data, textStatus, jqXHR)) {
+                    return false;
+                }
+                
                 callBack(data, textStatus, jqXHR);
                 if (conn.afterFunc) {
                     conn.afterFunc(data, textStatus, jqXHR);

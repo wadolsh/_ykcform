@@ -51,19 +51,159 @@
         </div>
     </nav>
     
+<datalist id="findServiceMapKuList">
+    <option value="横浜市鶴見区">横浜市鶴見区</option>
+    <option value="横浜市神奈川区">横浜市神奈川区</option>
+    <option value="横浜市西区">横浜市西区</option>
+    <option value="横浜市中区">横浜市中区</option>
+    <option value="横浜市南区">横浜市南区</option>
+    <option value="横浜市保土ヶ谷区">横浜市保土ヶ谷区</option>
+    <option value="横浜市磯子区">横浜市磯子区</option>
+    <option value="横浜市金沢区">横浜市金沢区</option>
+    <option value="横浜市港北区">横浜市港北区</option>
+    <option value="横浜市戸塚区">横浜市戸塚区</option>
+    <option value="横浜市港南区">横浜市港南区</option>
+    <option value="横浜市旭区">横浜市旭区</option>
+    <option value="横浜市緑区">横浜市緑区</option>
+    <option value="横浜市瀬谷区">横浜市瀬谷区</option>
+    <option value="横浜市栄区">横浜市栄区</option>
+    <option value="横浜市泉区">横浜市泉区</option>
+    <option value="横浜市青葉区">横浜市青葉区</option>
+    <option value="横浜市都筑区">横浜市都筑区</option>
+    <option value="川崎市川崎区">川崎市川崎区</option>
+    <option value="川崎市幸区">川崎市幸区</option>
+    <option value="川崎市中原区">川崎市中原区</option>
+    <option value="川崎市高津区">川崎市高津区</option>
+    <option value="川崎市多摩区">川崎市多摩区</option>
+    <option value="川崎市宮前区">川崎市宮前区</option>
+    <option value="川崎市麻生区">川崎市麻生区</option>
+    <option value="相模原市緑区">相模原市緑区</option>
+    <option value="相模原市中央区">相模原市中央区</option>
+    <option value="相模原市南区">相模原市南区</option>
+    <option value="横須賀市">横須賀市</option>
+    <option value="平塚市">平塚市</option>
+    <option value="鎌倉市">鎌倉市</option>
+    <option value="藤沢市">藤沢市</option>
+    <option value="小田原市">小田原市</option>
+    <option value="茅ヶ崎市">茅ヶ崎市</option>
+    <option value="逗子市">逗子市</option>
+    <option value="三浦市">三浦市</option>
+    <option value="秦野市">秦野市</option>
+    <option value="厚木市">厚木市</option>
+    <option value="大和市">大和市</option>
+    <option value="伊勢原市">伊勢原市</option>
+    <option value="海老名市">海老名市</option>
+    <option value="座間市">座間市</option>
+    <option value="南足柄市">南足柄市</option>
+    <option value="綾瀬市">綾瀬市</option>
+    <option value="三浦郡葉山町">三浦郡葉山町</option>
+    <option value="高座郡寒川町">高座郡寒川町</option>
+    <option value="中郡大磯町">中郡大磯町</option>
+    <option value="中郡二宮町">中郡二宮町</option>
+    <option value="足柄上郡中井町">足柄上郡中井町</option>
+    <option value="足柄上郡大井町">足柄上郡大井町</option>
+    <option value="足柄上郡松田町">足柄上郡松田町</option>
+    <option value="足柄上郡山北町">足柄上郡山北町</option>
+    <option value="足柄上郡開成町">足柄上郡開成町</option>
+    <option value="足柄下郡箱根町">足柄下郡箱根町</option>
+    <option value="足柄下郡真鶴町">足柄下郡真鶴町</option>
+    <option value="足柄下郡湯河原町">足柄下郡湯河原町</option>
+    <option value="愛甲郡愛川町">愛甲郡愛川町</option>
+    <option value="愛甲郡清川村">愛甲郡清川村</option>
+</datalist>
+<datalist id="findServiceFindFromList">
+    <option value="電話帳">
+    <option value="ゼンリン">
+    <option value="その他">
+</datalist>
+
     <div class="container" id="findService">
     	<div id="findServiceTable" class="panel panel-default br-tmpl">
 		    <script type="text/tmpl" data-tmpl-id="findServiceTable">
         		<div class="panel-heading">
         		    探し記録
-                    <button type="button" class="btn btn-default btn-sm pull-right ##=data.editMode=='new' ? 'hidden': ''##" data-event="##:findServiceModel.addNew##">
+                    <button type="button" class="btn btn-default btn-sm pull-right ##=data.editMode=='new' || data.editMode=='no' ? 'hidden': ''##" data-event="##:findServiceModel.addNew##">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 新規追加
                     </button>
                     <button type="button" class="btn btn-default btn-sm pull-right ##=(!data.editMode) ? 'hidden': ''##" data-event="##:findServiceModel.listArea##">
                         <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 一覧
                     </button>
+                    <!--
+                    <button type="button" class="btn btn-default btn-sm pull-right ##=(data.editMode) ? 'hidden': ''##" data-event="##:{
+                                                        click:function(){
+                                                            $('#matchData').toggleClass('hidden');
+                                                        }}##">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 付け合わ
+                    </button>
+                    -->
         		</div>
-##if(data.editMode) {##
+        		
+##if(data.mathcMode) {##
+        		<div class="panel-body" id="matchData">
+        		    <div class="">
+            		    <form class="form-inline">
+                            <div class="form-group">
+                                <label class="sr-only">検索住所</label>
+                                <input type="text" class="form-control" style="width:100px" id="matchAddressInput1" placeholder="住所1" 
+                                        value="##=data.findServiceAddress1##">
+                                <input type="text" class="form-control" style="width:200px" id="matchAddressInput2" placeholder="住所2" 
+                                        value="##=data.findServiceAddress2##">
+                                <input type="text" class="form-control" style="width:200px" id="matchAddressInput3" placeholder="住所3" 
+                                        value="##=data.findServiceAddress3##">
+                                <input type="text" class="form-control" style="width:200px" id="matchAddressInput4" placeholder="住所4" 
+                                        value="##=data.findServiceAddress4##">
+                            </div>
+                            <button type="button" class="btn btn-primary" data-event="##:{
+                                                                    click:function(e){
+                                                                        /*
+                                                                        address2: "501"banchi: "22"chome: "1"cityward: "川崎市川崎区"class: "返却済"congregation: "川崎市中央"description: "日本語"fileno: "03"gou: ""id: "KWS5352070940"lastvisit: ""lat: "35.53521"lng: "139.70940"name: ""notice: ""phonetic_town: "ｱｻﾋﾁｮｳ"prefecture: "神奈川県"serial: "0"tel: ""town: "旭町"zipcode: "2100808"
+                                                                        */
+                                                                        var address1 = $('#matchAddressInput1').val();
+                                                                        var address2 = $('#matchAddressInput2').val();
+                                                                        var address3 = $('#matchAddressInput3').val();
+                                                                        var address4 = $('#matchAddressInput4').val();
+                                                                        var $matchAddressTableBody = $('#matchAddressTable tbody').empty();
+        
+                                                                        var exports = [];
+                                                                        var data = null;
+                                                                        var addr = null;
+                                                                        
+                                                                        for (var key in exportdata) {
+                                                                            data = exportdata[key];
+                                                                            if (data.prefecture == address1 && data.cityward == address2 && address3.indexOf(data.town) > -1) {
+                                                                                exports.push(data);
+                                                                				addr = data.cityward + ' ' + data.town + ' '+ data.chome;
+                                                                				addr += (data.banchi) ? ('-' + data.banchi):'';
+                                                                				addr += (data.gou) ? ('-' + data.gou):'';
+                                                                				addr += data.address2;
+
+                                                                                $('<tr><td>' + data.id + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
+                                                                            }
+                                                                        }
+                                                                    }}##">検索</button>
+                		    <button type="button" class="btn btn-default" data-event="##:{click:function(){refreshStorage();}}##">
+                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> 区域データ取得
+                            </button>
+
+                            <button type="button" data-event="##:findServiceModel.setToNew##" class="btn btn-xs ##=(data.isNew==1) ? 'btn-success' : 'btn-default'##">新規</button>
+            			    <button type="button" data-event="##:findServiceModel.setToDuplicate##" class="btn btn-xs ##=(data.sNew==2) ? 'btn-success' : 'btn-default'##">既存</button>
+                        </form>
+        		    </div>
+        		</div>
+        		<div class="table-responsive">
+            		<table class="table table-bordered" id="matchAddressTable">
+                        <thead>
+                            <tr class="active">
+                                <th>ID</th>
+                                <th>住所</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+##}##
+##if(data.editMode && data.editMode != 'no') {##
         		<div class="panel-body">
                  	<div id="findServiceEditArea" class="form-edit panel-body" role="form">
             		    <input type="hidden" name="##=Bridge.idName##" value="##=data[Bridge.idName]##">
@@ -71,88 +211,20 @@
                 			<div class="form-group col-sm-4">
                 				<label class="">登録日</label>
                 				<input type="date" class="form-control" name="findServiceDate" value="##=data.findServiceDate##" placeholder="日付">
-
                 			</div>
                 		</div>
                 		<div class="row">
                 		    <div class="form-group col-sm-4">
                 				<label class="">情報元</label>
             					<input type="text" name="findServiceFindFrom" list="findServiceFindFromList" value="##=data.findServiceFindFrom##" class="form-control"/>
-            					<datalist id="findServiceFindFromList">
-                                    <option value="電話帳">
-                                    <option value="ゼンリン">
-                                    <option value="その他">
-                                </datalist>
                 			</div>
                 			<div class="form-group col-sm-4">
                 				<label class="">地図:市区</label>
             				    <input type="text" name="findServiceMapKu" list="findServiceMapKuList" value="##=data.findServiceMapKu##" class="form-control">
-            					<datalist id="findServiceMapKuList">
-<option value="横浜市鶴見区">横浜市鶴見区</option>
-<option value="横浜市神奈川区">横浜市神奈川区</option>
-<option value="横浜市西区">横浜市西区</option>
-<option value="横浜市中区">横浜市中区</option>
-<option value="横浜市南区">横浜市南区</option>
-<option value="横浜市保土ヶ谷区">横浜市保土ヶ谷区</option>
-<option value="横浜市磯子区">横浜市磯子区</option>
-<option value="横浜市金沢区">横浜市金沢区</option>
-<option value="横浜市港北区">横浜市港北区</option>
-<option value="横浜市戸塚区">横浜市戸塚区</option>
-<option value="横浜市港南区">横浜市港南区</option>
-<option value="横浜市旭区">横浜市旭区</option>
-<option value="横浜市緑区">横浜市緑区</option>
-<option value="横浜市瀬谷区">横浜市瀬谷区</option>
-<option value="横浜市栄区">横浜市栄区</option>
-<option value="横浜市泉区">横浜市泉区</option>
-<option value="横浜市青葉区">横浜市青葉区</option>
-<option value="横浜市都筑区">横浜市都筑区</option>
-<option value="川崎市川崎区">川崎市川崎区</option>
-<option value="川崎市幸区">川崎市幸区</option>
-<option value="川崎市中原区">川崎市中原区</option>
-<option value="川崎市高津区">川崎市高津区</option>
-<option value="川崎市多摩区">川崎市多摩区</option>
-<option value="川崎市宮前区">川崎市宮前区</option>
-<option value="川崎市麻生区">川崎市麻生区</option>
-<option value="相模原市緑区">相模原市緑区</option>
-<option value="相模原市中央区">相模原市中央区</option>
-<option value="相模原市南区">相模原市南区</option>
-<option value="横須賀市">横須賀市</option>
-<option value="平塚市">平塚市</option>
-<option value="鎌倉市">鎌倉市</option>
-<option value="藤沢市">藤沢市</option>
-<option value="小田原市">小田原市</option>
-<option value="茅ヶ崎市">茅ヶ崎市</option>
-<option value="逗子市">逗子市</option>
-<option value="三浦市">三浦市</option>
-<option value="秦野市">秦野市</option>
-<option value="厚木市">厚木市</option>
-<option value="大和市">大和市</option>
-<option value="伊勢原市">伊勢原市</option>
-<option value="海老名市">海老名市</option>
-<option value="座間市">座間市</option>
-<option value="南足柄市">南足柄市</option>
-<option value="綾瀬市">綾瀬市</option>
-<option value="三浦郡葉山町">三浦郡葉山町</option>
-<option value="高座郡寒川町">高座郡寒川町</option>
-<option value="中郡大磯町">中郡大磯町</option>
-<option value="中郡二宮町">中郡二宮町</option>
-<option value="足柄上郡中井町">足柄上郡中井町</option>
-<option value="足柄上郡大井町">足柄上郡大井町</option>
-<option value="足柄上郡松田町">足柄上郡松田町</option>
-<option value="足柄上郡山北町">足柄上郡山北町</option>
-<option value="足柄上郡開成町">足柄上郡開成町</option>
-<option value="足柄下郡箱根町">足柄下郡箱根町</option>
-<option value="足柄下郡真鶴町">足柄下郡真鶴町</option>
-<option value="足柄下郡湯河原町">足柄下郡湯河原町</option>
-<option value="愛甲郡愛川町">愛甲郡愛川町</option>
-<option value="愛甲郡清川村">愛甲郡清川村</option>
-                                </datalist>
                 			</div>
                 			<div class="form-group col-sm-4">
                 				<label class="">ページ</label>
             					<input type="text" name="findServiceMapPage" list="findServiceMapPageList" value="##=data.findServiceMapPage##" class="form-control"/>
-            					<datalist id="findServiceMapPageList">
-                                </datalist>
                 			</div>
                 		</div>
                 		<div class="row">
@@ -225,11 +297,6 @@
                         <div class="form-group">
                             <label class="">情報元</label>
                             <input type="text" id="search_findServiceFindFrom" list="findServiceFindFromList" value="##=data.search_findServiceFindFrom##" class="form-control"/>
-                            <datalist id="findServiceFindFromList">
-                                <option value="電話帳">
-                                <option value="ゼンリン">
-                                <option value="その他">
-                            </datalist>
             			</div>
                         <div class="form-group">
                             <label class="">地図:市区</label>
@@ -239,6 +306,15 @@
                             <label class="">ページ</label>
                             <input type="text" id="search_findServiceMapPage" value="##=data.search_findServiceMapPage##" class="form-control"/>
             			</div>
+                			
+                		<div class="form-group">
+                		    <select id="search_isNew" class="form-control" value="##=data.search_isNew##">
+                		        <option value=""></option>
+                                <option value="0">未設定</option>
+                                <option value="1">新規</option>
+                                <option value="2">既存</option>
+                            </select>
+                        </div>
             			<button class="btn btn-default" type="submit" data-event="##:findServiceModel.listArea##">検索</button>
         			</div>
         		</div>
@@ -275,6 +351,16 @@
                                 <td>##=obj.findServiceDate##</td>
                                 <td>##=obj.findServiceFindFrom## ##=obj.findServiceMapKu## ##=obj.findServiceMapPage##</td>
                                 <td>
+                                    ##if(findServiceModel.getAuth(1)) {##
+                                    <button type="button" class="btn btn-default btn-xs">
+                                        <span class="glyphicon glyphicon-search" aria-hidden="true" data-event="##:{click:function(e){
+                                            
+                                            Bridge.tmplTool.render('findServiceTable', Bridge.extend(e.data, {mathcMode: true, editMode: 'no'}));
+                                            //$('#matchAddressInput').val(data.findServiceAddress1 + data.findServiceAddress2 + data.findServiceAddress3 + data.findServiceAddress4);
+                                        }}##"></span>
+                                    </button>
+                                    &nbsp;
+                                    ##}##
                                     <a href="http://maps.google.co.jp/maps?q=##=(obj.findServiceLat && obj.findServiceLng) ? 'loc:' + obj.findServiceLat + ',' + obj.findServiceLng :  obj.findServiceAddress1 + obj.findServiceAddress2 + obj.findServiceAddress3 + ' ' + obj.findServiceAddress4##" target="gmap">
                                         ##=obj.findServiceAddress1####=obj.findServiceAddress2####=obj.findServiceAddress3## ##=obj.findServiceAddress4##
                                     </a>
@@ -508,6 +594,9 @@
 				var search_findServiceFindFrom = $('#search_findServiceFindFrom').val();
 				var search_findServiceMapPage = $('#search_findServiceMapPage').val();
 				var search_findServiceMapKu = $('#search_findServiceMapKu').val();
+				var search_isNew = $('#search_isNew').val();
+				
+				
 				var searchParm = {$query: {}, $orderby: {findServiceDate : 1}};
 				
 				if (search_findServiceFindFrom) {
@@ -518,6 +607,9 @@
 				}
 				if (search_findServiceMapKu) {
                     searchParm.$query['findServiceMapKu'] = {$regex : search_findServiceMapKu};
+				}
+				if (search_isNew) {
+                    searchParm.$query['isNew'] = {$eq : parseInt(search_isNew)};
 				}
 				
 				
@@ -533,6 +625,7 @@
                     data.search_findServiceFindFrom = search_findServiceFindFrom;
                     data.search_findServiceMapPage = search_findServiceMapPage;
                     data.search_findServiceMapKu = search_findServiceMapKu;
+                    data.search_isNew = search_isNew;
                     
                     if (findServiceModel.savedData) {
                         data.findServiceDate = findServiceModel.savedData.findServiceDate;
@@ -546,6 +639,36 @@
                 });
             },
         };
+
+
+        var exportdate = null;
+        var exportdate = null;
+        function refreshStorage() {
+            
+            var paregoriaParm = {
+                accept: 'application/json',
+                auth: 'korean:1914',
+                hostname: 'paregoria.ddns.net',
+                port: 80,
+                path: '/trtr/exportdate.json'
+            }
+            paregoriaParm.path = '/trtr/exportdate.json';
+            findServiceConn.reqExecMethod('export', 'getDataByUrl', {parm: paregoriaParm}).request(function(data, textStatus, jqXHR) {
+                if ((localStorage['exportdate'] || '0') < data['export'].lastvisit ){
+                	paregoriaParm.path = '/trtr/export.json';
+                	findServiceConn.reqExecMethod('export', 'getDataByUrl', {parm: paregoriaParm}).request(function(data, textStatus, jqXHR) {
+                 	 	localStorage['exportdata'] = JSON.stringify(data['export']);
+                 	 	exportdata = data['export'];
+                	});
+        			localStorage['exportdate'] = data['export'].lastvisit;
+        			exportdate = data.lastvisit;
+        		} else {
+        		    exportdate = localStorage['exportdate'];
+        		    exportdata = JSON.parse(localStorage['exportdata']);
+        		}
+    		});
+        }
+
 
         Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
         Bridge.tmplTool.render('menu', {});

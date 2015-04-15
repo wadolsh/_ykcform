@@ -1,4 +1,5 @@
 console.log('bridge.config file path = ' + module.filename);
+var http = require('http');
 
 exports.mainMenuList = function(reqData, callback, req){
 	console.log('mainMenuList!');
@@ -23,5 +24,52 @@ exports.mainMenuList = function(reqData, callback, req){
             } else {
             }
         });
+    });
+};
+
+exports.getDataByUrl = function(reqData, callback, req){
+	console.log('getDataByUrl!');
+	/*
+    var parm = {
+        url: request.params.url,
+        success: function(httpResponse) {
+            callback(httpResponse.data || httpResponse.text);
+        },
+        error: function(httpResponse) {
+            callback(httpResponse);
+        }
+    }
+  
+    if (reqData.params) {
+        parm.params = request.params.params;
+    }
+    if (reqData.headers) {
+        parm.headers = request.params.headers;
+    }
+
+    Parse.Cloud.httpRequest(parm);
+    */
+    
+    
+    http.get(reqData.data.parm, function(res) {
+        var body = '';
+        res.setEncoding('utf8');
+     
+        res.on('data', function(chunk){
+            body += chunk;
+        });
+     
+        res.on('end', function(res){
+            
+            try {
+                callback(JSON.parse(body.trim()));
+            } catch (e) {
+                callback(body);
+            }
+        });
+        
+        console.log("Got response: " + res.statusCode);
+    }).on('error', function(e) {
+        console.log("Got error: " + e.message);
     });
 };

@@ -251,7 +251,7 @@
         };
         
         commonModel.loginCheckerAfter = function(data) {
-            findServiceModel.listAreaReset();
+            findServicePlanModel.listAreaReset();
         }
         commonModel.logoutAfter = function(data) {
             //Bridge.tmplTool.reset({loginUser: null, findService: null});
@@ -380,7 +380,10 @@
         };
 
         Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
-        Bridge.tmplTool.render('menu', {});
+        Bridge.tmplTool.render('menu', {}, function(data, $html) {
+            
+            
+        });
         
         //if (Bridge.localStorageTool.get('keepLogin')) {
             commonModel.loginChecker();
