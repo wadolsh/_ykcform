@@ -137,12 +137,19 @@
         var template = function(data) {
             var html = render.call(data, data, _);
             $area.html($(html));
-            $.each(funcArray, function(key, obj) {
+            //$area[0].innerHTML = html;
+            //$.each(funcArray, function(key, obj) {
+            var obj = null;
+            for (var key in funcArray) {
+                obj = funcArray[key];
                 var $element = $area.find('[data-event="' + key + '"]');
-                $.each(obj.func, function(eventId, eventFunc) {
+                //$.each(obj.func, function(eventId, eventFunc) {
+                var eventFunc = null;
+                for (var eventId in obj.func) {
+                    eventFunc = obj.func[eventId];
                     $element.on(eventId, obj.data, eventFunc);
-                });
-            });
+                };
+            };
             return $area;
         };
 
