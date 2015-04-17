@@ -50,7 +50,15 @@ exports.reqData = function(reqData, callback){
 exports.reqList = function(reqData, callback){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
-        db.collection(reqData.dataName).find(reqData.parm).toArray(function (err, docs) {
+        var result = db.collection(reqData.dataName).find(reqData.parm);
+        if (reqData.option) {
+            var option = null;
+            for (var key in reqData.option) {
+                option = reqData.option[key];
+                result[key](option);
+            }
+        }
+        result.toArray(function (err, docs) {
             if(err) throw err;
             callback(docs);
         });

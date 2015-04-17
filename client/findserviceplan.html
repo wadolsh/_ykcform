@@ -211,6 +211,11 @@
             "住宅地図": null,
             "アパート・マンション": null
         };
+        
+        var appData = Bridge.localStorageTool.get('apps').find_service_plan;
+        var ku_list = appData.ku_list;
+        
+        /*
         var ku_list = {
             "川崎市川崎区": {
                 pageLimit: 80,
@@ -249,6 +254,7 @@
                 dataList: []
             }
         };
+        */
         
         commonModel.loginCheckerAfter = function(data) {
             findServicePlanModel.listAreaReset();
@@ -369,9 +375,15 @@
                     for (var key in findType) {
                         findType[key] = $.extend(true, {}, ku_list);
                     }
+                    
+                    var kuData = null;
                     for(var ind in data.list) {
                         temp = data.list[ind];
-                        findType[temp.findServicePlan_findType][temp.findServicePlan_kuName].dataList.push(temp);
+                        kuData = findType[temp.findServicePlan_findType][temp.findServicePlan_kuName];
+                        if (!kuData.dataList) {
+                            kuData.dataList = [];
+                        }
+                        kuData.dataList.push(temp);
                     }
                     data.tableList = findType;
                     Bridge.tmplTool.render('findServicePlanTable', data);

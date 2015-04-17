@@ -129,8 +129,9 @@
 
         commonModel.loginCheckerAfter = function(data) {
             Bridge.tmplTool.reset({login: null});
-            appSettingConn.reqExecMethod('appData', 'mainMenuList').request(function(data, textStatus, jqXHR) {
-    			var data = data['appData'];
+            appSettingConn.reqExecMethod('apps', 'mainMenuList').request(function(data, textStatus, jqXHR) {
+    			var data = data['apps'];
+    			Bridge.localStorageTool.push('apps', data.apps);
                 Bridge.tmplTool.render('mainMenu', data);
     		});
         }

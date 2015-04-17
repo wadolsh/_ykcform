@@ -573,12 +573,14 @@
             }, id)));
             return this;
         },
-        reqList : function (key, query) {
+        reqList : function (key, query, option) {
             query = query || {};
+            //option = option || {};
             this.combine({
                 "key" : key,
                 "method" : "reqList",
                 "parm" : query,
+                "option": option
             });
             return this;
         },

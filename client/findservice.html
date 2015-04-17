@@ -206,6 +206,7 @@
         		<div class="panel-body">
                  	<div id="findServiceEditArea" class="form-edit panel-body" role="form">
             		    <input type="hidden" name="##=Bridge.idName##" value="##=data[Bridge.idName]##">
+            		    <input type="hidden" name="isNew" value="##=(data.isNew || 0)##">
             			<div class="row">
                 			<div class="form-group col-sm-4">
                 				<label class="">登録日</label>
@@ -283,8 +284,8 @@
         		</div>
                 <nav class="navbar navbar-default navbar-fixed-bottom">
                     <div class="container">
-                        <a class="navbar-brand"></a>
                         <div class="navbar-header" style="padding:10px">
+                            <div class="navbar-brand"style="height: 0px;"></div>
                             <div class="navbar-left">
                                 <button type="button" data-event="##:findServiceModel.save##" class="btn ##=data[Bridge.idName] ? 'btn-success' : 'btn-primary'## ">##=data[Bridge.idName] ? '修正' : '登録'##</button>
                             </div>
@@ -323,6 +324,15 @@
             			<button class="btn btn-default" type="submit" data-event="##:findServiceModel.search##">検索</button>
         			</div>
         		</div>
+        		<!--
+        		<nav>
+                    <ul class="pagination">
+                        <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                        <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+                        <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                    </ul>
+                </nav>
+                -->
         		<div class="table-responsive">
             		<table class="table table-bordered">
                         <thead>
@@ -418,6 +428,7 @@
     <script src="js/app.js"></script>
     <script type="text/javascript">
         commonModel.loginCheckerAfter = function(data) {
+            findServiceModel.savedData = Bridge.localStorageTool.get('findServiceModel_savedData');
             findServiceModel.listAreaReset();
         }
         commonModel.logoutAfter = function(data) {
@@ -552,6 +563,7 @@
                     findServiceConn.reqSave('reqSave', obj.data).request(function(data) {
                         //delete data[reqSave][Bridge.idName];
                         findServiceModel.savedData = data['reqSave'];
+                        Bridge.localStorageTool.push('findServiceModel_savedData', findServiceModel.savedData);
                         findServiceModel.listAreaReset();
                         commonModel.messageAreaReset(data);
                     });
@@ -569,14 +581,16 @@
                 findServiceModel.listAreaReset();
             }},
             restoreFromPrev: {click: function(e) {
+                var findServiceModel_savedData = Bridge.localStorageTool.get('findServiceModel_savedData');
                 
-                delete findServiceModel.savedData.findServiceAddress4;
-                delete findServiceModel.savedData.findServiceName;
-                delete findServiceModel.savedData.findServiceComment;
-                delete findServiceModel.savedData.findServiceLng;
-                delete findServiceModel.savedData.findServiceLat;
+                delete findServiceModel_savedData[Bridge.idName];
+                delete findServiceModel_savedData.findServiceAddress4;
+                delete findServiceModel_savedData.findServiceName;
+                delete findServiceModel_savedData.findServiceComment;
+                delete findServiceModel_savedData.findServiceLng;
+                delete findServiceModel_savedData.findServiceLat;
                 
-                Bridge.tmplTool.render('findServiceTable', Bridge.extend({editMode: 'new'}, findServiceModel.savedData));
+                Bridge.tmplTool.render('findServiceTable', Bridge.extend({editMode: 'new'}, findServiceModel_savedData));
             }},
             /*
             update: {click: function(e) {
@@ -658,11 +672,17 @@
 				//if (serviceDateMonth) {
 				//	param.$query = {serviceDate: {$regex : serviceDateMonth}};
 				//}
-                findServiceConn.reset().reqList('reqList', searchParm).request(function(data, textStatus, jqXHR) {
+				
+				var pagesize = 10;
+				var pageNum = 1;
+                findServiceConn.reset()
+                //.reqList('count', {}, {count: {}})
+                //.reqList('reqList', searchParm, {skip: (pagesize * ( pageNum - 1 )), limit: pagesize})
+                .reqList('reqList', searchParm)
+                .request(function(data, textStatus, jqXHR) {
                     findServiceModel.listData = data['reqList'];
                     data.list = data['reqList'];
                     commonModel.messageAreaReset(data);
-                    
                     
                     data.search_findServiceFindFrom = search_findServiceFindFrom;
                     data.search_findServiceMapPage = search_findServiceMapPage;
