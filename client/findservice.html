@@ -631,7 +631,7 @@
         				addr = data.cityward + ' ' + data.town + ' '+ data.chome;
         				addr += (data.banchi) ? ('-' + data.banchi):'';
         				addr += (data.gou) ? ('-' + data.gou):'';
-        				addr += data.address2;
+        				addr += ' ' + data.address2;
 
                         $('<tr><td>' + data.class + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
                     }
@@ -649,6 +649,7 @@
             }},
             
 			search: {click: function(e) {
+			    findServiceModel.pageNum = 1;
 				var search_findServiceFindFrom = $('#search_findServiceFindFrom').val();
 				var search_findServiceMapPage = $('#search_findServiceMapPage').val();
 				var search_findServiceMapKu = $('#search_findServiceMapKu').val();
