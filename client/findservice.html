@@ -154,33 +154,7 @@
                             </div>
                             <button type="button" class="btn btn-primary" data-event="##:{
                                                                     click:function(e){
-                                                                        /*
-                                                                        address2: "501"banchi: "22"chome: "1"cityward: "川崎市川崎区"class: "返却済"congregation: "川崎市中央"description: "日本語"fileno: "03"gou: ""id: "KWS5352070940"lastvisit: ""lat: "35.53521"lng: "139.70940"name: ""notice: ""phonetic_town: "ｱｻﾋﾁｮｳ"prefecture: "神奈川県"serial: "0"tel: ""town: "旭町"zipcode: "2100808"
-                                                                        */
-                                                                        var address1 = $('#matchAddressInput1').val();
-                                                                        var address2 = $('#matchAddressInput2').val();
-                                                                        var address3 = $('#matchAddressInput3').val();
-                                                                        var address4 = $('#matchAddressInput4').val();
-                                                                        var $matchAddressTableBody = $('#matchAddressTable tbody').empty();
-        
-                                                                        var exports = [];
-                                                                        var data = null;
-                                                                        var addr = null;
-                                                                        
-                                                                        for (var key in exportdata) {
-                                                                            data = exportdata[key];
-                                                                            if (data.prefecture == address1 
-                                                                                    && (data.cityward.indexOf(address2) > -1 || address2.indexOf(data.cityward) > -1) 
-                                                                                    && address3.indexOf(data.town) > -1) {
-                                                                                exports.push(data);
-                                                                				addr = data.cityward + ' ' + data.town + ' '+ data.chome;
-                                                                				addr += (data.banchi) ? ('-' + data.banchi):'';
-                                                                				addr += (data.gou) ? ('-' + data.gou):'';
-                                                                				addr += data.address2;
-
-                                                                                $('<tr><td>' + data.id + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
-                                                                            }
-                                                                        }
+                                                                        findServiceModel.matchAddress();
                                                                     }}##">検索</button>
                 		    <button type="button" class="btn btn-default" data-event="##:{click:function(){refreshStorage();}}##">
                                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> 区域データ取得
@@ -329,7 +303,6 @@
 
         		<nav>
                     <ul class="pagination" style="margin:0px">
-                        
                         <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
                         ##
                         var endNum = (findServiceModel.listCount / findServiceModel.pageSize) + 1;
@@ -382,6 +355,7 @@
                                         <span class="glyphicon glyphicon-search" aria-hidden="true" data-event="##:{click:function(e){
                                             
                                             Bridge.tmplTool.render('findServiceTable', Bridge.extend(e.data, {mathcMode: true, editMode: 'no'}));
+                                            findServiceModel.matchAddress();
                                             //$('#matchAddressInput').val(data.findServiceAddress1 + data.findServiceAddress2 + data.findServiceAddress3 + data.findServiceAddress4);
                                         }}##"></span>
                                     </button>
@@ -634,6 +608,36 @@
                 return commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service.save > level;
             },
             
+            matchAddress: function() {
+                /*
+                address2: "501"banchi: "22"chome: "1"cityward: "川崎市川崎区"class: "返却済"congregation: "川崎市中央"description: "日本語"fileno: "03"gou: ""id: "KWS5352070940"lastvisit: ""lat: "35.53521"lng: "139.70940"name: ""notice: ""phonetic_town: "ｱｻﾋﾁｮｳ"prefecture: "神奈川県"serial: "0"tel: ""town: "旭町"zipcode: "2100808"
+                */
+                var address1 = $('#matchAddressInput1').val();
+                var address2 = $('#matchAddressInput2').val();
+                var address3 = $('#matchAddressInput3').val();
+                var address4 = $('#matchAddressInput4').val();
+                var $matchAddressTableBody = $('#matchAddressTable tbody').empty();
+
+                var exports = [];
+                var data = null;
+                var addr = null;
+                
+                for (var key in exportdata) {
+                    data = exportdata[key];
+                    if (data.prefecture == address1 
+                            && (data.cityward.indexOf(address2) > -1 || address2.indexOf(data.cityward) > -1) 
+                            && address3.indexOf(data.town) > -1) {
+                        exports.push(data);
+        				addr = data.cityward + ' ' + data.town + ' '+ data.chome;
+        				addr += (data.banchi) ? ('-' + data.banchi):'';
+        				addr += (data.gou) ? ('-' + data.gou):'';
+        				addr += data.address2;
+
+                        $('<tr><td>' + data.id + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
+                    }
+                }
+            },
+            
 			listArea: {click: function(e) {
 				findServiceModel.listAreaReset();
             }},
@@ -645,8 +649,6 @@
             }},
             
 			search: {click: function(e) {
-				
-				
 				var search_findServiceFindFrom = $('#search_findServiceFindFrom').val();
 				var search_findServiceMapPage = $('#search_findServiceMapPage').val();
 				var search_findServiceMapKu = $('#search_findServiceMapKu').val();
