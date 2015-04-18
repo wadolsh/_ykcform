@@ -169,7 +169,9 @@
                                                                         
                                                                         for (var key in exportdata) {
                                                                             data = exportdata[key];
-                                                                            if (data.prefecture == address1 && data.cityward == address2 && address3.indexOf(data.town) > -1) {
+                                                                            if (data.prefecture == address1 
+                                                                                    && (data.cityward.indexOf(address2) > -1 || address2.indexOf(data.cityward) > -1) 
+                                                                                    && address3.indexOf(data.town) > -1) {
                                                                                 exports.push(data);
                                                                 				addr = data.cityward + ' ' + data.town + ' '+ data.chome;
                                                                 				addr += (data.banchi) ? ('-' + data.banchi):'';
@@ -252,7 +254,7 @@
                 			    </div>
                 			</div>
                 			<div class="form-group col-sm-4">
-                				<label for="findServiceName" class="">お名前</label>
+                				<label for="findServiceName" class="">名前</label>
                 				<input type="text" id="findServiceName" name="findServiceName" value="##=data.findServiceName##" class="form-control"/>
                 			</div>
                 		</div>
@@ -324,15 +326,24 @@
             			<button class="btn btn-default" type="submit" data-event="##:findServiceModel.search##">検索</button>
         			</div>
         		</div>
-        		<!--
+
         		<nav>
                     <ul class="pagination">
+                        
                         <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
-                        <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+                        ##
+                        var endNum = (findServiceModel.listCount / findServiceModel.pageSize) + 1;
+                        //for (var num = 1; num < endNum; num++) {
+                        $.each(_.range(1, endNum), function(ind, num) {
+                        ##
+                        <li class="##=findServiceModel.pageNum == num ? 'active' : ''##">
+                            <a href="#" data-event="##:findServiceModel.pageSelect##">##=num##<span class="sr-only">(current)</span></a>
+                        </li>
+                        ##})##
                         <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
                     </ul>
                 </nav>
-                -->
+
         		<div class="table-responsive">
             		<table class="table table-bordered">
                         <thead>
@@ -361,7 +372,7 @@
             						<button data-event="##:findServiceModel.lineDelete##" class="btn btn-default btn-xs">削除</button>
             					    ##}##
             					    <button data-event="##:findServiceModel.setToNew##" class="btn btn-xs ##=(obj.isNew==1) ? 'btn-success' : 'btn-default'##" ##if(!findServiceModel.getAuth(1)) {## disabled="disabled" ##}##>新規</button>
-            					    <button data-event="##:findServiceModel.setToDuplicate##" class="btn btn-xs ##=(obj.isNew==2) ? 'btn-success' : 'btn-default'##" ##if(!findServiceModel.getAuth(1)) {## disabled="disabled" ##}##>既存</button>
+            					    <button data-event="##:findServiceModel.setToDuplicate##" class="btn btn-xs ##=(obj.isNew==2) ? 'btn-warning' : 'btn-default'##" ##if(!findServiceModel.getAuth(1)) {## disabled="disabled" ##}##>既存</button>
             					</td>
                                 <td>##=obj.findServiceDate##</td>
                                 <td>##=obj.findServiceFindFrom## ##=obj.findServiceMapKu## ##=obj.findServiceMapPage##</td>
@@ -392,8 +403,8 @@
                             <tr class="active">
             					<th></th>
                                 <th>総計 >></th>
-                                <th id="findServiceTotalCount">##=totalData.findServiceTotalCount##</th>
-                                <th id=""></th>
+                                <th id="findServiceTotalCount">##=findServiceModel.listCount##</th>
+                                <th id="">##=totalData.findServiceTotalCount##</th>
                                 <th id=""></th>
                                 <th id=""></th>
             					##if(findServiceModel.getAuth(1)) {##
@@ -446,6 +457,9 @@
         var findServiceModel = {
             savedData: null,
             listData: null,
+            listCount: 0,
+            pageSize: 20,
+            pageNum: 1,
 			lineEdit: {click: function(e) {
 					e.stopPropagation();
 					findServiceConn.reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
@@ -624,6 +638,12 @@
 				findServiceModel.listAreaReset();
             }},
             
+            pageSelect: {click: function(e) {
+                
+                findServiceModel.pageNum = e.data;
+                findServiceModel.listAreaReset();
+            }},
+            
 			search: {click: function(e) {
 				
 				
@@ -653,7 +673,7 @@
 				$('#search_isNew').val(search_isNew);
 				
 				
-				var searchParm = {$query: {}, $orderby: {findServiceDate : 1}};
+				var searchParm = {$query: {}, $orderby: {findServiceDate : -1}};
 				
 				if (search_findServiceFindFrom) {
                     searchParm.$query['findServiceFindFrom'] = {$regex : search_findServiceFindFrom};
@@ -673,13 +693,16 @@
 				//	param.$query = {serviceDate: {$regex : serviceDateMonth}};
 				//}
 				
-				var pagesize = 10;
-				var pageNum = 1;
+				var pageSize = findServiceModel.pageSize;
+				var pageNum = findServiceModel.pageNum;
+
+				
                 findServiceConn.reset()
-                //.reqList('count', {}, {count: {}})
-                //.reqList('reqList', searchParm, {skip: (pagesize * ( pageNum - 1 )), limit: pagesize})
-                .reqList('reqList', searchParm)
+                .reqCount('count', {})
+                .reqList('reqList', searchParm, {skip: (pageSize * ( pageNum - 1 )), limit: pageSize})
+                //.reqList('reqList', searchParm)
                 .request(function(data, textStatus, jqXHR) {
+                    findServiceModel.listCount = data['count'];
                     findServiceModel.listData = data['reqList'];
                     data.list = data['reqList'];
                     commonModel.messageAreaReset(data);
@@ -696,7 +719,7 @@
 
 
         var exportdate = null;
-        var exportdate = null;
+        var exportdata = JSON.parse(localStorage['exportdata']);
         function refreshStorage() {
             
             var paregoriaParm = {

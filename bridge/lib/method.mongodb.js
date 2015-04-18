@@ -65,6 +65,16 @@ exports.reqList = function(reqData, callback){
     });
 };
 
+exports.reqCount = function(reqData, callback){
+    mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
+        if(err) throw err;
+        db.collection(reqData.dataName).find(reqData.parm).count(function (err, docs) {
+            if(err) throw err;
+            callback(docs);
+        });
+    });
+};
+
 exports.reqInsert = function(reqData, callback){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
@@ -76,6 +86,8 @@ exports.reqInsert = function(reqData, callback){
         });
     });
 };
+
+
 
 exports.reqUpdate = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {

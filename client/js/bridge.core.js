@@ -98,7 +98,7 @@
             if (func) {
                 source += "';\nvar funcId = (funcIdCount++);\n__p+='";
                 source += "'+\nfuncId\n'";
-                source += "';\nfuncArray[funcId] = {func: " + func + ", data: this, data2:'" + JSON.stringify(data) +"'};\n__p+='";
+                source += "';\nfuncArray[funcId] = {func: " + func + ", data: this};\n__p+='";
             }
             if (evaluate) {
                 source += "';\n" + evaluate + "\n__p+='";
@@ -581,6 +581,16 @@
                 "method" : "reqList",
                 "parm" : query,
                 "option": option
+            });
+            return this;
+        },
+        reqCount : function (key, query) {
+            query = query || {};
+            //option = option || {};
+            this.combine({
+                "key" : key,
+                "method" : "reqCount",
+                "parm" : query
             });
             return this;
         },
