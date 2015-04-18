@@ -160,8 +160,8 @@
                                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> 区域データ取得
                             </button>
 
-                            <button type="button" data-event="##:findServiceModel.setToNew##" class="btn btn-xs ##=(data.isNew==1) ? 'btn-success' : 'btn-default'##">新規</button>
-            			    <button type="button" data-event="##:findServiceModel.setToDuplicate##" class="btn btn-xs ##=(data.sNew==2) ? 'btn-success' : 'btn-default'##">既存</button>
+                            <button type="button" data-event="##:findServiceModel.setToNew##" class="btn btn-default ##=(data.isNew==1) ? 'btn-success' : 'btn-default'##">新規</button>
+            			    <button type="button" data-event="##:findServiceModel.setToDuplicate##" class="btn btn-default ##=(data.sNew==2) ? 'btn-success' : 'btn-default'##">既存</button>
                         </form>
         		    </div>
         		</div>
@@ -169,7 +169,7 @@
             		<table class="table table-bordered" id="matchAddressTable">
                         <thead>
                             <tr class="active">
-                                <th>ID</th>
+                                <th>class</th>
                                 <th>住所</th>
                             </tr>
                         </thead>
@@ -633,7 +633,7 @@
         				addr += (data.gou) ? ('-' + data.gou):'';
         				addr += data.address2;
 
-                        $('<tr><td>' + data.id + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
+                        $('<tr><td>' + data.class + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
                     }
                 }
             },
