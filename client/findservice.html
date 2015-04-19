@@ -292,17 +292,19 @@
                 		<div class="form-group">
                 		    <select id="search_isNew" class="form-control" value="##=data.search_isNew##">
                 		        <option value=""></option>
-                                <option value="0">未設定</option>
-                                <option value="1">新規</option>
-                                <option value="2">既存</option>
+                                <option value="0" ##=data.search_isNew == '0' ? 'selected="selected"' : ""##>未設定</option>
+                                <option value="1" ##=data.search_isNew == 1 ? 'selected="selected"' : ""##>新規</option>
+                                <option value="2" ##=data.search_isNew == 2 ? 'selected="selected"' : ""##>既存</option>
                             </select>
                         </div>
             			<button class="btn btn-default" type="submit" data-event="##:findServiceModel.search##">検索</button>
         			</div>
         		</div>
 
-        		<nav>
+        		<nav>                    
+
                     <ul class="pagination" style="margin:0px">
+    
                         <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
                         ##
                         var endNum = (findServiceModel.listCount / findServiceModel.pageSize) + 1;
@@ -315,6 +317,11 @@
                         ##})##
                         <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
                     </ul>
+                    <select id="findService_pageSize" class="form-control" style="width:100px; display:inline;" data-event="##:findServiceModel.pageSizeChange##">
+                        ##$.each([10, 20, 50, 100, 200, 1000], function(ind, num) {##
+                        <option value="##=num##" ##=(num==findServiceModel.pageSize) ? 'selected="selected"' : ""##>##=num##</option>
+                        ##})##
+                    </select>
                 </nav>
 
         		<div class="table-responsive">
@@ -642,8 +649,11 @@
 				findServiceModel.listAreaReset();
             }},
             
+            pageSizeChange: {change: function(e) {
+			    findServiceModel.pageSize = parseInt($('#findService_pageSize').val());
+                findServiceModel.listAreaReset();
+            }},
             pageSelect: {click: function(e) {
-                
                 findServiceModel.pageNum = e.data;
                 findServiceModel.listAreaReset();
             }},
@@ -688,20 +698,18 @@
                     searchParm.$query['findServiceMapKu'] = {$regex : search_findServiceMapKu};
 				}
 				if (search_isNew) {
-                    searchParm.$query['isNew'] = {$eq : parseInt(search_isNew)};
+				    if (search_isNew == 0) {
+				        searchParm.$query['$or'] = [{isNew : {$exists : 0}}, {isNew : {$eq : 0}}];
+				    } else {
+				        searchParm.$query['isNew'] = {$eq : parseInt(search_isNew)};
+				    }
 				}
-				
-				
-				//if (serviceDateMonth) {
-				//	param.$query = {serviceDate: {$regex : serviceDateMonth}};
-				//}
 				
 				var pageSize = findServiceModel.pageSize;
 				var pageNum = findServiceModel.pageNum;
 
-				
                 findServiceConn.reset()
-                .reqCount('count', {})
+                .reqCount('count', searchParm.$query)
                 .reqList('reqList', searchParm, {skip: (pageSize * ( pageNum - 1 )), limit: pageSize})
                 //.reqList('reqList', searchParm)
                 .request(function(data, textStatus, jqXHR) {
