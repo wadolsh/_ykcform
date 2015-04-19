@@ -305,17 +305,21 @@
 
                     <ul class="pagination" style="margin:0px">
     
-                        <li class="disabled"><a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a></li>
+                        <li class="##=findServiceModel.pageNum == 1 ? 'hidden' : ''##">
+                            <a href="#" aria-label="Previous" data-page="##=findServiceModel.pageNum - 1##" data-event="##:findServiceModel.pageSelect##"><span data-page="##=findServiceModel.pageNum - 1##" aria-hidden="true">&laquo;</span></a>
+                        </li>
                         ##
-                        var endNum = (findServiceModel.listCount / findServiceModel.pageSize) + 1;
-                        //for (var num = 1; num < endNum; num++) {
-                        $.each(_.range(1, endNum), function(ind, num) {
+                        var endNum = Math.ceil(findServiceModel.listCount / findServiceModel.pageSize) + 1;
+                        for (var num = 1; num < endNum; num++) {
+                        //$.each(_.range(1, endNum), function(ind, num) {
                         ##
                         <li class="##=findServiceModel.pageNum == num ? 'active' : ''##">
-                            <a href="#" data-event="##:findServiceModel.pageSelect##">##=num##<span class="sr-only">(current)</span></a>
+                            <a href="#" data-page="##=num##" data-event="##:findServiceModel.pageSelect##">##=num##<span data-page="##=num##" class="sr-only">(current)</span></a>
                         </li>
-                        ##})##
-                        <li><a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a></li>
+                        ##}##
+                        <li class="##=findServiceModel.pageNum == (endNum-1) ? 'hidden' : ''##">
+                            <a href="#" aria-label="Next" data-page="##=findServiceModel.pageNum + 1##" data-event="##:findServiceModel.pageSelect##"><span data-page="##=findServiceModel.pageNum + 1##" aria-hidden="true">&raquo;</span></a>
+                        </li>
                     </ul>
                     <select id="findService_pageSize" class="form-control" style="width:100px; display:inline;" data-event="##:findServiceModel.pageSizeChange##">
                         ##$.each([10, 20, 50, 100, 200, 1000], function(ind, num) {##
@@ -650,11 +654,12 @@
             }},
             
             pageSizeChange: {change: function(e) {
-			    findServiceModel.pageSize = parseInt($('#findService_pageSize').val());
+			    findServiceModel.pageSize = parseInt(e.target.value);
+			    findServiceModel.pageNum = 1;
                 findServiceModel.listAreaReset();
             }},
             pageSelect: {click: function(e) {
-                findServiceModel.pageNum = e.data;
+                findServiceModel.pageNum = parseInt(e.target.dataset.page);
                 findServiceModel.listAreaReset();
             }},
             
