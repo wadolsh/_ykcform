@@ -699,7 +699,7 @@
 				}
 				if (search_isNew) {
 				    if (search_isNew == 0) {
-				        searchParm.$query['$or'] = [{isNew : {$exists : 0}}, {isNew : {$eq : 0}}];
+				        searchParm.$query['$or'] = [{isNew : {$exists : false}}, {isNew : {$eq : 0}}];
 				    } else {
 				        searchParm.$query['isNew'] = {$eq : parseInt(search_isNew)};
 				    }
