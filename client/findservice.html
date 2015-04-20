@@ -781,7 +781,7 @@
                 url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
                          ?  ((document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1) ? "https:" : "") + "//ykcform.herokuapp.com/bridge" : "/bridge"});
             
-            kanagwaConn.reqDistinct('town', 'town_name').request(function(data, textStatus, jqXHR) {
+            kanagwaConn.reqDistinct('town', 'town_name', {$or: [{city_name: {$regex : '川崎市'}}, {city_name: {$regex : '横浜市'}}]}).request(function(data, textStatus, jqXHR) {
                 if (data.error) {
                     return;
                 }
@@ -792,6 +792,7 @@
             Bridge.tmplTool.render('townNameList', kanagwa_town);
         }
         
+        //Bridge.RouterTool.init();
 
         
         //if (Bridge.localStorageTool.get('keepLogin')) {

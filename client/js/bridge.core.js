@@ -138,18 +138,15 @@
             var html = render.call(data, data, _);
             $area.html($(html));
             //$area[0].innerHTML = html;
-            //$.each(funcArray, function(key, obj) {
-            var obj = null;
-            for (var key in funcArray) {
-                obj = funcArray[key];
+            $.each(funcArray, function(key, obj) {
                 var $element = $area.find('[data-event="' + key + '"]');
-                //$.each(obj.func, function(eventId, eventFunc) {
-                var eventFunc = null;
-                for (var eventId in obj.func) {
-                    eventFunc = obj.func[eventId];
-                    $element.on(eventId, obj.data, eventFunc);
-                };
-            };
+                $.each(obj.func, function(eventId, eventFunc) {
+                    
+                    $element.on(eventId, obj.data, function(e) {
+                        RouterTool.capture(eventFunc, e);
+                    });
+                });
+            });
             return $area;
         };
 
@@ -190,11 +187,16 @@
             return this;
         },
         
-        render: function(id, data, callback) {
-            var ele = document.getElementById(id)
-            //ele.innerHTML = Bridge.tmpl($('#' + id), tmplTool.cache[id], data);
-            var $html = tmplTool.cache[id](data);
-            RouterTool.add(id, data);
+        render: function(tmplKey, data, callback, route) {
+            var route = route || true;
+            var ele = document.getElementById(tmplKey)
+            //ele.innerHTML = Bridge.tmpl($('#' + tmplKey), tmplTool.cache[tmplKey], data);
+
+            if (route) {
+                RouterTool.add(tmplKey, data);
+            }
+
+            var $html = tmplTool.cache[tmplKey](data);
             
             if (callback) {
                 callback(data, $html);
@@ -316,19 +318,50 @@
 
 
     var RouterTool = Bridge.RouterTool = {
-        //history : {},
+        history : {},
         temp: {},
         init: function() {
             this.add = function(id, data) {
-                this.temp[id] = data;
+                RouterTool.temp[id] = data;
             }
+            
+            this.capture = function(func, event) {
+                //RouterTool.RTL = true;
+                RouterTool.temp = {};
+                func(event);
+                var state = new Date().getTime();
+                window.history.pushState(state, null);
+                RouterTool.history[state] = RouterTool.temp;
+                //RouterTool.RTL = false;
+            }
+            
             var route = this;
+            /*
             var history = localStorage.br_history ? JSON.parse(localStorage.br_history) : {};
             if (!history[location.hash]) {
                 history[location.hash] = {};
             }
+            */
             //hashchange
-            $(window).on('popstate', function(event) {
+            
+            window.addEventListener('popstate', function(event) {
+                // コンテンツを操作するコード
+                var state = event.state; // stateオブジェクト
+            //});
+            //$(window).on('popstate', function(event) {
+                
+                if (!state) {
+                    return; // 初回アクセス時対策
+                }
+                
+                var tempDatas = RouterTool.history[state];
+                
+                $.each(tempDatas, function (key, data) {
+                    Bridge.tmplTool.render(key, data, null, false);
+                })
+                
+                
+                /*
                 if (Object.keys(route.temp).length > 0) {
                     history[location.hash] = route.temp;
                     localStorage.br_history = JSON.stringify(history);
@@ -336,14 +369,18 @@
                 } else {
                     RouterTool.historyBack();
                 }
+                */
             });
             $(window).trigger('popstate');
         },
         add: function(id, data) {
             
         },
+        capture: function(func, event) {
+            func(event);
+        },
         historyBack: function() {
-
+            /*
             var history = localStorage.br_history ? JSON.parse(localStorage.br_history) : {};
             if (!history[location.hash]) {
                 history[location.hash] = {};
@@ -351,6 +388,7 @@
             $.each(history[location.hash], function(id, data) {
                 tmplTool.render(id, data);
             });
+            */
         }
     };
     
