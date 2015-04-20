@@ -742,7 +742,7 @@
 
 
         var exportdate = null;
-        var exportdata = JSON.parse(localStorage['exportdata']);
+        var exportdata = Bridge.localStorageTool.get('exportdata');
         function refreshStorage() {
             
             var paregoriaParm = {
@@ -767,7 +767,7 @@
         		    exportdata = JSON.parse(localStorage['exportdata']);
         		}
     		});
-        };
+        }
         
 
         Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
@@ -792,7 +792,7 @@
             Bridge.tmplTool.render('townNameList', kanagwa_town);
         }
         
-        //Bridge.RouterTool.init();
+
 
         
         //if (Bridge.localStorageTool.get('keepLogin')) {

@@ -371,7 +371,7 @@
                 }
                 */
             });
-            $(window).trigger('popstate');
+            //$(window).trigger('popstate');
         },
         add: function(id, data) {
             
