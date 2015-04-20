@@ -594,6 +594,17 @@
             });
             return this;
         },
+        reqDistinct : function (key, field, query) {
+            query = query || {};
+            //option = option || {};
+            this.combine({
+                "key" : key,
+                "method" : "reqDistinct",
+                "field" : field,
+                "parm" : query
+            });
+            return this;
+        },
         reqMovePage : function (key, query) {
             query = query || {};
             this.combine({

@@ -115,6 +115,13 @@
     <option value="ゼンリン">
     <option value="その他">
 </datalist>
+<datalist id="townNameList" class="br-tmpl">
+    <script type="text/tmpl" data-tmpl-id="townNameList">
+    ##for(var ind in data.town) {##
+        <option value="##=data.town[ind]##">
+    ##}##
+    </script>
+</datalist>
 
     <div class="container" id="findService">
     	<div id="findServiceTable" class="panel panel-default br-tmpl">
@@ -218,7 +225,7 @@
                 				</div>
                 				<div class="row">	
                 				    <div class="col-sm-12">
-                				        <input type="text" id="findServiceAddress3" name="findServiceAddress3" value="##=data.findServiceAddress3##" class="form-control" placeholder="町村"/>
+                				        <input type="text" list="townNameList" id="findServiceAddress3" name="findServiceAddress3" value="##=data.findServiceAddress3##" class="form-control" placeholder="町村"/>
                 				    </div>
                 				</div>
                 				<div class="row">
@@ -760,11 +767,32 @@
         		    exportdata = JSON.parse(localStorage['exportdata']);
         		}
     		});
-        }
-
+        };
+        
 
         Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
         Bridge.tmplTool.render('menu', {});
+        
+        
+        var kanagwa_town = Bridge.localStorageTool.get('kanagwa_town');
+        if (!kanagwa_town) {
+            var kanagwaConn = new Bridge.Connector({dataName : "kanaga14",
+                //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
+                url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+                         ?  ((document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1) ? "https:" : "") + "//ykcform.herokuapp.com/bridge" : "/bridge"});
+            
+            kanagwaConn.reqDistinct('town', 'town_name').request(function(data, textStatus, jqXHR) {
+                if (data.error) {
+                    return;
+                }
+                Bridge.localStorageTool.push('kanagwa_town', data);
+                Bridge.tmplTool.render('townNameList', data);
+            });
+        } else {
+            Bridge.tmplTool.render('townNameList', kanagwa_town);
+        }
+        
+
         
         //if (Bridge.localStorageTool.get('keepLogin')) {
             commonModel.loginChecker();
