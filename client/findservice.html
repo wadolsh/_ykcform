@@ -641,7 +641,7 @@
                 var exports = [];
                 var data = null;
                 var addr = null;
-                
+                var hasData = false;
                 for (var key in exportdata) {
                     data = exportdata[key];
                     if (data.prefecture == address1 
@@ -653,8 +653,12 @@
         				addr += (data.gou) ? ('-' + data.gou):'';
         				addr += ' ' + data.address2 + ' ' + data.name;
 
+                        hasData = true;
                         $('<tr><td>' + data.class + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
                     }
+                }
+                if (!hasData) {
+                    $('<tr><td></td><td>データがありません。</td></tr>').appendTo($matchAddressTableBody);
                 }
             },
             
