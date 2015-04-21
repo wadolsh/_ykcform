@@ -310,9 +310,7 @@
         		</div>
 
         		<nav>                    
-
                     <ul class="pagination" style="margin:0px">
-    
                         <li class="##=findServiceModel.pageNum == 1 ? 'hidden' : ''##">
                             <a href="#" aria-label="Previous" data-page="##=findServiceModel.pageNum - 1##" data-event="##:findServiceModel.pageSelect##"><span data-page="##=findServiceModel.pageNum - 1##" aria-hidden="true">&laquo;</span></a>
                         </li>
@@ -329,7 +327,7 @@
                             <a href="#" aria-label="Next" data-page="##=findServiceModel.pageNum + 1##" data-event="##:findServiceModel.pageSelect##"><span data-page="##=findServiceModel.pageNum + 1##" aria-hidden="true">&raquo;</span></a>
                         </li>
                     </ul>
-                    <select id="findService_pageSize" class="form-control" style="width:100px; display:inline;" data-event="##:findServiceModel.pageSizeChange##">
+                    <select id="findService_pageSize" class="form-control" style="width:100px; display:inline;vertical-align:top;" data-event="##:findServiceModel.pageSizeChange##">
                         ##$.each([10, 20, 50, 100, 200, 1000], function(ind, num) {##
                         <option value="##=num##" ##=(num==findServiceModel.pageSize) ? 'selected="selected"' : ""##>##=num##</option>
                         ##})##
@@ -370,13 +368,12 @@
                                 <td>##=obj.findServiceFindFrom## ##=obj.findServiceMapKu## ##=obj.findServiceMapPage##</td>
                                 <td>
                                     ##if(findServiceModel.getAuth(1)) {##
-                                    <button type="button" class="btn btn-default btn-xs">
-                                        <span class="glyphicon glyphicon-search" aria-hidden="true" data-event="##:{click:function(e){
-                                            
+                                    <button type="button" class="btn btn-default btn-xs" data-event="##:{click:function(e){
                                             Bridge.tmplTool.render('findServiceTable', Bridge.extend(e.data, {mathcMode: true, editMode: 'no'}));
                                             findServiceModel.matchAddress();
                                             //$('#matchAddressInput').val(data.findServiceAddress1 + data.findServiceAddress2 + data.findServiceAddress3 + data.findServiceAddress4);
-                                        }}##"></span>
+                                        }}##">
+                                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span>
                                     </button>
                                     &nbsp;
                                     ##}##
