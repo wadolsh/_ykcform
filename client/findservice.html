@@ -146,30 +146,32 @@
         		
 ##if(data.mathcMode) {##
         		<div class="panel-body" id="matchData">
-        		    <div class="">
+        		    <div class="row">
             		    <form class="form-inline">
                             <div class="form-group">
                                 <label class="sr-only">検索住所</label>
                                 <input type="text" class="form-control" style="width:100px" id="matchAddressInput1" placeholder="住所1" 
                                         value="##=data.findServiceAddress1##">
-                                <input type="text" class="form-control" style="width:200px" id="matchAddressInput2" placeholder="住所2" 
+                                <input type="text" class="form-control" style="width:150px" id="matchAddressInput2" placeholder="住所2" 
                                         value="##=data.findServiceAddress2##">
                                 <input type="text" class="form-control" style="width:200px" id="matchAddressInput3" placeholder="住所3" 
                                         value="##=data.findServiceAddress3##">
                                 <input type="text" class="form-control" style="width:200px" id="matchAddressInput4" placeholder="住所4" 
                                         value="##=data.findServiceAddress4##">
+                                <input type="text" class="form-control" style="width:200px" id="matchAddressName" placeholder="名前" 
+                                        value="##=data.findServiceName##" readonly>
                             </div>
                             <button type="button" class="btn btn-primary" data-event="##:{
                                                                     click:function(e){
                                                                         findServiceModel.matchAddress();
                                                                     }}##">検索</button>
-                		    <button type="button" class="btn btn-default" data-event="##:{click:function(){refreshStorage();}}##">
-                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> 区域データ取得
-                            </button>
-
-                            <button type="button" data-event="##:findServiceModel.setToNew##" class="btn btn-default ##=(data.isNew==1) ? 'btn-success' : 'btn-default'##">新規</button>
-            			    <button type="button" data-event="##:findServiceModel.setToDuplicate##" class="btn btn-default ##=(data.sNew==2) ? 'btn-success' : 'btn-default'##">既存</button>
                         </form>
+
+            		    <button type="button" class="btn btn-default" data-event="##:{click:function(){refreshStorage();}}##">
+                            <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> 区域データ
+                        </button>
+                        <button type="button" data-event="##:findServiceModel.setToNew##" class="btn btn-default ##=(data.isNew==1) ? 'btn-success' : 'btn-default'##">新規</button>
+        			    <button type="button" data-event="##:findServiceModel.setToDuplicate##" class="btn btn-default ##=(data.sNew==2) ? 'btn-success' : 'btn-default'##">既存</button>
         		    </div>
         		</div>
         		<div class="table-responsive">
@@ -342,7 +344,7 @@
                                 <th width="90px">登録日</th>
                                 <th>情報元</th>
                                 <th>住所</th>
-                                <th>お名前</th>
+                                <th>名前</th>
             					<th>コメント</th>
             					##if(findServiceModel.getAuth(1)) {##
             					<th>登録者</th>
