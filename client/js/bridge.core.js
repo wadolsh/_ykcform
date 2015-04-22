@@ -134,9 +134,14 @@
             return $area;
         }
         
-        var template = function(data) {
+        var template = function(data, element) {
             var html = render.call(data, data, _);
-            $area.html($(html));
+            if (element) {
+                element.innerHTML = html;
+            } else {
+                $area.html($(html));
+            }
+            
             //$area[0].innerHTML = html;
             $.each(funcArray, function(key, obj) {
                 var $element = $area.find('[data-event="' + key + '"]');
@@ -164,9 +169,11 @@
             if (obj instanceof jQuery) {
                 obj.each(function(ind, ele) {
                     var tmpl_id = ele.dataset['tmplId'];
-                    var $tmpl_container = $('#' + tmpl_id);
+                    var $tmpl_container = $('[data-bind-tmpl-id="' + tmpl_id + '"], #' + tmpl_id);
                     tmpl.cache[tmpl_id] = template($tmpl_container, ele.innerHTML);
-                    $tmpl_container[0].innerHTML = '';
+                    if ($tmpl_container[0]) {
+                        $tmpl_container[0].innerHTML = '';
+                    }
                 });
             } else {
                 /*
@@ -178,32 +185,57 @@
                 $.ajax({
                     url: obj,
                     success: function(html) {
-                        tmpl.addTmpl($(html).find('.br-tmpl'));
+                        tmpl.addTmpl($(html).find('[data-tmpl-id]'));
                     },
                     dataType: 'text',
-                    async: false
+                    async: false,
+                    cache: true
                 });
             }
             return this;
         },
         
         render: function(tmplKey, data, callback, route) {
+            var tmplKeys = tmplKey.split('::');
             var route = route || true;
-            var ele = document.getElementById(tmplKey)
+            var ele = document.getElementById(tmplKeys[1] || tmplKeys[0])
             //ele.innerHTML = Bridge.tmpl($('#' + tmplKey), tmplTool.cache[tmplKey], data);
 
             if (route) {
                 RouterTool.add(tmplKey, data);
             }
 
-            var $html = tmplTool.cache[tmplKey](data);
+            var $html = tmplTool.cache[tmplKeys[0]](data, ele);
             
             if (callback) {
                 callback(data, $html);
             }
             return $html;
         },
-        
+        bindTmpl: function(obj) {
+            if (obj instanceof jQuery) {
+                obj.each(function(ind, ele) {
+                    var bindTmplId = ele.dataset['bindTmplId'];
+                    var tmplSrc = ele.dataset['tmplSrc'];
+                    if (tmplSrc) {
+                        //tmplTool.addTmpl(tmplSrc);
+                        $.ajax({
+                            url: tmplSrc,
+                            success: function(html) {
+                                ele.innerHTML = $(html).find('[data-tmpl-id="' + bindTmplId + '"]').html();
+                                tmplTool.addTmpl($(ele).find('[data-tmpl-id]'));
+                            },
+                            dataType: 'text',
+                            async: false,
+                            cache: true
+                        });
+                    }
+
+                });
+            } else {
+                
+            }
+        },
         editor: function($html, config) {
             config = config || {};
             var inputObjList = [];

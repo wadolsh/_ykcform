@@ -29,28 +29,7 @@ exports.mainMenuList = function(reqData, callback, req){
 
 exports.getDataByUrl = function(reqData, callback, req){
 	console.log('getDataByUrl!');
-	/*
-    var parm = {
-        url: request.params.url,
-        success: function(httpResponse) {
-            callback(httpResponse.data || httpResponse.text);
-        },
-        error: function(httpResponse) {
-            callback(httpResponse);
-        }
-    }
-  
-    if (reqData.params) {
-        parm.params = request.params.params;
-    }
-    if (reqData.headers) {
-        parm.headers = request.params.headers;
-    }
 
-    Parse.Cloud.httpRequest(parm);
-    */
-    
-    
     http.get(reqData.data.parm, function(res) {
         var body = '';
         res.setEncoding('utf8');

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ja">
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+<title>記録</title>
+<link href="css/bootstrap.min.css" rel="stylesheet">
+<link href="css/app.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand">
+                    <img alt="Brand" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAA81BMVEX///9VPnxWPXxWPXxWPXxWPXxWPXxWPXz///9hSYT6+vuFc6BXPn37+vz8+/z9/f2LeqWMe6aOfqiTg6uXiK5bQ4BZQX9iS4VdRYFdRYJfSINuWI5vWY9xXJF0YJR3Y5Z4ZZd5ZZd6Z5h9apq0qcW1qsW1q8a6sMqpnLyrn76tocCvpMGwpMJoUoprVYxeRoJjS4abjLGilLemmbrDutDFvdLPx9nX0eDa1OLb1uPd1+Td2OXe2eXh3Ofj3+nk4Orl4evp5u7u7PLv7fPx7/T08vb08/f19Pf29Pj39vn6+fuEcZ9YP35aQn/8/P1ZQH5fR4PINAOdAAAAB3RSTlMAIWWOw/P002ipnAAAAPhJREFUeF6NldWOhEAUBRvtRsfdfd3d3e3/v2ZPmGSWZNPDqScqqaSBSy4CGJbtSi2ubRkiwXRkBo6ZdJIApeEwoWMIS1JYwuZCW7hc6ApJkgrr+T/eW1V9uKXS5I5GXAjW2VAV9KFfSfgJpk+w4yXhwoqwl5AIGwp4RPgdK3XNHD2ETYiwe6nUa18f5jYSxle4vulw7/EtoCdzvqkPv3bn7M0eYbc7xFPXzqCrRCgH0Hsm/IjgTSb04W0i7EGjz+xw+wR6oZ1MnJ9TWrtToEx+4QfcZJ5X6tnhw+nhvqebdVhZUJX/oFcKvaTotUcvUnY188ue/n38AunzPPE8yg7bAAAAAElFTkSuQmCC">
+                </a>
+        		<div id="menu" class="br-tmpl panel-body navbar-left" role="form">
+        		    <script type="text/tmpl" data-tmpl-id="menu">
+            		    <select data-event="##:commonModel.viewport##" id="viewport-scale">
+                            ##
+                            var sv = 0;
+                            var selected = false;
+                            var value = localStorage['viewport_scale'] || 1;
+                            commonModel.viewport.setScale(value);
+                            for (var i=150; i > 49; i=i-5) {
+                                sv = i / 100;
+                                selected = value == sv;
+                            ##
+                                <option value="##=sv##" ##=selected ? 'selected="selected"' : ""##>x ##=sv##</option>
+                            ##}##
+                        </select>
+                    </script>
+        		</div>
+        		<div id="loginUser" class="br-tmpl panel-body navbar-right" role="form">
+                    <script type="text/tmpl" data-tmpl-id="loginUser">
+                        ##if(data.name) {##
+                        <span>##=data.name##</span>
+                        <button data-event="##:commonModel.logout##" class="btn btn-primary btn-xs">Sign Out</button>
+                        ##}##
+                    </script>
+        		</div>
+    		</div>
+            <div id="message" class="br-tmpl">
+                <script type="text/tmpl" data-tmpl-id="message">
+                    <div>##=data.msg##</div>
+                </script>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+    
+    
+    
+    </div>
+    <div id="loadingModal" class="modal" data-keyboard="false" tabindex="-1" role="dialog">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content">
+                <div class="progress">
+                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
+                        Loading...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDejNEedWnONLDewIynvzf6Wv-aI4sd3eU&amp;sensor=true"></script>
+    <script src="js/jquery-2.1.0.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/underscore.js"></script>
+    <script src="js/bridge.core.js"></script>
+    <script src="js/app.js"></script>
+    <script type="text/javascript">
+        commonModel.loginCheckerAfter = function(data) {
+            //Model.listAreaReset();
+        }
+        commonModel.logoutAfter = function(data) {
+            location.href = "/";
+        }
+        commonModel.loginCheckerFail = function(data) {
+            location.href = "/";
+        }
+    
+        Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
+        Bridge.tmplTool.render('menu', {});
+        
+        commonModel.loginChecker();
+    </script>
+</body>
+</html>

@@ -38,6 +38,7 @@ exports.loginMethod = {
                 , login_user: {save : 2, read : 0}
                 , service_time: {save : 1, read : 1}
                 , find_service: {save : 1, read : 0}
+                , jpon2012: {save : 1, read : 0}
                 , find_service_plan: {save : 1, read : 1}
                 , app_setting: {save : 1, read : 0}
                 , kanaga14: {save : 0, read : 0}
