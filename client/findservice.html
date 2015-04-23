@@ -96,7 +96,7 @@
         		<div class="panel-heading">
         		    探し記録
         		    
-        		    <a href="http://ko.wikipedia.org/wiki/%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%EC%9D%98_%EC%9D%B8%EA%B5%AC%EC%88%9C_%EC%84%B1%EC%94%A8_%EB%AA%A9%EB%A1%9D" class="btn btn-default btn-sm" target="wiki1">韓国姓2</a>
+        		    <a href="http://ko.wikipedia.org/wiki/%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%EC%9D%98_%EC%9D%B8%EA%B5%AC%EC%88%9C_%EC%84%B1%EC%94%A8_%EB%AA%A9%EB%A1%9D" class="btn btn-default btn-sm" target="wiki1">韓国姓1</a>
         		    <a href="http://ko.wikipedia.org/wiki/%ED%95%9C%EA%B5%AD%EC%9D%98_%EC%84%B1%EC%94%A8_%EB%AA%A9%EB%A1%9D" class="btn btn-default btn-sm" target="wiki2">韓国姓2</a>
         		    
                     <button type="button" class="btn btn-default btn-sm pull-right ##=data.editMode=='new' || data.editMode=='no' ? 'hidden': ''##" data-event="##:findServiceModel.addNew##">
@@ -751,7 +751,7 @@
 				}
 				if (search_isNew) {
 				    if (search_isNew == 0) {
-				        searchParm.$query['$or'] = [{isNew : {$exists : false}}, {isNew : {$eq : 0}}];
+				        searchParm.$query['$or'] = [{isNew : {$exists : false}}, {isNew : {$eq : 0}}, {isNew : {$eq : '0'}}];
 				    } else {
 				        searchParm.$query['isNew'] = {$eq : parseInt(search_isNew)};
 				    }
