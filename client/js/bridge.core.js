@@ -63,14 +63,12 @@
             interpolate : /##=([\s\S]+?)##/g,
             escape      : /##-([\s\S]+?)##/g,
             func        : /##:([\s\S]+?)##/g,
+            include    : /##~([\s\S]+?)##/g,
             variable: 'data'
     };
     
-    // JavaScript micro-templating, similar to John Resig's implementation.
-    // Underscore templating handles arbitrary delimiters, preserves whitespace,
-    // and correctly escapes quotes within interpolated code.
-    var template = Bridge.template = function($area, text, data, settings) {
-        var render = null;
+    
+    var templateParser = function(text, settings) {
         settings = _.defaults({}, settings, Bridge.templateSettings);
     
         // Combine delimiters into one regular expression via alternation.
@@ -78,15 +76,16 @@
           (settings.escape || noMatch).source,
           (settings.interpolate || noMatch).source,
           (settings.func || noMatch).source,
+          (settings.include || noMatch).source,
           (settings.evaluate || noMatch).source,
         ].join('|') + '|$', 'g');
     
         // Compile the template source, escaping string literals appropriately.
         var index = 0;
-        var source = "__p+='";
+        var source = "";
         window.funcArray = {};
         window.funcIdCount = 0;
-        text.replace(matcher, function(match, escape, interpolate, func, evaluate, offset) {
+        text.replace(matcher, function(match, escape, interpolate, func, include, evaluate, offset) {
             source += text.slice(index, offset).replace(escaper, function(match) { return '\\' + escapes[match]; });
 
             if (escape) {
@@ -103,9 +102,23 @@
             if (evaluate) {
                 source += "';\n" + evaluate + "\n__p+='";
             }
+            if (include) {
+                source += "';\n__p+='" + new Function('return ' + include).call(this);
+            }
             index = offset + match.length;
             return match;
         });
+        return source;
+    }
+    
+    // JavaScript micro-templating, similar to John Resig's implementation.
+    // Underscore templating handles arbitrary delimiters, preserves whitespace,
+    // and correctly escapes quotes within interpolated code.
+    var template = Bridge.template = function($area, text, data, settings) {
+        settings = _.defaults({}, settings, Bridge.templateSettings);
+        var render = null;
+        var source = "__p+='";
+        source += templateParser(text, settings);
         source += "';\n";
     
         // If a variable is not specified, place data values in local scope.
@@ -136,11 +149,15 @@
         
         var template = function(data, element) {
             var html = render.call(data, data, _);
+            var $html = $(html);
             if (element) {
+                //$(element).html($html);
                 element.innerHTML = html;
             } else {
-                $area.html($(html));
+                $area.html($html);
             }
+            
+            
             
             //$area[0].innerHTML = html;
             $.each(funcArray, function(key, obj) {
@@ -170,7 +187,7 @@
                 obj.each(function(ind, ele) {
                     var tmpl_id = ele.dataset['tmplId'];
                     var $tmpl_container = $('[data-bind-tmpl-id="' + tmpl_id + '"], #' + tmpl_id);
-                    tmpl.cache[tmpl_id] = template($tmpl_container, ele.innerHTML);
+                    tmpl.cache[tmpl_id] = template($tmpl_container, ele.innerHTML);//ele.innerHTML);
                     if ($tmpl_container[0]) {
                         $tmpl_container[0].innerHTML = '';
                     }
@@ -222,8 +239,10 @@
                         $.ajax({
                             url: tmplSrc,
                             success: function(html) {
-                                ele.innerHTML = $(html).find('[data-tmpl-id="' + bindTmplId + '"]').html();
-                                tmplTool.addTmpl($(ele).find('[data-tmpl-id]'));
+                                var $html = $(html);
+                                var $ele = $(ele);
+                                ele.innerHTML = $html.find('[data-tmpl-id="' + bindTmplId + '"]').add($html.filter('[data-tmpl-id="' + bindTmplId + '"]')).html();
+                                tmplTool.addTmpl($ele.find('[data-tmpl-id]').add($ele.filter('[data-tmpl-id]')));
                             },
                             dataType: 'text',
                             async: false,
@@ -235,6 +254,23 @@
             } else {
                 
             }
+        },
+        include: function(tmplSrc, tmplId) {
+            var html = $.ajax({
+                url: tmplSrc,
+                /*
+                success: function(html) {
+                    var $html = $(html);
+                    return $html.find('[data-tmpl-id="' + tmplId + '"]').add($html.filter('[data-tmpl-id="' + tmplId + '"]')).html();
+                    //tmplTool.addTmpl($ele.find('[data-tmpl-id]').add($ele.filter('[data-tmpl-id]')));
+                },
+                */
+                dataType: 'text',
+                async: false,
+                cache: true
+            }).responseText;
+            var $html = $(html);
+            return templateParser($html.find('[data-tmpl-id="' + tmplId + '"]').add($html.filter('[data-tmpl-id="' + tmplId + '"]')).html());
         },
         editor: function($html, config) {
             config = config || {};

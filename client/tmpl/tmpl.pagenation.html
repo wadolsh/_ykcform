@@ -1,15 +1,19 @@
+<script data-tmpl-id="pagination">
+
 <ul class="pagination" style="margin:0px">
     ##
     var listCount = data.listCount;
     var pageNum = data.page.pageNum;
     var pageSize = data.page.pageSize;
     var pageWidth = data.page.pageWidth;
+    var pageSelectFunc = data.page.pageSelectFunc;
+    var pageSizeChangeFunc = data.page.pageSizeChangeFunc;
     ##
     <li class="##=pageNum == 1 ? 'disabled' : ''##">
-        <a href="#" aria-label="Previous" data-page="##=pageNum - 1##" ##if(pageNum != 1) {## data-event="##:findServiceModel.pageSelect##" ##}##><span data-page="##=findServiceModel.pageNum - 1##" aria-hidden="true">&laquo;</span></a>
+        <a href="#" aria-label="Previous" data-page="##=pageNum - 1##" ##if(pageNum != 1) {## data-event="##:pageSelectFunc##" ##}##><span data-page="##=pageNum - 1##" aria-hidden="true">&laquo;</span></a>
     </li>
     <li class="##=pageNum == 1 ? 'active' : ''##">
-        <a href="#" data-page="1" data-event="##:findServiceModel.pageSelect##">1##=(pageNum - pageWidth > 1) ? '..' : ''##<span data-page="1" class="sr-only">(current)</span></a>
+        <a href="#" data-page="1" data-event="##:pageSelectFunc##">1##=(pageNum - pageWidth > 1) ? '..' : ''##<span data-page="1" class="sr-only">(current)</span></a>
     </li>
     ##
     var endNum = Math.ceil(listCount / pageSize);
@@ -17,18 +21,20 @@
     $.each(_.range((pageNum - pageWidth < 1 ? 1 : pageNum - pageWidth) + 1, (pageNum + pageWidth > endNum ? endNum : pageNum + pageWidth) ), function(ind, num) {
     ##
     <li class="##=data.page.pageNum == num ? 'active' : ''##">
-        <a href="#" data-page="##=num##" data-event="##:findServiceModel.pageSelect##">##=num##<span data-page="##=num##" class="sr-only">(current)</span></a>
+        <a href="#" data-page="##=num##" data-event="##:pageSelectFunc##">##=num##<span data-page="##=num##" class="sr-only">(current)</span></a>
     </li>
     ##})##
     <li class="##=pageNum == endNum ? 'active' : ''##">
-        <a href="#" data-page="##=endNum##" data-event="##:findServiceModel.pageSelect##">##=(pageNum + pageWidth < endNum) ? '..' : ''####=endNum##<span data-page="##=endNum##" class="sr-only">(current)</span></a>
+        <a href="#" data-page="##=endNum##" data-event="##:pageSelectFunc##">##=(pageNum + pageWidth < endNum) ? '..' : ''####=endNum##<span data-page="##=endNum##" class="sr-only">(current)</span></a>
     </li>
     <li class="##=pageNum == endNum ? 'disabled' : ''##">
-        <a href="#" aria-label="Next" data-page="##=pageNum + 1##"  ##if(pageNum != endNum) {## data-event="##:findServiceModel.pageSelect##" ##}##><span data-page="##=findServiceModel.pageNum + 1##" aria-hidden="true">&raquo;</span></a>
+        <a href="#" aria-label="Next" data-page="##=pageNum + 1##"  ##if(pageNum != endNum) {## data-event="##:pageSelectFunc##" ##}##><span data-page="##=pageNum + 1##" aria-hidden="true">&raquo;</span></a>
     </li>
 </ul>
-<select id="findService_pageSize" class="form-control" style="width:100px; display:inline;vertical-align:top;" data-event="##:findServiceModel.pageSizeChange##">
+<select id="findService_pageSize" class="form-control" style="width:100px; display:inline;vertical-align:top;" data-event="##:pageSizeChangeFunc##">
     ##$.each([10, 20, 50, 100, 200, 1000], function(ind, num) {##
     <option value="##=num##" ##=(num==pageSize) ? 'selected="selected"' : ""##>##=num##</option>
     ##})##
 </select>
+
+</script>
