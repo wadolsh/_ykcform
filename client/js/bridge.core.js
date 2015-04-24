@@ -63,7 +63,7 @@
             interpolate : /##=([\s\S]+?)##/g,
             escape      : /##-([\s\S]+?)##/g,
             func        : /##:([\s\S]+?)##/g,
-            include    : /##~([\s\S]+?)##/g,
+            include    : /##@([\s\S]+?)##/g,
             variable: 'data'
     };
     
