@@ -24,10 +24,10 @@
         <a href="#" data-page="##=num##" data-event="##:pageSelectFunc##">##=num##<span data-page="##=num##" class="sr-only">(current)</span></a>
     </li>
     ##})##
-    <li class="##=pageNum == endNum ? 'active' : ''##">
+    <li class="##=(pageNum==endNum) ? 'active' : ''## ##=(endNum==1) ? 'hidden': ''##">
         <a href="#" data-page="##=endNum##" data-event="##:pageSelectFunc##">##=(pageNum + pageWidth < endNum) ? '..' : ''####=endNum##<span data-page="##=endNum##" class="sr-only">(current)</span></a>
     </li>
-    <li class="##=pageNum == endNum ? 'disabled' : ''##">
+    <li class="##=(pageNum==endNum) ? 'disabled' : ''##">
         <a href="#" aria-label="Next" data-page="##=pageNum + 1##"  ##if(pageNum != endNum) {## data-event="##:pageSelectFunc##" ##}##><span data-page="##=pageNum + 1##" aria-hidden="true">&raquo;</span></a>
     </li>
 </ul>
