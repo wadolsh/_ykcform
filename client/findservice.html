@@ -258,7 +258,12 @@
 ##}##
 ##
   if(data.list) {
-      var resultType = {'1': '韓国語', '2':'日本語', '3':'中国語', '-1':'あいまい', '-2':'住所不明', '0':'未設定'};
+      var resultType = {'1': {label: '韓国語', color:'btn-success'}
+                      , '2': {label: '日本語', color:'btn-info'}
+                      , '3': {label: '中国語', color:'btn-info'}
+                      , '-1': {label: 'あいまい', color:'btn-warning'}
+                      , '-2': {label: '住所不明', color:'btn-danger'}
+                      , '0': {label: '未設定', color:'btn-default'}};
 ##
         		<div class="panel-heading">
         		    <div class="form-inline">
@@ -286,8 +291,8 @@
                 		<div class="form-group">
                 		    <select id="search_result" class="form-control" value="##=data.search.search_result##">
                 		        <option value="">-結果-</option>
-                		        ##$.each(resultType, function(key, value) {##
-                		            <option value="##=key##" ##=data.search.search_result == key ? 'selected="selected"' : ""##>##=value##</option>
+                		        ##$.each(resultType, function(key, obj) {##
+                		            <option value="##=key##" ##=data.search.search_result == key ? 'selected="selected"' : ""##>##=obj.label##</option>
                 		        ##});##
                             </select>
                         </div>
@@ -334,17 +339,17 @@
             					</td>
             					<td>
             					    <div class="btn-group">
-                					    <button type="button" class="btn ##=obj.result == '1' ? 'btn-success' : 'btn-default'## btn-xs dropdown-toggle" data-toggle="dropdown">
-                                            ##=resultType[obj.result] || '未設定' ## <span class="caret"></span>
+                					    <button type="button" class="btn ##=resultType[obj.result || 0].color## btn-xs dropdown-toggle" data-toggle="dropdown">
+                                            ##=resultType[obj.result || 0].label## <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="1" class=" ##=(obj.result==1) ? 'btn-info' : 'btn-default'##">韓国語</a></li>
-                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="2" class=" ##=(obj.result==2) ? 'btn-info' : 'btn-default'##">日本語</a></li>
-                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="3" class=" ##=(obj.result==3) ? 'btn-info' : 'btn-default'##">中国語</a></li>
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="1" class="##=(obj.result==1) ? 'btn-success' : 'btn-default'##">韓国語</a></li>
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="2" class="##=(obj.result==2) ? 'btn-info' : 'btn-default'##">日本語</a></li>
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="3" class="##=(obj.result==3) ? 'btn-info' : 'btn-default'##">中国語</a></li>
                                             <li class="divider"></li>
-                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="-1" class=" ##=(obj.result==-1) ? 'btn-info' : 'btn-default'##">あいまい</a></li>
-                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="-2" class=" ##=(obj.result==-2) ? 'btn-info' : 'btn-default'##">住所不明</a></li>
-                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="0" class=" ##=(!obj.result || obj.result==0) ? 'btn-info' : 'btn-default'##">未設定</a></li>
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="-1" class="##=(obj.result==-1) ? 'btn-warning' : 'btn-default'##">あいまい</a></li>
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="-2" class="##=(obj.result==-2) ? 'btn-danger' : 'btn-default'##">住所不明</a></li>
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="0" class="##=(!obj.result || obj.result==0) ? 'btn-info' : 'btn-default'##">未設定</a></li>
                                         </ul>
                                     </div>
             					</td>
