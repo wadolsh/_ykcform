@@ -10,7 +10,7 @@
 <link href="css/app.css" rel="stylesheet">
 </head>
 <body>
-    
+
 <nav class="navbar navbar-default navbar-fixed-top" role="navigation" data-bind-tmpl-id="header" data-tmpl-src="./tmpl/tmpl.common.html">
 </nav>
     
@@ -256,28 +256,39 @@
                     </div>
                 </nav>
 ##}##
-##if(data.list) {##
+##
+  if(data.list) {
+      var resultType = {'1': '韓国語', '2':'日本語', '3':'中国語', '-1':'あいまい', '-2':'住所不明', '0':'未設定'};
+##
         		<div class="panel-heading">
         		    <div class="form-inline">
                         <div class="form-group">
                             <label class="">情報元</label>
-                            <input type="text" id="search_findServiceFindFrom" list="findServiceFindFromList" value="##=data.search_findServiceFindFrom##" class="form-control"/>
+                            <input type="text" id="search_findServiceFindFrom" list="findServiceFindFromList" value="##=data.search.search_findServiceFindFrom##" class="form-control"/>
             			</div>
                         <div class="form-group">
                             <label class="">地図:市区</label>
-                            <input type="text" list="findServiceMapKuList" id="search_findServiceMapKu" value="##=data.search_findServiceMapKu##" class="form-control"/>
+                            <input type="text" list="findServiceMapKuList" id="search_findServiceMapKu" value="##=data.search.search_findServiceMapKu##" class="form-control"/>
             			</div>
                         <div class="form-group">
                             <label class="">ページ</label>
-                            <input type="text" id="search_findServiceMapPage" value="##=data.search_findServiceMapPage##" class="form-control"/>
+                            <input type="text" id="search_findServiceMapPage" value="##=data.search.search_findServiceMapPage##" class="form-control"/>
             			</div>
                 			
                 		<div class="form-group">
-                		    <select id="search_isNew" class="form-control" value="##=data.search_isNew##">
-                		        <option value=""></option>
-                                <option value="0" ##=data.search_isNew == '0' ? 'selected="selected"' : ""##>未設定</option>
-                                <option value="1" ##=data.search_isNew == 1 ? 'selected="selected"' : ""##>新規</option>
-                                <option value="2" ##=data.search_isNew == 2 ? 'selected="selected"' : ""##>既存</option>
+                		    <select id="search_isNew" class="form-control" value="##=data.search.search_isNew##">
+                		        <option value="">-新規有無-</option>
+                                <option value="0" ##=data.search.search_isNew == '0' ? 'selected="selected"' : ""##>未設定</option>
+                                <option value="1" ##=data.search.search_isNew == 1 ? 'selected="selected"' : ""##>新規</option>
+                                <option value="2" ##=data.search.search_isNew == 2 ? 'selected="selected"' : ""##>既存</option>
+                            </select>
+                        </div>	
+                		<div class="form-group">
+                		    <select id="search_result" class="form-control" value="##=data.search.search_result##">
+                		        <option value="">-結果-</option>
+                		        ##$.each(resultType, function(key, value) {##
+                		            <option value="##=key##" ##=data.search.search_result == key ? 'selected="selected"' : ""##>##=value##</option>
+                		        ##});##
                             </select>
                         </div>
             			<button class="btn btn-default" type="submit" data-event="##:findServiceModel.search##">検索</button>
@@ -292,7 +303,8 @@
             		<table class="table table-bordered">
                         <thead>
                             <tr class="active">
-            					<th style="width:92px;"></th>
+            					<th style="width:92px;">総計:##=data.listCount##</th>
+            					<th>確認記録</th>
                                 <th width="90px">登録日</th>
                                 <th>情報元</th>
                                 <th>住所</th>
@@ -304,8 +316,10 @@
                             </tr>
                         </thead>
                         <tbody>
-            				##totalData={};##
-                            ##$.each(data.list || {} , function(ind, obj) {##
+            				##
+            				totalData={};
+            				$.each(data.list || {} , function(ind, obj) {
+            				##
                             <tr class="##=(commonModel._id == obj.last_update_user) ? '' : ''##">
             					##
             					totalData.findServiceTotalCount = totalData.findServiceTotalCount ? totalData.findServiceTotalCount + 1 : 1;
@@ -317,6 +331,22 @@
             					    ##}##
             					    <button data-event="##:findServiceModel.setToNew##" class="btn btn-xs ##=(obj.isNew==1) ? 'btn-success' : 'btn-default'##" ##if(!findServiceModel.getAuth(1)) {## disabled="disabled" ##}##>新規</button>
             					    <button data-event="##:findServiceModel.setToDuplicate##" class="btn btn-xs ##=(obj.isNew==2) ? 'btn-warning' : 'btn-default'##" ##if(!findServiceModel.getAuth(1)) {## disabled="disabled" ##}##>既存</button>
+            					</td>
+            					<td>
+            					    <div class="btn-group">
+                					    <button type="button" class="btn ##=obj.result == '1' ? 'btn-success' : 'btn-default'## btn-xs dropdown-toggle" data-toggle="dropdown">
+                                            ##=resultType[obj.result] || '未設定' ## <span class="caret"></span>
+                                        </button>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="1" class=" ##=(obj.result==1) ? 'btn-info' : 'btn-default'##">韓国語</a></li>
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="2" class=" ##=(obj.result==2) ? 'btn-info' : 'btn-default'##">日本語</a></li>
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="3" class=" ##=(obj.result==3) ? 'btn-info' : 'btn-default'##">中国語</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="-1" class=" ##=(obj.result==-1) ? 'btn-info' : 'btn-default'##">あいまい</a></li>
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="-2" class=" ##=(obj.result==-2) ? 'btn-info' : 'btn-default'##">住所不明</a></li>
+                                            <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="0" class=" ##=(!obj.result || obj.result==0) ? 'btn-info' : 'btn-default'##">未設定</a></li>
+                                        </ul>
+                                    </div>
             					</td>
                                 <td>##=obj.findServiceDate##</td>
                                 <td>##=obj.findServiceFindFrom## ##=obj.findServiceMapKu## ##=obj.findServiceMapPage##</td>
@@ -345,10 +375,11 @@
                         </tbody>
                         <tfoot>
                             <tr class="active">
-            					<th></th>
-                                <th>総計 >></th>
-                                <th id="findServiceTotalCount">##=findServiceModel.listCount##</th>
-                                <th id="">##=totalData.findServiceTotalCount##</th>
+            					<th>表示:##=totalData.findServiceTotalCount##</th>
+                                <th></th>
+                                <th></th>
+                                <th id=""></th>
+                                <th id=""></th>
                                 <th id=""></th>
                                 <th id=""></th>
             					##if(findServiceModel.getAuth(1)) {##
@@ -367,16 +398,7 @@
 		</div>
     </div>
     
-    <div id="loadingModal" class="modal" data-keyboard="false" tabindex="-1" role="dialog">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content">
-                <div class="progress">
-                    <div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%">
-                        Loading...
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div id="loadingModal" class="modal" data-keyboard="false" tabindex="-1" role="dialog" data-bind-tmpl-id="loadingBar" data-tmpl-src="./tmpl/tmpl.common.html">
     </div>
     
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDejNEedWnONLDewIynvzf6Wv-aI4sd3eU&amp;sensor=true"></script>
@@ -384,6 +406,7 @@
     <script src="js/bootstrap.min.js"></script>
     <script src="js/underscore.js"></script>
     <script src="js/bridge.core.js"></script>
+    <script src="js/bridge.date.js"></script>
     <script src="js/app.js"></script>
     <script type="text/javascript">
         commonModel.loginCheckerAfter = function(data) {
@@ -538,14 +561,6 @@
                 }
             }},
             saveCancel: {click: function(e) {
-                /*
-                delete findServiceModel.savedData[Bridge.idName];
-                delete findServiceModel.savedData.findServiceAddress3;
-                delete findServiceModel.savedData.findServiceAddress4;
-                delete findServiceModel.savedData.findServiceName;
-                delete findServiceModel.savedData.findServiceComment;
-                Bridge.tmplTool.render('findServiceTable', findServiceModel.savedData);
-                */
                 findServiceModel.listAreaReset();
             }},
             restoreFromPrev: {click: function(e) {
@@ -570,7 +585,18 @@
                 });
             }},
             */
-            
+            setResult: {click: function(e) {
+                var resultType = parseInt(e.target.dataset.resulttype);
+                findServiceConn.reqUpdate('reqUpdate', e.data._id, {
+                        result: resultType, 
+                        result_update_name : commonModel.user.name,
+                        result_update_date : Bridge.dateStr.getNowDate(),
+                        result_update_user : commonModel.user._id
+                    }).request(function(data) {
+                    commonModel.messageAreaReset(data);
+                    findServiceModel.listAreaReset();
+                });
+            }},
             setToNew: {click: function(e) {
                 findServiceConn.reqUpdate('reqUpdate', e.data._id, {isNew: e.data.isNew == 1 ? 0 : 1}).request(function(data) {
                     commonModel.messageAreaReset(data);
@@ -642,47 +668,50 @@
 				var search_findServiceMapPage = $('#search_findServiceMapPage').val();
 				var search_findServiceMapKu = $('#search_findServiceMapKu').val();
 				var search_isNew = $('#search_isNew').val();
+				var search_result = $('#search_result').val();
 				
-				Bridge.sessionStorageTool.push('search_findServiceFindFrom', search_findServiceFindFrom);
-				Bridge.sessionStorageTool.push('search_findServiceMapPage', search_findServiceMapPage);
-				Bridge.sessionStorageTool.push('search_findServiceMapKu', search_findServiceMapKu);
-				Bridge.sessionStorageTool.push('search_isNew', search_isNew);
-				
+				Bridge.sessionStorageTool.push('search_findService', {
+				    search_findServiceFindFrom: search_findServiceFindFrom,
+				    search_findServiceMapPage: search_findServiceMapPage,
+				    search_findServiceMapKu: search_findServiceMapKu,
+				    search_isNew: search_isNew,
+				    search_result: search_result
+				});
 				
 				findServiceModel.listAreaReset();
             }},
             listAreaReset: function() {
 				//var serviceDateMonth = $('#dat').val();
-				var search_findServiceFindFrom = Bridge.sessionStorageTool.get('search_findServiceFindFrom');
-				var search_findServiceMapPage = Bridge.sessionStorageTool.get('search_findServiceMapPage');
-				var search_findServiceMapKu = Bridge.sessionStorageTool.get('search_findServiceMapKu');
-				var search_isNew = Bridge.sessionStorageTool.get('search_isNew');
-				
-				$('#search_findServiceFindFrom').val(search_findServiceFindFrom);
-				$('#search_findServiceMapPage').val(search_findServiceMapPage);
-				$('#search_findServiceMapKu').val(search_findServiceMapKu);
-				$('#search_isNew').val(search_isNew);
-				
+				var search_findService = Bridge.sessionStorageTool.get('search_findService') || {};
+				$.each(search_findService, function(key, value) {
+				    $('#' + key).val(value);
+				});
 				
 				var searchParm = {$query: {}, $orderby: {findServiceDate : -1}};
 				
-				if (search_findServiceFindFrom) {
-                    searchParm.$query['findServiceFindFrom'] = {$regex : search_findServiceFindFrom};
+				if (search_findService.search_findServiceFindFrom) {
+                    searchParm.$query['findServiceFindFrom'] = {$regex : search_findService.search_findServiceFindFrom};
 				}
-				if (search_findServiceMapPage) {
-                    searchParm.$query['findServiceMapPage'] = {$eq : search_findServiceMapPage};
+				if (search_findService.search_findServiceMapPage) {
+                    searchParm.$query['findServiceMapPage'] = {$eq : search_findService.search_findServiceMapPage};
 				}
-				if (search_findServiceMapKu) {
-                    searchParm.$query['findServiceMapKu'] = {$regex : search_findServiceMapKu};
+				if (search_findService.search_findServiceMapKu) {
+                    searchParm.$query['findServiceMapKu'] = {$regex : search_findService.search_findServiceMapKu};
 				}
-				if (search_isNew) {
-				    if (search_isNew == 0) {
+				if (search_findService.search_isNew) {
+				    if (search_findService.search_isNew == 0) {
 				        searchParm.$query['$or'] = [{isNew : {$exists : false}}, {isNew : {$eq : 0}}, {isNew : {$eq : '0'}}];
 				    } else {
-				        searchParm.$query['isNew'] = {$eq : parseInt(search_isNew)};
+				        searchParm.$query['isNew'] = {$eq : parseInt(search_findService.search_isNew)};
 				    }
 				}
-				
+				if (search_findService.search_result) {
+				    if (search_findService.search_result == 0) {
+				        searchParm.$query['$or'] = [{result : {$exists : false}}, {result : {$eq : 0}}];
+				    } else {
+				        searchParm.$query['result'] = {$eq : parseInt(search_findService.search_result)};
+				    }
+				}
 				var pageSize = findServiceModel.page.pageSize;
 				var pageNum = findServiceModel.page.pageNum;
 
@@ -697,11 +726,7 @@
                     data.listCount = data['count'];
                     commonModel.messageAreaReset(data);
                     
-                    data.search_findServiceFindFrom = search_findServiceFindFrom;
-                    data.search_findServiceMapPage = search_findServiceMapPage;
-                    data.search_findServiceMapKu = search_findServiceMapKu;
-                    data.search_isNew = search_isNew;
-                    
+                    data.search = search_findService;
                     data.page = findServiceModel.page;
                     
                     Bridge.tmplTool.render('findServiceTable', data);

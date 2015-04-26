@@ -24,7 +24,7 @@
         <a href="#" data-page="##=num##" data-event="##:pageSelectFunc##">##=num##<span data-page="##=num##" class="sr-only">(current)</span></a>
     </li>
     ##})##
-    <li class="##=(pageNum==endNum) ? 'active' : ''## ##=(endNum==1) ? 'hidden': ''##">
+    <li class="##=(pageNum==endNum) ? 'active' : ''## ##=(endNum < 2) ? 'hidden': ''##">
         <a href="#" data-page="##=endNum##" data-event="##:pageSelectFunc##">##=(pageNum + pageWidth < endNum) ? '..' : ''####=endNum##<span data-page="##=endNum##" class="sr-only">(current)</span></a>
     </li>
     <li class="##=(pageNum==endNum) ? 'disabled' : ''##">

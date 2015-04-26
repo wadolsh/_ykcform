@@ -106,3 +106,7 @@ body {
 .panel-heading .btn-sm {
     margin-top: -4px;
 }
+
+table .open>.dropdown-menu {
+  display: flex;
+}

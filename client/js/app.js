@@ -105,6 +105,7 @@ var commonModel = {
         commonConn.reqExecMethod('loginChecker', 'loginChecker').request(function(data) {
             data.loginChecker['keep_login'] = Bridge.localStorageTool.get('keepLogin');
 			if (data.loginChecker[Bridge.idName]) {
+			    commonModel.user = data.loginChecker;
 			    commonModel._id = data.loginChecker[Bridge.idName];
 			    commonModel._auth = data.loginChecker._auth;
 				Bridge.tmplTool.render('loginUser', data['loginChecker']);
