@@ -99,7 +99,7 @@
     		});
         }
         commonModel.loginCheckerFail = function(data) {
-            Bridge.tmplTool.render('login', {});
+            Bridge.tmplTool.render('login', data);
         }
         commonModel.logoutAfter = function(data) {
             Bridge.tmplTool.reset({login: {keep_login : Bridge.localStorageTool.get('keepLogin')}, loginUser: null, mainMenu: null});

@@ -123,7 +123,8 @@ var commonModel = {
     },
     messageAreaReset: function(data) {
         data = data || {};
-        Bridge.tmplTool.render('message', {msg : data.msg || data.error || data.warm});
+        alert(data.msg || data.error || data.warm);
+        //Bridge.tmplTool.render('message', {msg : data.msg || data.error || data.warm});
     }
 };
 
