@@ -125,11 +125,13 @@
                                         value="##=data.findServiceAddress1##">
                                 <input type="text" class="form-control" style="width:150px" id="matchAddressInput2" placeholder="住所2" 
                                         value="##=data.findServiceAddress2##">
-                                <input type="text" class="form-control" style="width:200px" id="matchAddressInput3" placeholder="住所3" 
+                                <input type="text" class="form-control" style="width:150px" id="matchAddressInput3" placeholder="住所3" 
                                         value="##=data.findServiceAddress3##">
-                                <input type="text" class="form-control" style="width:200px" id="matchAddressInput4" placeholder="住所4" 
+                                <input type="text" class="form-control" style="width:150px" id="matchAddressInput4" placeholder="住所4" 
                                         value="##=data.findServiceAddress4##">
-                                <input type="text" class="form-control" style="width:200px" id="matchAddressName" placeholder="名前" 
+                                <input type="text" class="form-control" style="width:150px" id="matchAddressInput5" placeholder="住所5" 
+                                        value="##=data.findServiceAddress5##">
+                                <input type="text" class="form-control" style="width:150px" id="matchAddressName" placeholder="名前" 
                                         value="##=data.findServiceName##" readonly>
                             </div>
                             <button type="button" class="btn btn-primary" data-event="##:{
@@ -182,7 +184,14 @@
                 			</div>
                 			<div class="form-group col-sm-4">
                 				<label class="">ページ</label>
-            					<input type="text" name="findServiceMapPage" list="findServiceMapPageList" value="##=data.findServiceMapPage##" class="form-control"/>
+                				<div class="input-group">
+            					    <input type="text" name="findServiceMapPage" list="findServiceMapPageList" value="##=data.findServiceMapPage##" class="form-control"/>
+                                     <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" data-event="##:findServiceModel.clearField##">
+                                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                        </button>
+                                    </span>
+                                </div>
                 			</div>
                 		</div>
                 		<div class="row">
@@ -190,28 +199,73 @@
                 				<label class="">住所</label>
                 				<div class="row">
                 				    <div class="col-sm-6">
-                				        <input type="text" id="findServiceAddress1" name="findServiceAddress1" value="##=data.findServiceAddress1 || '神奈川県'##" class="form-control" placeholder="都道府県"/>
+                				        <div class="input-group">
+                				            <input type="text" id="findServiceAddress1" name="findServiceAddress1" value="##=data.findServiceAddress1 || '神奈川県'##" class="form-control" placeholder="都道府県"/>
+                				            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button" data-event="##:findServiceModel.clearField##">
+                                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                                </button>
+                                            </span>
+                				        </div>
                 				    </div>
                 				</div>
                 				<div class="row">
                 				    <div class="col-sm-6">
-                				        <input type="text" list="findServiceMapKuList" id="findServiceAddress2" name="findServiceAddress2" value="##=data.findServiceAddress2##" class="form-control" placeholder="市区"/>
+                				        <div class="input-group">
+                				            <input type="text" list="findServiceMapKuList" id="findServiceAddress2" name="findServiceAddress2" value="##=data.findServiceAddress2##" class="form-control" placeholder="市区"/>
+                				            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button" data-event="##:findServiceModel.clearField##">
+                                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                                </button>
+                                            </span>
+                				        </div>
                 				    </div>
                 				</div>
-                				<div class="row">	
-                				    <div class="col-sm-12">
-                				        <input type="text" list="townNameList" id="findServiceAddress3" name="findServiceAddress3" value="##=data.findServiceAddress3##" class="form-control" placeholder="町村"/>
+                				<div class="row">
+                				    <div class="col-sm-6">
+                				        <div class="input-group">
+                    				        <input type="text" list="townNameList" id="findServiceAddress3" name="findServiceAddress3" value="##=data.findServiceAddress3##" class="form-control" placeholder="町村"/>
+                    				        <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button" data-event="##:findServiceModel.clearField##">
+                                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                                </button>
+                                            </span>
+                                        </div>
+                				    </div>
+                				    <div class="col-sm-6">
+                				        <div class="input-group">
+                				            <input type="text" id="findServiceAddress4" name="findServiceAddress4" value="##=data.findServiceAddress4##" class="form-control" placeholder="番地"/>
+                				            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button" data-event="##:findServiceModel.clearField##">
+                                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                                </button>
+                                            </span>
+                				        </div>
                 				    </div>
                 				</div>
                 				<div class="row">
                 				    <div class="col-sm-12">
-                				        <input type="text" id="findServiceAddress4" name="findServiceAddress4" value="##=data.findServiceAddress4##" class="form-control" placeholder="建物名"/>
+                				        <div class="input-group">
+                				            <input type="text" id="findServiceAddress5" name="findServiceAddress5" value="##=data.findServiceAddress5##" class="form-control" placeholder="建物名"/>
+                                            <span class="input-group-btn">
+                                                <button class="btn btn-default" type="button" data-event="##:findServiceModel.clearField##">
+                                                    <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                                </button>
+                                            </span>
+                                        </div>
                 			        </div>
                 			    </div>
                 			</div>
                 			<div class="form-group col-sm-4">
                 				<label for="findServiceName" class="">名前</label>
-                				<input type="text" id="findServiceName" name="findServiceName" value="##=data.findServiceName##" class="form-control"/>
+                				<div class="input-group">
+                				    <input type="text" id="findServiceName" name="findServiceName" value="##=data.findServiceName##" class="form-control"/>
+                                    <span class="input-group-btn">
+                                        <button class="btn btn-default" type="button" data-event="##:findServiceModel.clearField##">
+                                            <span class="glyphicon glyphicon-minus" aria-hidden="true"></span>
+                                        </button>
+                                    </span>
+                			    </div>
                 			</div>
                 		</div>
                         <div class="row">
@@ -367,7 +421,7 @@
                                     &nbsp;
                                     ##}##
                                     <a href="http://maps.google.co.jp/maps?q=##=(obj.findServiceLat && obj.findServiceLng) ? 'loc:' + obj.findServiceLat + ',' + obj.findServiceLng :  obj.findServiceAddress1 + obj.findServiceAddress2 + obj.findServiceAddress3 + ' ' + obj.findServiceAddress4##" target="gmap">
-                                        ##=obj.findServiceAddress1####=obj.findServiceAddress2####=obj.findServiceAddress3## ##=obj.findServiceAddress4##
+                                        ##=obj.findServiceAddress1####=obj.findServiceAddress2####=obj.findServiceAddress3####=obj.findServiceAddress4## ##=obj.findServiceAddress5##
                                     </a>
                                 </td>
                                 <td>##=obj.findServiceName##</td>
@@ -450,7 +504,7 @@
 			}},
 			lineDelete: {click: function(e) {
 					e.stopPropagation();
-					if (!confirm("'" + e.data.findServiceAddress3 + e.data.findServiceAddress3 + "' の記録を削除してもよろしいでしょか？")) {
+					if (!confirm("'" + e.data.findServiceAddress3 + e.data.findServiceAddress4 + e.data.findServiceAddress5 + "' の記録を削除してもよろしいでしょか？")) {
 					    return false;
 					}
 					
@@ -468,7 +522,7 @@
 					e.stopPropagation();
                     
                     var address = '';
-                    $('#findServiceAddress1, #findServiceAddress2, #findServiceAddress3, #findServiceAddress4').each(function(idx, obj) {
+                    $('#findServiceAddress1, #findServiceAddress2, #findServiceAddress3, #findServiceAddress4, #findServiceAddress5').each(function(idx, obj) {
                         address += ' ' + obj.value;
                     })
                     findServiceModel.geocoding.latLngByAddress(address, function(latLng){
@@ -536,6 +590,9 @@
 			addNew: {click: function(e) {
 			    Bridge.tmplTool.render('findServiceTable', {editMode: 'new'});
 			}},
+			clearField: {click: function(e) {
+			    $(e.target).parents('.input-group').find('input').val('');
+			}},
             save: {click: function(e) {
                 var template = $(e.target).parents('.br-tmpl');
                 var obj = Bridge.tmplTool.editor(template, {
@@ -572,7 +629,7 @@
                 var findServiceModel_savedData = Bridge.localStorageTool.get('findServiceModel_savedData');
                 
                 delete findServiceModel_savedData[Bridge.idName];
-                delete findServiceModel_savedData.findServiceAddress4;
+                //delete findServiceModel_savedData.findServiceAddress4;
                 delete findServiceModel_savedData.findServiceName;
                 delete findServiceModel_savedData.findServiceComment;
                 delete findServiceModel_savedData.findServiceLng;

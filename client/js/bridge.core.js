@@ -137,7 +137,8 @@
 
         if (data) {
             var html = render.call(data, data, _);
-            $area.html($(html));
+            //$area.html($(html));
+            $area[0].innerHTML = html;
             $.each(funcArray, function(key, obj) {
                 var $element = $area.find('[data-event="' + key + '"]');
                 $.each(obj.func, function(eventId, eventFunc) {
@@ -149,21 +150,24 @@
         
         var template = function(data, element) {
             var html = render.call(data, data, _);
-            var $html = $(html);
-            if (element) {
-                //$(element).html($html);
-                element.innerHTML = html;
-            } else {
-                $area.html($html);
+            //var $html = $(html);
+            try {
+                if (element) {
+                    //$(element).html($html);
+                    element.innerHTML = html;
+                    $area = $(element);
+                } else {
+                    //$area.html($html);
+                    $area[0].innerHTML = html;
+                }
+            } catch(e) {
+                console.log(e);
             }
-            
-            
             
             //$area[0].innerHTML = html;
             $.each(funcArray, function(key, obj) {
                 var $element = $area.find('[data-event="' + key + '"]');
                 $.each(obj.func, function(eventId, eventFunc) {
-                    
                     $element.on(eventId, obj.data, function(e) {
                         RouterTool.capture(eventFunc, e);
                     });
