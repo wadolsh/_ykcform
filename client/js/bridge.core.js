@@ -209,7 +209,7 @@
                         tmpl.addTmpl($(html).find('[data-tmpl-id]'));
                     },
                     dataType: 'text',
-                    async: false,
+                    //async: false,
                     cache: true
                 });
             }
@@ -243,7 +243,6 @@
                         
                         $.ajax({
                             url: tmplSrc,
-                            
                             success: function(html) {
                                 var $html = $(html);
                                 var $ele = $(ele);
@@ -254,20 +253,6 @@
                             async: false,
                             cache: true
                         });
-                        
-                        /*
-                        var html = $.ajax({
-                            url: tmplSrc,
-    
-                            dataType: 'text',
-                            async: false,
-                            cache: true
-                        }).responseText;
-                        var $html = $(html);
-                        ele.innerHTML = $html.find('[data-tmpl-id="' + bindTmplId + '"]').add($html.filter('[data-tmpl-id="' + bindTmplId + '"]')).html();
-                        var $ele = $(ele);
-                        tmplTool.addTmpl($ele.find('[data-tmpl-id]').add($ele.filter('[data-tmpl-id]')));
-                        */
                     }
 
                 });

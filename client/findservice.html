@@ -321,6 +321,20 @@
 ##
         		<div class="panel-heading">
         		    <div class="form-inline">
+        		    ##
+        		    $.each(findServiceModel.searchForm, function(key, obj) {
+        		        if (obj.lineBreak) {
+        		    ##
+        		    
+            		</div>
+            		<div class="form-inline">
+            		    ##}##
+                        <div class="form-group">
+                            <label class="">##=obj.label##</label>
+                            <input type="text" id="##=key##" list="##=obj.list##" value="##=data.search[key]##" class="form-control" style="##=obj.style##"/>
+            			</div>
+        		    ##});##
+        		    <!--
                         <div class="form-group">
                             <label class="">情報元</label>
                             <input type="text" id="search_findServiceFindFrom" list="findServiceFindFromList" value="##=data.search.search_findServiceFindFrom##" class="form-control"/>
@@ -333,7 +347,11 @@
                             <label class="">ページ</label>
                             <input type="text" style="width:60px;" id="search_findServiceMapPage" value="##=data.search.search_findServiceMapPage##" class="form-control"/>
             			</div>
-                	
+                        <div class="form-group">
+                            <label class="">町村</label>
+                            <input type="text" list="townNameList" id="search_findServiceMapTown" value="##=data.search.search_findServiceMapTown##" class="form-control"/>
+            			</div>
+                    -->
                 		<div class="form-group">
                 		    <select id="search_isNew" class="form-control" value="##=data.search.search_isNew##">
                 		        <option value="">-新規有無-</option>
@@ -733,20 +751,25 @@
             
 			search: {click: function(e) {
 			    findServiceModel.page.pageNum = 1;
-				var search_findServiceFindFrom = $('#search_findServiceFindFrom').val();
-				var search_findServiceMapPage = $('#search_findServiceMapPage').val();
-				var search_findServiceMapKu = $('#search_findServiceMapKu').val();
-				var search_isNew = $('#search_isNew').val();
-				var search_result = $('#search_result').val();
-				
-				Bridge.sessionStorageTool.push('search_findService', {
-				    search_findServiceFindFrom: search_findServiceFindFrom,
-				    search_findServiceMapPage: search_findServiceMapPage,
-				    search_findServiceMapKu: search_findServiceMapKu,
-				    search_isNew: search_isNew,
-				    search_result: search_result
-				});
-				
+
+			    var search_findService = {};
+			    var value = null;
+			    for (var key in findServiceModel.searchForm) {
+			        value = $('#' + key).val();
+			        if (value) {
+			            search_findService[key] = value;
+			        }
+			    }
+			    value = $('#search_isNew').val();
+			    if (value) {
+			        search_findService['search_isNew'] = value;
+			    }
+			    value = $('#search_result').val();
+			    if (value) {
+			        search_findService['search_result'] = value;
+			    }
+			    
+				Bridge.sessionStorageTool.push('search_findService', search_findService);
 				findServiceModel.listAreaReset();
             }},
             listAreaReset: function() {
@@ -760,6 +783,22 @@
 				if (Object.keys(search_findService).length != 0) {
 				    searchParm.$query.$and = [];
 				}
+				
+				var searchFrom = findServiceModel.searchForm;
+				var searchFormObj = null;
+				var searchValue = null;
+				for(var key in searchFrom) {
+				    searchFormObj = searchFrom[key];
+    				if (search_findService[key]) {
+    				    searchValue = {};
+    				    searchValue[searchFormObj.searchField] = {};
+    				    searchValue[searchFormObj.searchField][searchFormObj.searchComparison] = search_findService[key];
+                        searchParm.$query.$and.push(searchValue);
+                        //searchParm.$query.$and.push({}[searchFormObj.searchField] = {}[searchFormObj.searchComparison] = search_findService[key]);
+    				    //searchParm.$query.$and.push(JSON.parse('{"' + searchFormObj.searchField + '" : {"' + searchFormObj.searchComparison + '" : "' + search_findService[key] + '"}}'));
+    				}
+				}
+				/*
 				if (search_findService.search_findServiceFindFrom) {
                     searchParm.$query.$and.push({'findServiceFindFrom' : {$regex : search_findService.search_findServiceFindFrom}});
 				}
@@ -769,6 +808,10 @@
 				if (search_findService.search_findServiceMapKu) {
                     searchParm.$query.$and.push({'findServiceMapKu': {$regex : search_findService.search_findServiceMapKu}});
 				}
+				if (search_findService.search_findServiceMapTown) {
+                    searchParm.$query.$and.push({'findServiceAddress3': {$regex : search_findService.search_findServiceMapTown}});
+				}
+				*/
 				if (search_findService.search_isNew) {
 				    if (search_findService.search_isNew == 0) {
 				        searchParm.$query.$and.push({'$or': [{isNew : {$exists : false}}, {isNew : {$eq : 0}}, {isNew : {$eq : '0'}}]});
@@ -813,6 +856,39 @@
                 pageSizeChangeFunc: findServiceModel.pageSizeChange
         };
 
+	    findServiceModel.searchForm = {
+	        search_findServiceFindFrom: {
+	            searchField: "findServiceFindFrom",
+	            searchComparison : "$regex",
+	            label: "情報元",
+	            list: "findServiceFindFromList"
+	        },
+	        search_findServiceMapKu: {
+	            searchField: "findServiceMapKu",
+	            searchComparison : "$regex",
+	            label: "地図:市区",
+	            list: "findServiceMapKuList"
+	        },
+	        search_findServiceMapPage: {
+	            searchField: "findServiceMapPage",
+	            searchComparison : "$eq",
+	            label: "ページ",
+	            style: "width:60px;"
+	        },
+	        search_findServiceCityward: {
+	            searchField: "findServiceAddress2",
+	            searchComparison : "$regex",
+	            label: "住所:市区",
+	            list: "findServiceMapKuList",
+	            lineBreak: 1
+	        },
+	        search_findServiceTown: {
+	            searchField: "findServiceAddress3",
+	            searchComparison : "$regex",
+	            label: "町村",
+	            list: "townNameList"
+	        }
+	    }
 
         var exportdate = null;
         var exportdata = Bridge.localStorageTool.get('exportdata');
