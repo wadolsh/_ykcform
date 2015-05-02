@@ -1,0 +1,47 @@
+Binary
+
+Import database
+mongorestore -h ds041188.mongolab.com:41188 -d ykcform -u <user> -p <password> <input db directory>
+Export database
+mongodump -h ds041188.mongolab.com:41188 -d ykcform -u <user> -p <password> -o <output directory>
+
+Import collection
+mongorestore -h ds041188.mongolab.com:41188 -d ykcform -u <user> -p <password> <input .bson file>
+Export collection
+mongodump -h ds041188.mongolab.com:41188 -d ykcform -c <collection> -u <user> -p <password> -o <output directory>
+
+
+JSON
+
+Import collection
+mongoimport -h ds041188.mongolab.com:41188 -d ykcform -c <collection> -u <user> -p <password> --file <input file>
+Export collection
+mongoexport -h ds041188.mongolab.com:41188 -d ykcform -c <collection> -u <user> -p <password> -o <output file>
+
+
+CSV
+
+Import collection
+mongoimport -h ds041188.mongolab.com:41188 -d ykcform -c <collection> -u <user> -p <password> --file <input .csv file> --type csv --headerline
+Export collection
+mongoexport -h ds041188.mongolab.com:41188 -d ykcform -c <collection> -u <user> -p <password> -o <output .csv file> --csv -f <comma-separated list of field names>
+
+
+mongodump -h ds041188.mongolab.com:41188 -d ykcform -c find_service -u ykcform -p -o bson
+
+mongoexport -h ds041188.mongolab.com:41188 -d ykcform -c find_service -u ykcform -p -o bson/find_service.csv --csv -f _id,findServiceAddress3,findServiceAddress4,findServiceAddress5
+
+mongoimport -h ds041188.mongolab.com:41188 -d ykcform -c find_service -u ykcform -p --file bson/find_service.csv --type csv --headerline --upsert --upsertFields _id,findServiceAddress3,findServiceAddress4,findServiceAddress5
+
+
+mongoexport -h ds041188.mongolab.com:41188 -d ykcform -c find_service -u ykcform -p  -o bson/find_service.json
+
+
+mongorestore -h ds041188.mongolab.com:41188 -d ykcform -u ykcform -p  bson/ykcform/find_service.bson
+
+
+db.find_service_ad.find().forEach(function(doc) {db.find_service.update({_id:doc._id},{$set:{findServiceAddress3:doc.findServiceAddress3, findServiceAddress4:doc.findServiceAddress4, findServiceAddress5:doc.findServiceAddress5 }})})
+
+db.find_service.update({}, {$rename: {findServiceAddress1: "prefecture",　 findServiceAddress2: "cityward",　 findServiceAddress2: ""town,
+findServiceAddress4: "chome", findServiceAddress5: "address2", findServiceName : "name", findServiceLat : "lat", findServiceLng : "lng\"}})
+    
