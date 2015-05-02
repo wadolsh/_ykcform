@@ -97,7 +97,8 @@
             if (func) {
                 source += "';\nvar funcId = (funcIdCount++);\n__p+='";
                 source += "'+\nfuncId\n'";
-                source += "';\nfuncArray[funcId] = {func: " + func + ", data: this};\n__p+='";
+                var funcArray = func.split('::');
+                source += "';\nfuncArray[funcId] = {func: " + funcArray[0] + ", data: " + (funcArray[1] || 'this') + "};\n__p+='";
             }
             if (evaluate) {
                 source += "';\n" + evaluate + "\n__p+='";
@@ -190,10 +191,14 @@
             if (obj instanceof jQuery) {
                 obj.each(function(ind, ele) {
                     var tmpl_id = ele.dataset['tmplId'];
+                    var tmpl_option = JSON.parse(ele.dataset['tmplOption'] || '{}');
                     var $tmpl_container = $('[data-bind-tmpl-id="' + tmpl_id + '"], #' + tmpl_id);
-                    tmpl.cache[tmpl_id] = template($tmpl_container, ele.innerHTML);//ele.innerHTML);
+                    var render = tmpl.cache[tmpl_id] = template($tmpl_container, ele.innerHTML);//ele.innerHTML);
                     if ($tmpl_container[0]) {
                         $tmpl_container[0].innerHTML = '';
+                    }
+                    if (tmpl_option.render) {
+                        render(tmpl_option.data || {});
                     }
                 });
             } else {
@@ -246,7 +251,9 @@
                             success: function(html) {
                                 var $html = $(html);
                                 var $ele = $(ele);
+                                var eleHtml = ele.innerHTML;
                                 ele.innerHTML = $html.find('[data-tmpl-id="' + bindTmplId + '"]').add($html.filter('[data-tmpl-id="' + bindTmplId + '"]')).html();
+                                $ele.find('content').replaceWith(eleHtml);
                                 tmplTool.addTmpl($ele.find('[data-tmpl-id]').add($ele.filter('[data-tmpl-id]')));
                             },
                             dataType: 'text',

@@ -62,6 +62,10 @@ body {
   margin-left: auto;
 }
 
+nav .panel-body {
+  padding: 15px;
+}
+
 .navbar-right {
   float: right!important;
   margin-right: -15px;

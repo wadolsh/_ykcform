@@ -11,8 +11,55 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-fixed-top" role="navigation" data-bind-tmpl-id="header" data-tmpl-src="./tmpl/tmpl.common.html">
-</nav>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" data-bind-tmpl-id="header" data-tmpl-src="./tmpl/tmpl.common.html">
+        <div id="navMenu">
+            <script type="text/tmpl" data-tmpl-id="navMenu" data-tmpl-option='{"render": true}'>
+                <button type="button" id="mapToggleButton" class="btn btn-default btn-xs" aria-label="Left Align" data-event="##:findServiceModel.showSearchedMap##">
+                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true">地図</span>
+                </button>
+            </script>
+        </div>
+    </nav>
+    
+    <div class="container hidden" id="searchedMapArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
+        <div id="searchedMap" style="height: 100%;">
+            
+        </div>
+        <div class="modal" id="searchedMapModal">
+          <script type="text/tmpl" data-tmpl-id="searchedMapModal">
+          <div class="modal-dialog">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">##=data.findServiceAddress2 + data.findServiceAddress3 + data.findServiceAddress4 + ' ' + data.findServiceAddress5+ ' ' + data.findServiceName##</h4>
+              </div>
+              <div class="modal-body br-form">
+                <input type="hidden" name="##=Bridge.idName##" value="##=data[Bridge.idName]##">
+                <div class="row">
+        			<div class="form-group col-sm-12">
+        				<label for="findServiceComment" class="">コメント</label>
+        				<textarea class="form-control" rows="5" id="searchedMapModalComment" name="findServiceComment" data-event="##:{keydown: function(e){
+        				    $('#searchedMapModalSubmitButton').removeClass('disabled');
+        				}}##">##=data.findServiceComment##</textarea>
+        			</div>
+                </div>
+                <div class="row">
+        			<div class="form-group col-sm-12">
+        			    <button type="submit" id="searchedMapModalSubmitButton" class="btn btn-primary disabled" data-event="##:findServiceModel.saveComment::data##">コメント登録</button>
+        			</div>
+                </div>
+              </div>
+              <div class="modal-footer">
+              	##$.each(findServiceModel.resultTypeModel, function(key, obj) {##
+              	    <button type="button" class="btn ##=(data.result==key) ? obj.color : 'btn-default'##" data-event="##:findServiceModel.setResult::data##" data-resultType="##=key##" data-fromMap="true">##=obj.label##</button>
+                ##});##
+              </div>
+            </div><!-- /.modal-content -->
+          </div><!-- /.modal-dialog -->
+          </script>
+        </div><!-- /.modal -->
+        
+    </div>
     
 <datalist id="findServiceMapKuList">
     <option value=""></option>
@@ -163,7 +210,7 @@
                 </div>
 ##}##
 ##if(data.editMode && data.editMode != 'no') {##
-        		<div class="panel-body">
+        		<div class="panel-body br-form">
                  	<div id="findServiceEditArea" class="form-edit panel-body" role="form">
             		    <input type="hidden" name="##=Bridge.idName##" value="##=data[Bridge.idName]##">
 
@@ -294,30 +341,25 @@
                 			</div>
                         </div>
             		</div>
+                    <nav class="navbar navbar-default navbar-fixed-bottom">
+                        <div class="container">
+                            <div class="navbar-header" style="padding:10px">
+                                <div class="navbar-brand"style="height: 0px;"></div>
+                                <div class="navbar-left">
+                                    <button type="button" data-event="##:findServiceModel.save##" class="btn ##=data[Bridge.idName] ? 'btn-success' : 'btn-primary'## ">##=data[Bridge.idName] ? '修正' : '登録'##</button>
+                                </div>
+                                <div class="navbar-right">
+                                    <button type="button" data-event="##:findServiceModel.restoreFromPrev##" class="btn btn-success ##=data.editMode != 'new' || !findServiceModel.savedData ? 'hidden': ''##">前回登録をコピー</button>
+                                    <button type="button" data-event="##:findServiceModel.saveCancel##" class="btn">キャンセル</button>
+                    		    </div>
+                    		</div>
+                        </div>
+                    </nav>
         		</div>
-                <nav class="navbar navbar-default navbar-fixed-bottom">
-                    <div class="container">
-                        <div class="navbar-header" style="padding:10px">
-                            <div class="navbar-brand"style="height: 0px;"></div>
-                            <div class="navbar-left">
-                                <button type="button" data-event="##:findServiceModel.save##" class="btn ##=data[Bridge.idName] ? 'btn-success' : 'btn-primary'## ">##=data[Bridge.idName] ? '修正' : '登録'##</button>
-                            </div>
-                            <div class="navbar-right">
-                                <button type="button" data-event="##:findServiceModel.restoreFromPrev##" class="btn btn-success ##=data.editMode != 'new' || !findServiceModel.savedData ? 'hidden': ''##">前回登録をコピー</button>
-                                <button type="button" data-event="##:findServiceModel.saveCancel##" class="btn">キャンセル</button>
-                		    </div>
-                		</div>
-                    </div>
-                </nav>
-##}##
+
 ##
-  if(data.list) {
-      var resultType = {'1': {label: '韓国語', color:'btn-success'}
-                      , '2': {label: '日本語', color:'btn-info'}
-                      , '3': {label: '中国語', color:'btn-info'}
-                      , '-1': {label: 'あいまい', color:'btn-warning'}
-                      , '-2': {label: '住所不明', color:'btn-danger'}
-                      , '0': {label: '未設定', color:'btn-default'}};
+}
+if(data.list) {
 ##
         		<div class="panel-heading">
         		    <div class="form-inline">
@@ -363,7 +405,7 @@
                 		<div class="form-group">
                 		    <select id="search_result" class="form-control" value="##=data.search.search_result##">
                 		        <option value="">-結果-</option>
-                		        ##$.each(resultType, function(key, obj) {##
+                		        ##$.each(findServiceModel.resultTypeModel, function(key, obj) {##
                 		            <option value="##=key##" ##=data.search.search_result == key ? 'selected="selected"' : ""##>##=obj.label##</option>
                 		        ##});##
                             </select>
@@ -411,8 +453,8 @@
             					</td>
             					<td>
             					    <div class="btn-group">
-                					    <button type="button" class="btn ##=resultType[obj.result || 0].color## btn-xs dropdown-toggle" data-toggle="dropdown">
-                                            ##=resultType[obj.result || 0].label## <span class="caret"></span>
+                					    <button type="button" class="btn ##=findServiceModel.resultTypeModel[obj.result || 0].color## btn-xs dropdown-toggle" data-toggle="dropdown">
+                                            ##=findServiceModel.resultTypeModel[obj.result || 0].label## <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="1" class="##=(obj.result==1) ? 'btn-success' : 'btn-default'##">韓国語</a></li>
@@ -613,7 +655,7 @@
 			    $(e.target).parents('.input-group').find('input').val('');
 			}},
             save: {click: function(e) {
-                var template = $(e.target).parents('.br-tmpl');
+                var template = $(e.target).parents('.br-form');
                 var obj = Bridge.tmplTool.editor(template, {
                     findServiceDate : {validateRule : {label: '登録日', isNullAble : false}},
                     findServiceFindFrom : {validateRule : {label: '情報元', isNullAble : false}},
@@ -641,8 +683,22 @@
                     });
                 }
             }},
+            saveComment: {click: function(e) {
+                var template = $(e.target).parents('.br-form');
+                var obj = Bridge.tmplTool.editor(template, {});
+                if (obj.validate()) {
+                    //delete obj.data._id;
+                    findServiceConn.reqSave('reqSave', obj.data).request(function(data) {
+                        e.data.findServiceComment = data.reqSave.findServiceComment;
+                        findServiceModel.listAreaReset(false);
+                        commonModel.messageAreaReset(data);
+                        Bridge.tmplTool.render('searchedMapModal', e.data);
+                        $('#searchedMapModal').modal('show');
+                    });
+                }
+            }},
             saveCancel: {click: function(e) {
-                findServiceModel.listAreaReset();
+                findServiceModel.listAreaReset(false);
             }},
             restoreFromPrev: {click: function(e) {
                 var findServiceModel_savedData = Bridge.localStorageTool.get('findServiceModel_savedData');
@@ -675,7 +731,12 @@
                         result_update_user : commonModel.user._id
                     }).request(function(data) {
                     commonModel.messageAreaReset(data);
-                    findServiceModel.listAreaReset();
+                    e.data.result = data.reqUpdate.result;
+                    findServiceModel.listAreaReset(false);
+                    if (e.target.dataset.frommap) {
+                        Bridge.tmplTool.render('searchedMapModal', e.data);
+                        $('#searchedMapModal').modal('show');
+                    }
                 });
             }},
             setToNew: {click: function(e) {
@@ -736,7 +797,7 @@
             },
             
 			listArea: {click: function(e) {
-				findServiceModel.listAreaReset();
+				findServiceModel.listAreaReset(false);
             }},
             
             pageSizeChange: {change: function(e) {
@@ -747,6 +808,60 @@
             pageSelect: {click: function(e) {
                 findServiceModel.page.pageNum = parseInt(e.target.dataset.page);
                 findServiceModel.listAreaReset();
+            }},
+            
+            showSearchedMap: {click: function(e) {
+                var listData = findServiceModel.listData;
+                
+                var $searchedMapArea = $('#searchedMapArea');
+                
+                $searchedMapArea.toggleClass('hidden');
+                $('#findService').toggleClass('hidden');
+                var isHidden = $searchedMapArea.hasClass('hidden');
+                if (isHidden) {
+                    $('#mapToggleButton').removeClass('btn-success');
+                    return;
+                }
+                $('#mapToggleButton').addClass('btn-success');
+                
+                if (!findServiceModel.searchedMap) {
+                    var mapOptions = {
+                        center: {lat: parseFloat(listData[0].findServiceLat), lng: parseFloat(listData[0].findServiceLng)},
+                        zoom: 14,
+                        mapTypeId: google.maps.MapTypeId.ROADMAP
+                    };
+                    var map_canvas = document.getElementById("searchedMap");
+                    //map_canvas.style.height = '400px';
+                    findServiceModel.searchedMap = new google.maps.Map(map_canvas, mapOptions);
+                }
+                var map = findServiceModel.searchedMap;
+                
+                if (!findServiceModel.searchedMarkers) {
+                    findServiceModel.searchedMarkers = [];
+                }
+                
+                var searchedMarkers = findServiceModel.searchedMarkers;
+                
+                for(var ind in searchedMarkers) {
+                    searchedMarkers[ind].setMap(null);
+                }
+                
+                var marker, data = null;
+                $.each(listData, function(ind, data) {
+                //for (var ind in listData) {
+                    //data = listData[ind];
+                    marker = new google.maps.Marker({
+                        //icon : 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + idx + '|00a8e6|000000',
+                        map: map,
+                        position: {lat: parseFloat(data.findServiceLat), lng: parseFloat(data.findServiceLng)},
+                        draggable: false
+                    });
+                    google.maps.event.addListener.call(this, marker, 'click', function(e) {
+                        Bridge.tmplTool.render('searchedMapModal', data);
+                        $('#searchedMapModal').modal('show');
+                    });
+                    searchedMarkers.push(marker);
+                });
             }},
             
 			search: {click: function(e) {
@@ -772,12 +887,25 @@
 				Bridge.sessionStorageTool.push('search_findService', search_findService);
 				findServiceModel.listAreaReset();
             }},
-            listAreaReset: function() {
+            listAreaReset: function(isReflash) {
+                
 				//var serviceDateMonth = $('#dat').val();
 				var search_findService = Bridge.sessionStorageTool.get('search_findService') || {};
 				$.each(search_findService, function(key, value) {
 				    $('#' + key).val(value);
 				});
+				
+			    if (isReflash == undefined) isReflash = true;
+                if (!isReflash) {
+                    var data = {};
+                    data.search = search_findService;
+                    data.page = findServiceModel.page;
+                    data.list = findServiceModel.listData;
+                    data.listCount = findServiceModel.listCount;
+                    Bridge.tmplTool.render('findServiceTable', data);
+                    return;
+                }
+				
 				
 				var searchParm = {$query: {}, $orderby: {findServiceDate : -1}};
 				if (Object.keys(search_findService).length != 0) {
@@ -889,6 +1017,14 @@
 	            list: "townNameList"
 	        }
 	    }
+        findServiceModel.resultTypeModel = {
+            '1': {label: '韓国語', color:'btn-success'},
+            '2': {label: '日本語', color:'btn-info'}, 
+            '3': {label: '中国語', color:'btn-info'}, 
+            '-1': {label: 'あいまい', color:'btn-warning'}, 
+            '-2': {label: '住所不明', color:'btn-danger'}, 
+            '0': {label: '未設定', color:'btn-default'}
+        };
 
         var exportdate = null;
         var exportdata = Bridge.localStorageTool.get('exportdata');
