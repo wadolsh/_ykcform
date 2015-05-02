@@ -51,7 +51,7 @@
               </div>
               <div class="modal-footer">
               	##$.each(findServiceModel.resultTypeModel, function(key, obj) {##
-              	    <button type="button" class="btn ##=(data.result==key) ? obj.color : 'btn-default'##" data-event="##:findServiceModel.setResult::data##" data-resultType="##=key##" data-fromMap="true">##=obj.label##</button>
+              	    <button type="button" class="btn btn-sm ##=(data.result==key) ? obj.color : 'btn-default'##" data-event="##:findServiceModel.setResult::data##" data-resultType="##=key##" data-fromMap="true">##=obj.label##</button>
                 ##});##
               </div>
             </div><!-- /.modal-content -->
