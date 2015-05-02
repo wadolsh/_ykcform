@@ -719,7 +719,7 @@
                     data = exportdata[key];
                     if (//data.prefecture == address1 && 
                             (data.cityward.indexOf(address2) > -1 || address2.indexOf(data.cityward) > -1) 
-                            && address3.indexOf(data.town) > -1) {
+                            && (address3.indexOf(data.town) > -1 || data.town.indexOf(address3) > -1)) {
                         exports.push(data);
         				addr = data.cityward + ' ' + data.town + ' '+ data.chome;
         				addr += (data.banchi) ? ('-' + data.banchi):'';
