@@ -186,7 +186,7 @@
                 				<label class="">ページ</label>
                 				<div class="input-group">
             					    <input type="text" name="findServiceMapPage" list="findServiceMapPageList" value="##=data.findServiceMapPage##" class="form-control"/>
-                                     <span class="input-group-btn">
+                                    <span class="input-group-btn">
                                         <button class="btn btn-default" type="button" data-event="##:findServiceModel.clearField##">
                                             <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
                                         </button>
@@ -331,9 +331,9 @@
             			</div>
                         <div class="form-group">
                             <label class="">ページ</label>
-                            <input type="text" id="search_findServiceMapPage" value="##=data.search.search_findServiceMapPage##" class="form-control"/>
+                            <input type="text" style="width:60px;" id="search_findServiceMapPage" value="##=data.search.search_findServiceMapPage##" class="form-control"/>
             			</div>
-                			
+                	
                 		<div class="form-group">
                 		    <select id="search_isNew" class="form-control" value="##=data.search.search_isNew##">
                 		        <option value="">-新規有無-</option>
@@ -466,6 +466,7 @@
     <script src="js/underscore.js"></script>
     <script src="js/bridge.core.js"></script>
     <script src="js/bridge.date.js"></script>
+    <script src="js/backbone.router.js"></script>
     <script src="js/app.js"></script>
     <script type="text/javascript">
         commonModel.loginCheckerAfter = function(data) {
@@ -678,7 +679,13 @@
             
             matchAddress: function() {
                 /*
-                address2: "501"banchi: "22"chome: "1"cityward: "川崎市川崎区"class: "返却済"congregation: "川崎市中央"description: "日本語"fileno: "03"gou: ""id: "KWS5352070940"lastvisit: ""lat: "35.53521"lng: "139.70940"name: ""notice: ""phonetic_town: "ｱｻﾋﾁｮｳ"prefecture: "神奈川県"serial: "0"tel: ""town: "旭町"zipcode: "2100808"
+                address2: "501"
+                banchi: "22"
+                chome: "1"
+                cityward: "川崎市川崎区"class: "返却済"congregation: "川崎市中央"description: "日本語"fileno: "03"gou: ""id: "KWS5352070940"lastvisit: ""lat: "35.53521"lng: "139.70940"name: ""notice: ""phonetic_town: "ｱｻﾋﾁｮｳ"
+                prefecture: "神奈川県"serial: "0"tel: ""
+                town: "旭町"
+                zipcode: "2100808"
                 */
                 var address1 = $('#matchAddressInput1').val();
                 var address2 = $('#matchAddressInput2').val();
@@ -750,28 +757,30 @@
 				});
 				
 				var searchParm = {$query: {}, $orderby: {findServiceDate : -1}};
-				
+				if (Object.keys(search_findService).length != 0) {
+				    searchParm.$query.$and = [];
+				}
 				if (search_findService.search_findServiceFindFrom) {
-                    searchParm.$query['findServiceFindFrom'] = {$regex : search_findService.search_findServiceFindFrom};
+                    searchParm.$query.$and.push({'findServiceFindFrom' : {$regex : search_findService.search_findServiceFindFrom}});
 				}
 				if (search_findService.search_findServiceMapPage) {
-                    searchParm.$query['findServiceMapPage'] = {$eq : search_findService.search_findServiceMapPage};
+                    searchParm.$query.$and.push({'findServiceMapPage': {$eq : search_findService.search_findServiceMapPage}});
 				}
 				if (search_findService.search_findServiceMapKu) {
-                    searchParm.$query['findServiceMapKu'] = {$regex : search_findService.search_findServiceMapKu};
+                    searchParm.$query.$and.push({'findServiceMapKu': {$regex : search_findService.search_findServiceMapKu}});
 				}
 				if (search_findService.search_isNew) {
 				    if (search_findService.search_isNew == 0) {
-				        searchParm.$query['$or'] = [{isNew : {$exists : false}}, {isNew : {$eq : 0}}, {isNew : {$eq : '0'}}];
+				        searchParm.$query.$and.push({'$or': [{isNew : {$exists : false}}, {isNew : {$eq : 0}}, {isNew : {$eq : '0'}}]});
 				    } else {
-				        searchParm.$query['isNew'] = {$eq : parseInt(search_findService.search_isNew)};
+				        searchParm.$query.$and.push({'isNew': {$eq : parseInt(search_findService.search_isNew)}});
 				    }
 				}
 				if (search_findService.search_result) {
 				    if (search_findService.search_result == 0) {
-				        searchParm.$query['$or'] = [{result : {$exists : false}}, {result : {$eq : 0}}];
+				        searchParm.$query.$and.push({'$or': [{result : {$exists : false}}, {result : {$eq : 0}}]});
 				    } else {
-				        searchParm.$query['result'] = {$eq : parseInt(search_findService.search_result)};
+				        searchParm.$query.$and.push({'result': {$eq : parseInt(search_findService.search_result)}});
 				    }
 				}
 				var pageSize = findServiceModel.page.pageSize;
@@ -861,6 +870,29 @@
         
 
 
+
+var Workspace = Bridge.Router.extend({
+
+  routes: {
+    "help":                 "help",    // #help
+    "search/:query":        "search",  // #search/kiwis
+    "search/:query/p:page": "search"   // #search/kiwis/p7
+  },
+
+  help: function() {
+    console.log('help');
+  },
+
+  search: function(query, page) {
+    console.log('search');
+  }
+
+});
+
+
+
+
+var router = new Workspace().start();
         
         //if (Bridge.localStorageTool.get('keepLogin')) {
             commonModel.loginChecker();
