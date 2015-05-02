@@ -51,7 +51,7 @@
               </div>
               <div class="modal-footer">
               	##$.each(findServiceModel.resultTypeModel, function(key, obj) {##
-              	    <button type="button" class="btn btn-sm ##=(data.result==key) ? obj.color : 'btn-default'##" data-event="##:findServiceModel.setResult::data##" data-resultType="##=key##" data-fromMap="true">##=obj.label##</button>
+              	    <button type="button" class="btn btn-xs ##=(data.result==key) ? obj.color : 'btn-default'##" data-event="##:findServiceModel.setResult::data##" data-resultType="##=key##" data-fromMap="true">##=obj.label##</button>
                 ##});##
               </div>
             </div><!-- /.modal-content -->
@@ -542,8 +542,10 @@ if(data.list) {
 
         var findServiceConn = new Bridge.Connector({dataName : "find_service",
             //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
-            url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
-                         ?  ((document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1) ? "https:" : "") + "//ykcform.herokuapp.com/bridge" : "/bridge"});
+            //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
+            //             ?  ((document.URL.indexOf( 'http://' ) === -1 && document.URL.indexOf( 'https://' ) === -1) ? "https:" : "") + "//ykcform.herokuapp.com/bridge" : "/bridge"
+            url:"/bridge"
+        });
 
         var findServiceModel = {
             savedData: null,
