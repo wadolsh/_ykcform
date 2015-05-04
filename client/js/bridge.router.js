@@ -3,6 +3,7 @@
     var Bridge = root.Bridge;
     
     var Router = Bridge.Router = function(options) {
+        this.handlers = [];
         options || (options = {});
         if (options.routes) this.routes = options.routes;
         this._bindRoutes();
@@ -36,6 +37,15 @@
             name = '';
           }
           if (!callback) callback = this[name];
+          
+          var router = this;
+          this.handlers.unshift({route: route, callback: function(fragment) {
+            var args = router._extractParameters(route, fragment);
+            router.execute(callback, args);
+            //router.trigger.apply(router, ['route:' + name].concat(args));
+            //router.trigger('route', name, args);
+            //Backbone.history.trigger('route', router, name, args);
+          }});
           //var router = this;
           /*
           Backbone.history.route(route, function(fragment) {
@@ -48,7 +58,7 @@
           */
           return this;
         },
-    
+        
         // Execute a route handler with the provided parameters.  This is an
         // excellent place to do pre-route setup or post-route cleanup.
         execute: function(callback, args) {
@@ -63,7 +73,7 @@
     
         start: function(options) {
             
-            _.bindAll(this, 'checkUrl');
+            //_.bindAll(this, 'checkUrl');
             
             //this.root             = this.options.root;
             //this._wantsHashChange = this.options.hashChange !== false;
@@ -77,7 +87,7 @@
                 //this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
             }
             
-            
+            this.checkUrl();
         },
     
         stop: function() {
@@ -95,7 +105,7 @@
         // match, returns `true`. If no defined routes matches the fragment,
         // returns `false`.
         loadUrl: function(fragment) {
-          fragment = this.fragment;
+          //fragment = this.fragment;
           return _.any(this.handlers, function(handler) {
             if (handler.route.test(fragment)) {
               handler.callback(fragment);

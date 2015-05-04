@@ -373,7 +373,7 @@ if(data.list) {
             		    ##}##
                         <div class="form-group">
                             <label class="">##=obj.label##</label>
-                            <input type="text" id="##=key##" list="##=obj.list##" value="##=data.search[key]##" class="form-control" style="##=obj.style##"/>
+                            <input type="##=obj.type || 'text'##" id="##=key##" list="##=obj.list##" value="##=data.search[key]##" class="form-control" style="##=obj.style##"/>
             			</div>
         		    ##});##
         		    <!--
@@ -531,7 +531,6 @@ if(data.list) {
     <script type="text/javascript">
         commonModel.loginCheckerAfter = function(data) {
             findServiceModel.savedData = Bridge.localStorageTool.get('findServiceModel_savedData');
-            findServiceModel.listAreaReset();
         }
         commonModel.logoutAfter = function(data) {
             location.href = "/";
@@ -987,6 +986,13 @@ if(data.list) {
         };
 
 	    findServiceModel.searchForm = {
+	        search_findServiceDate: {
+	            searchField: "findServiceDate",
+	            searchComparison : "$eq",
+	            label: "登録日",
+	            type: "date",
+	            style: "width:160px;"
+	        },
 	        search_findServiceFindFrom: {
 	            searchField: "findServiceFindFrom",
 	            searchComparison : "$regex",
@@ -1056,13 +1062,10 @@ if(data.list) {
     		});
         }
         
-
-
+        
         Bridge.tmplTool.bindTmpl($('[data-bind-tmpl-id]'));
-
         Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
         Bridge.tmplTool.render('menu', {});
-        
         
         var kanagwa_town = Bridge.localStorageTool.get('kanagwa_town');
         if (!kanagwa_town) {
@@ -1087,19 +1090,24 @@ if(data.list) {
 
 var Workspace = Bridge.Router.extend({
 
-  routes: {
-    "help":                 "help",    // #help
-    "search/:query":        "search",  // #search/kiwis
-    "search/:query/p:page": "search"   // #search/kiwis/p7
-  },
-
-  help: function() {
-    console.log('help');
-  },
-
-  search: function(query, page) {
-    console.log('search');
-  }
+    routes: {
+        "":                     "index",
+        "help":                 "help",    // #help
+        "search/:query":        "search",  // #search/kiwis
+        "search/:query/p:page": "search"   // #search/kiwis/p7
+    },
+    
+    index: function() {
+        findServiceModel.listAreaReset();
+    },
+    
+    help: function() {
+        console.log('help');
+    },
+    
+    search: function(query, page) {
+        console.log('search');
+    }
 
 });
 
