@@ -439,12 +439,12 @@ if(data.list) {
             				totalData={};
             				$.each(data.list || {} , function(ind, obj) {
             				##
-                            <tr class="##=(commonModel._id == obj.last_update_user) ? '' : ''##">
+                            <tr class="##=(commonModel._id == obj.first_update_user || commonModel._id == obj.last_update_user) ? '' : ''##">
             					##
             					totalData.findServiceTotalCount = totalData.findServiceTotalCount ? totalData.findServiceTotalCount + 1 : 1;
             					##
                                 <td>
-                                    ##if (commonModel._id == obj.last_update_user || (commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service.save > 1)) {##
+                                    ##if (commonModel._id == obj.first_update_user || commonModel._id == obj.last_update_user || (commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service.save > 1)) {##
             						<button data-ind="##=ind##" data-id="##=obj[Bridge.idName]##" data-event="##:findServiceModel.lineEdit##" class="btn btn-default btn-xs">修正</button>
             						<button data-event="##:findServiceModel.lineDelete##" class="btn btn-default btn-xs">削除</button>
             					    ##}##
