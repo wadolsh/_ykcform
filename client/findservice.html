@@ -777,8 +777,19 @@ if(data.list) {
                 var data = null;
                 var addr = null;
                 var hasData = false;
+                var conv = function(str) {
+                    return str.replace('が', 'ケ')
+                              .replace('ヶ', 'ケ')
+                              .replace('ッ', 'ツ');
+                }
+                var cityward = null;
+                var town = null;
+                address2 = conv(address2);
+                address3 = conv(address3);
                 for (var key in exportdata) {
                     data = exportdata[key];
+                    cityward = conv(data.cityward);
+                    town = conv(data.town);
                     if (//data.prefecture == address1 && 
                             (data.cityward.indexOf(address2) > -1 || address2.indexOf(data.cityward) > -1) 
                             && (address3.indexOf(data.town) > -1 || data.town.indexOf(address3) > -1)) {
