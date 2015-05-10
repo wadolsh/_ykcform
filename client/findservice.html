@@ -411,6 +411,11 @@ if(data.list) {
                             </select>
                         </div>
             			<button class="btn btn-default" type="submit" data-event="##:findServiceModel.search##">検索</button>
+            			##if(findServiceModel.getAuth(1)) {##
+                        <button type="button" id="csvDownLoadButton" class="btn btn-default" aria-label="Left Align" data-event="##:findServiceModel.toCsv##">
+                            <span class="glyphicon glyphicon-download" aria-hidden="true"> CSV</span>
+                        </button>
+                        ##}##
         			</div>
         		</div>
 
@@ -538,7 +543,8 @@ if(data.list) {
         commonModel.loginCheckerFail = function(data) {
             location.href = "/";
         }
-
+        commonModel.loginChecker();
+        
         var findServiceConn = new Bridge.Connector({dataName : "find_service",
             //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/) ? "https://bridge-c9-choish.c9.io/bridge" : "/bridge"});
             //url: navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry|IEMobile)/)
@@ -576,6 +582,17 @@ if(data.list) {
 						findServiceModel.listAreaReset();
 					});
 					//alert(e.data.mark);
+			}},
+			toCsv: {click: function(e) {
+			    var search_findService = Bridge.sessionStorageTool.get('search_findService') || {};
+                var csv = JSON2CSV(findServiceModel.listData, true, true, escape('\r\n'));
+                //window.open('data:text/csv;filename=exportData.csv;charset=utf-8,' + csv);
+                
+                var link = document.createElement('a');
+                link.download = 'CSV_' + (search_findService.search_findServiceCityward || '') + (search_findService.search_findServiceTown || '') + '.csv';
+                link.href = 'data:text/csv;charset=utf-8,' + csv;
+                link.click();
+                
 			}},
 			geocoding: {
 			    map: null,
@@ -1074,10 +1091,56 @@ if(data.list) {
         }
         
         
+        function JSON2CSV(objArray, labels, quote, newline) {
+            var newline = newline || '\n';
+            var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
+        
+            var str = '';
+            var line = '';
+        
+            if (labels) {
+                var head = array[0];
+                if ($("#quote").is(':checked')) {
+                    for (var index in array[0]) {
+                        var value = index + "";
+                        line += '"' + value.replace(/"/g, '""') + '",';
+                    }
+                } else {
+                    for (var index in array[0]) {
+                        line += index + ',';
+                    }
+                }
+        
+                line = line.slice(0, -1);
+                str += line + newline;
+            }
+        
+            for (var i = 0; i < array.length; i++) {
+                var line = '';
+        
+                if (quote) {
+                    for (var index in array[i]) {
+                        var value = array[i][index] + "";
+                        line += '"' + value.replace(/"/g, '""') + '",';
+                    }
+                } else {
+                    for (var index in array[i]) {
+                        line += array[i][index] + ',';
+                    }
+                }
+        
+                line = line.slice(0, -1);
+                str += line + newline;
+            }
+            return str;
+            
+        }
+        
+        
         Bridge.tmplTool.bindTmpl($('[data-bind-tmpl-id]'));
         Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
         Bridge.tmplTool.render('menu', {});
-        
+            
         var kanagwa_town = Bridge.localStorageTool.get('kanagwa_town');
         if (!kanagwa_town) {
             var kanagwaConn = new Bridge.Connector({dataName : "kanaga14",
@@ -1128,7 +1191,7 @@ var Workspace = Bridge.Router.extend({
 var router = new Workspace().start();
         
         //if (Bridge.localStorageTool.get('keepLogin')) {
-            commonModel.loginChecker();
+        //    commonModel.loginChecker();
         //} else {
         //    location.href = "/";
         //}

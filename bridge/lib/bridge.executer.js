@@ -48,16 +48,18 @@ exports.excuteMethod = function(ind, reqDataArray, resData, req, res) {
                 exports.excuteMethod(ind, reqDataArray, resData, req, res);
             } else {
                 res.json(resData);
+                //return resData;
             }
         }, req, res);
 
     } catch (e) {
         console.log(e.message);
         console.log(e.stack);
+        
         res.json({error : e.message});
         //return {error : e.message};
     } finally {
-        
+        //return resData;
     }
 };
 

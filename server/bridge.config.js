@@ -4,7 +4,8 @@ var commonFilter = require('../bridge/lib/filter.common');
 var loginFilter = require('./filter.login');
 var orignChecker = function(reqData, req, res) {
     if (req.headers.origin.indexOf('bridge-choish.c9.io') > -1
-        || req.headers.origin.indexOf('ykcform.herokuapp.com') > -1) {
+        || req.headers.origin.indexOf('ykcform.herokuapp.com') > -1
+        || req.headers.origin.indexOf('http://uwkk2251a358.wadolsh.koding.io') > -1) {
         
     } else {
         throw new Error('接近不可');
