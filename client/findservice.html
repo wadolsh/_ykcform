@@ -1098,15 +1098,20 @@ if(data.list) {
             var str = '';
             var line = '';
         
+            var head = array[0];
+            var headArry = [];
+            for (var index in head) {
+                headArry.push(index);
+            } 
+        
             if (labels) {
-                var head = array[0];
-                if ($("#quote").is(':checked')) {
-                    for (var index in array[0]) {
+                if (quote) {
+                    for (var index in head) {
                         var value = index + "";
                         line += '"' + value.replace(/"/g, '""') + '",';
                     }
                 } else {
-                    for (var index in array[0]) {
+                    for (var index in head) {
                         line += index + ',';
                     }
                 }
@@ -1115,17 +1120,19 @@ if(data.list) {
                 str += line + newline;
             }
         
+            var obj = null;
             for (var i = 0; i < array.length; i++) {
+                obj = array[i];
                 var line = '';
         
                 if (quote) {
-                    for (var index in array[i]) {
-                        var value = array[i][index] + "";
+                    for (var index in headArry) {
+                        var value = obj[headArry[index]] + "";
                         line += '"' + value.replace(/"/g, '""') + '",';
                     }
                 } else {
-                    for (var index in array[i]) {
-                        line += array[i][index] + ',';
+                    for (var index in headArry) {
+                        line += obj[headArry[index]] + ',';
                     }
                 }
         
