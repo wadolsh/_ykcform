@@ -1174,8 +1174,9 @@ var Workspace = Bridge.Router.extend({
     routes: {
         "":                     "index",
         "help":                 "help",    // #help
-        "search/:query":        "search",  // #search/kiwis
-        "search/:query/p:page": "search"   // #search/kiwis/p7
+        //"search/:query":        "search",  // #search/kiwis
+        //"search/:query/p:page": "search",   // #search/kiwis/p7
+        "_id/:id":                 "search"
     },
     
     index: function() {
@@ -1186,8 +1187,26 @@ var Workspace = Bridge.Router.extend({
         console.log('help');
     },
     
-    search: function(query, page) {
-        console.log('search');
+    search: function(id) {
+       //console.log('search');
+        var searchParm = {$query: {'_id': id}, $orderby: {findServiceDate : -1}};
+        findServiceConn.reset()
+            .reqCount('count', searchParm.$query)
+            .reqList('reqList', searchParm)
+            //.reqList('reqList', searchParm)
+            .request(function(data, textStatus, jqXHR) {
+                findServiceModel.listCount = data['count'];
+                findServiceModel.listData = data['reqList'];
+                data.list = data['reqList'];
+                data.listCount = data['count'];
+                commonModel.messageAreaReset(data);
+                
+                data.search = {};
+                data.page = findServiceModel.page;
+                
+                Bridge.tmplTool.render('findServiceTable', data);
+        });
+       
     }
 
 });
