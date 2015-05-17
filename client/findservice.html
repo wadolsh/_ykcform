@@ -803,11 +803,13 @@ if(data.list) {
                 var town = null;
                 address2 = conv(address2);
                 address3 = conv(address3);
+                var addressList = [];
                 for (var key in exportdata) {
                     data = exportdata[key];
                     cityward = conv(data.cityward);
                     town = conv(data.town);
                     if (//data.prefecture == address1 && 
+                        data.town != '' &&
                             (data.cityward.indexOf(address2) > -1 || address2.indexOf(data.cityward) > -1) 
                             && (address3.indexOf(data.town) > -1 || data.town.indexOf(address3) > -1)) {
                         exports.push(data);
@@ -817,9 +819,16 @@ if(data.list) {
         				addr += ' ' + data.address2 + ' ' + data.name;
 
                         hasData = true;
-                        $('<tr><td>' + data.class + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
+                        //$('<tr><td>' + data.class + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
+                        addressList.push(addr);
                     }
                 }
+                
+                addressList.sort();
+                for (var ind in addressList) {
+                    $('<tr><td>' + data.class + '</td><td>' + addressList[ind] + '</td></tr>').appendTo($matchAddressTableBody);
+                }
+                
                 if (!hasData) {
                     $('<tr><td></td><td>データがありません。</td></tr>').appendTo($matchAddressTableBody);
                 }
@@ -875,10 +884,14 @@ if(data.list) {
                     searchedMarkers[ind].setMap(null);
                 }
                 
+                var listLat = [];
+                var listLng = [];
                 var marker, data = null;
                 $.each(listData, function(ind, data) {
                 //for (var ind in listData) {
                     //data = listData[ind];
+                    listLat.push(data.findServiceLat);
+                    listLng.push(data.findServiceLng);
                     marker = new google.maps.Marker({
                         //icon : 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + idx + '|00a8e6|000000',
                         map: map,
@@ -891,6 +904,11 @@ if(data.list) {
                     });
                     searchedMarkers.push(marker);
                 });
+                
+                var sw = new google.maps.LatLng(Math.min.apply({}, listLat), Math.min.apply({}, listLng));
+                var ne = new google.maps.LatLng(Math.max.apply({}, listLat), Math.max.apply({}, listLng));
+                var bounds = new google.maps.LatLngBounds(sw, ne);
+                map.fitBounds(bounds);
             }},
             
 			search: {click: function(e) {
@@ -1164,10 +1182,13 @@ var Workspace = Bridge.Router.extend({
         //"search/:query":        "search",  // #search/kiwis
         //"search/:query/p:page": "search",   // #search/kiwis/p7
         "_id/:id":                 "searchById",
-        "address/:address3(%:address2)(%:address1)(/isNew/:isNew)(/result/:result)": "searchByAddress"
+        "search/(addr3/:address3)(/addr2/:address2)(/addr1/:address1)(/isNew/:isNew)(/result/:result)": "searchByAddress",
+        "bounds/sn/:sw/ne/:ne(/isNew/:isNew)(/result/:result)": "searchByBounds",
+        "*path":                     "index",
     },
     
     index: function() {
+        Bridge.sessionStorageTool.push('search_findService', {});
         findServiceModel.listAreaReset();
     },
     
@@ -1197,17 +1218,43 @@ var Workspace = Bridge.Router.extend({
     },
     searchById: function(id) {
         var searchParm = {$query: {'_id': id}, $orderby: {findServiceDate : -1}};
-        this.search(searchParm, {});
+        this.search(searchParm, {
+                pageSize: 1000,
+                pageNum: 1,
+                pageWidth: 4,
+                pageSelectFunc: findServiceModel.pageSelect,
+                pageSizeChangeFunc: findServiceModel.pageSizeChange
+        });
     },
     searchByAddress: function(address3, address2, address1, isNew, result) {
         var search_findService = {
-            "search_findServiceCityward": address3,
-            "search_findServiceTown": address2,
+            "search_findServiceCityward": address2,
+            "search_findServiceTown": address3,
             "search_isNew": isNew,
             "search_result": result
         }
 		Bridge.sessionStorageTool.push('search_findService', search_findService);
 		findServiceModel.listAreaReset();
+    },
+    searchByBounds: function(sw, ne, isNew, result) {
+        var swArry = sw.split('|');
+        var neArry = ne.split('|');
+        var searchParm = {$query: {'findServiceLat': { $gt: swArry[0], $lt: neArry[0] }
+                                 , 'findServiceLng': { $gt: swArry[1], $lt: neArry[1] }}
+                                 , $orderby: {findServiceDate : -1}};
+        if (isNew) {
+            searchParm.$query['isNew'] = parseInt(isNew);
+        }
+        if (result) {
+            searchParm.$query['result'] = parseInt(result);
+        }
+        this.search(searchParm, {
+                pageSize: 1000,
+                pageNum: 1,
+                pageWidth: 4,
+                pageSelectFunc: findServiceModel.pageSelect,
+                pageSizeChangeFunc: findServiceModel.pageSizeChange
+        });
     }
 });
 

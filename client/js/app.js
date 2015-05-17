@@ -72,6 +72,12 @@ var commonModel = {
         commonConn.reqExecMethod('reqExecLogin', 'login', obj.data).request(function(data) {
             commonModel._id = data['reqExecLogin'][Bridge.idName];
             if (commonModel._id) {
+                var loginAfterUrl = Bridge.sessionStorageTool.get('loginAfterUrl');
+                if (loginAfterUrl) {
+                    Bridge.sessionStorageTool.remove('loginAfterUrl');
+                    location.href = loginAfterUrl;
+                    return;
+                }
                 //console.log(data['reqExecLogin']);
                 commonModel.loginChecker();
                 commonModel.loginAfter(data['reqExecLogin']);
@@ -83,6 +89,7 @@ var commonModel = {
     }},
     loginAfter: function(data) {
 		//Bridge.tmplTool.render('mainMenu', {});
+		Bridge.sessionStorage.push('loginAfterUrl', location.href);
     },
     logout: {click: function(e) {
         var template = $(e.target).parent('.br-tmpl');
@@ -113,6 +120,10 @@ var commonModel = {
 				Bridge.tmplTool.render('loginUser', data['loginChecker']);
 				commonModel.loginCheckerAfter(data.loginChecker);
 			} else {
+			    var loginAfterUrl = Bridge.sessionStorageTool.get('loginAfterUrl');
+			    if (!loginAfterUrl) {
+			        Bridge.sessionStorageTool.push('loginAfterUrl', location.href);
+			    }
 			    commonModel.loginCheckerFail(data.loginChecker);
 			}
         });

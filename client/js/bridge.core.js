@@ -472,33 +472,29 @@
         }
     };
     
-    var localStorageTool = Bridge.localStorageTool = {
+    
+    
+    var storageTool = {
         push: function(key, data) {
-            localStorage[key] = JSON.stringify(data);
+            this.storge[key] = JSON.stringify(data);
         },
         get: function(key) {
             try {
-                return JSON.parse(localStorage[key] || null);
+                return JSON.parse(this.storge[key] || null);
             } catch(e) {
                 return null;
             }
+        },
+        remove: function(key) {
+            this.storge.removeItem(key);
         }
     };
 
-    var sessionStorageTool = Bridge.sessionStorageTool = {
-        push: function(key, data) {
-            sessionStorage[key] = JSON.stringify(data);
-        },
-        get: function(key) {
-            try {
-                return JSON.parse(sessionStorage[key] || null);
-            } catch(e) {
-                return null;
-            }
-            
-        }
-    };
+    var localStorageTool = Bridge.localStorageTool = Bridge.clone(storageTool);
+    localStorageTool.storge = localStorage;
     
+    var sessionStorageTool = Bridge.sessionStorageTool = Bridge.clone(storageTool);
+    sessionStorageTool.storge = sessionStorage;
     
     /**
      * jsonの場合子も拡張する

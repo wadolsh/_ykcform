@@ -91,10 +91,10 @@
         			</div>
         		</div>
         		<div class="_table-responsive">
-        		    ##$.each(data.tableList || {} , function(typeKey, typeData) {##
+        		    ##$.each(data.tableList || {} , function(kuKey, kuData ) {##
         		    <div class="row">
-        		        ##$.each(typeData || {} , function(kuKey, kuData) {##
-                	    <div class="col-sm-4">
+        		        ##$.each(kuData || {} , function(typeKey, typeData) {##
+                	    <div class="col-sm-6">
                 	        <label>##=typeKey## - ##=kuKey##(##=kuData.pageLimit##)</label>
                     		<table class="table table-bordered">
                                 <thead>
@@ -107,7 +107,7 @@
                                 </thead>
                                 <tbody>
                     				##totalData={};##
-                                    ##$.each(kuData.dataList || {} , function(ind, obj) {##
+                                    ##$.each(typeData.dataList || {} , function(ind, obj) {##
                                     <tr>
                     					##
                     					//var tmpTime = obj.serviceTime ? obj.serviceTime.split(":") : "0:0";
@@ -171,53 +171,12 @@
     <script type="text/javascript">
 
         var find_type = {
-            "住宅地図": null,
-            "アパート・マンション": null
+            "住宅地図": {},
+            "アパート・マンション": {}
         };
         
         var appData = Bridge.localStorageTool.get('apps').find_service_plan;
         var ku_list = appData.ku_list;
-        
-        /*
-        var ku_list = {
-            "川崎市川崎区": {
-                pageLimit: 80,
-                dataList: []
-            },
-            "川崎市中原区": {
-                pageLimit: 55,
-                dataList: []
-            },
-            "川崎市高津区": {
-                pageLimit: 0,
-                dataList: []
-            },
-            "川崎市宮前区": {
-                pageLimit: 0,
-                dataList: []
-            },
-            "川崎市麻生区": {
-                pageLimit: 0,
-                dataList: []
-            },
-            "横浜市鶴見区": {
-                pageLimit: 0,
-                dataList: []
-            },
-            "横浜市中区": {
-                pageLimit: 0,
-                dataList: []
-            },
-            "横浜市南区": {
-                pageLimit: 0,
-                dataList: []
-            },
-            "横浜市神奈川区": {
-                pageLimit: 0,
-                dataList: []
-            }
-        };
-        */
         
         commonModel.loginCheckerAfter = function(data) {
             findServicePlanModel.listAreaReset();
@@ -334,15 +293,20 @@
                     data.list = data['reqList'];
                     commonModel.messageAreaReset(data);
                     var temp = null;
+                    /*
                     var findType = Bridge.clone(find_type);
                     for (var key in findType) {
                         findType[key] = $.extend(true, {}, ku_list);
                     }
-                    
+                    */
+                    var findType = Bridge.clone(ku_list);
+                    for (var key in findType) {
+                        findType[key] = $.extend(true, {}, find_type);
+                    }
                     var kuData = null;
                     for(var ind in data.list) {
                         temp = data.list[ind];
-                        kuData = findType[temp.findServicePlan_findType][temp.findServicePlan_kuName];
+                        kuData = findType[temp.findServicePlan_kuName][temp.findServicePlan_findType];
                         if (!kuData.dataList) {
                             kuData.dataList = [];
                         }
