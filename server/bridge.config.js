@@ -36,13 +36,27 @@ exports.loginMethod = {
     beforeFilter : [orignChecker, commonFilter.startLogger],
     afterFilter : [commonFilter.endLogger],
     authCheck: {mydata : {}
-                , login_user: {save : 2, read : 0}
-                , service_time: {save : 1, read : 1}
-                , find_service: {save : 1, read : 0}
-                , jpon2012: {save : 1, read : 0}
-                , find_service_plan: {save : 1, read : 1}
-                , app_setting: {save : 1, read : 0}
-                , kanaga14: {save : 0, read : 0}
+                , login_user: {_write : 2, _read : 0}
+                , service_time: {_write : 1, _read : 1}
+                , find_service: {
+                    _write : 1,
+                    _read : 0,
+                    _field: {
+                        result: {
+                            _write: 0
+                        },
+                        isNew: {
+                            _write: 2
+                        },
+                        findServiceComment: {
+                            _write: 0
+                        }
+                    }
+                }
+                , jpon2012: {_write : 1, _read : 0}
+                , find_service_plan: {_write : 1, _read : 1}
+                , app_setting: {_write : 1, _read : 0}
+                , kanaga14: {_write : 0, _read : 0}
     }
 }
 exports.loginMethod.module.init(exports.loginMethod);

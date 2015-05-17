@@ -35,27 +35,17 @@ exports.addLastUpdate = function(reqData, req) {
 
 var authCheckLogic = {
     Update : function(authData, reqData, req) {
-        if (authData.save) {
+        if (authData._write) {
             var user = req.session.user;
             var dataName = reqData.dataName;
-            if (authData.save == 0 && user) {
+            if (authData._write == 0 && user) {
                 return true;
-            /*
-            } else if (authData.save == 1 && user) {
-                if (!user.memberType || user.memberType < authData.save) {
+            } else if (authData._write == 1 && user) {
+                if (!user._auth || !user._auth[dataName] || user._auth[dataName]._write < authData._write) {
                     req.query = {last_update_user : user[idName]};
                 }
                 return true;
-            } else if (user.memberType > authData.save) {
-                return true;
-            }
-            */
-            } else if (authData.save == 1 && user) {
-                if (!user._auth || !user._auth[dataName] || user._auth[dataName].save < authData.save) {
-                    req.query = {last_update_user : user[idName]};
-                }
-                return true;
-            } else if (user._auth && user._auth[dataName] && user._auth[dataName].save > authData.save) {
+            } else if (user._auth && user._auth[dataName] && user._auth[dataName]._write > authData._write) {
                 return true;
             }
             return false;
@@ -67,14 +57,14 @@ var authCheckLogic = {
             console.log('last_update_user insert !');
         	reqData.parm.last_update_user = req.session.user[idName];
         }
-        if (authData.read) {
+        if (authData._read) {
             var user = req.session.user;
             var dataName = reqData.dataName;
-            if (authData.read == 0 && user) {
+            if (authData._read == 0 && user) {
                 return true;
-            /*
-            } else if (authData.read == 1 && user) {
-                if (!user.memberType || user.memberType < authData.read) {
+
+            } else if (authData._read == 1 && user) {
+                if (!user._auth || !user._auth[dataName] || user._auth[dataName]._read < authData._read) {
                     if(reqData.parm.$query) {
                         reqData.parm.$query.last_update_user = user[idName];
                     } else {
@@ -82,20 +72,7 @@ var authCheckLogic = {
                     }
                 }
                 return true;
-            } else if (user.memberType > authData.read) {
-                return true;
-            }
-            */
-            } else if (authData.read == 1 && user) {
-                if (!user._auth || !user._auth[dataName] || user._auth[dataName].read < authData.read) {
-                    if(reqData.parm.$query) {
-                        reqData.parm.$query.last_update_user = user[idName];
-                    } else {
-                        reqData.parm.last_update_user = user[idName];
-                    }
-                }
-                return true;
-            } else if (user._auth && user._auth[dataName] && user._auth[dataName].read > authData.read) {
+            } else if (user._auth && user._auth[dataName] && user._auth[dataName]._read > authData._read) {
                 return true;
             }
             return false;

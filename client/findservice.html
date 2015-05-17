@@ -247,7 +247,7 @@
                 				<div class="row">
                 				    <div class="col-sm-6">
                 				        <div class="input-group">
-                				            <input type="text" id="findServiceAddress1" name="findServiceAddress1" value="##=data.findServiceAddress1 || '神奈川県'##" class="form-control" placeholder="都道府県"/>
+                				            <input type="text" id="findServiceAddress1" name="findServiceAddress1" value="##=data.findServiceAddress1 || '神奈川県'##" class="form-control" placeholder="都���府県"/>
                 				            <span class="input-group-btn">
                                                 <button class="btn btn-default" type="button" data-event="##:findServiceModel.clearField##">
                                                     <span class="glyphicon glyphicon-erase" aria-hidden="true"></span>
@@ -449,7 +449,7 @@ if(data.list) {
             					totalData.findServiceTotalCount = totalData.findServiceTotalCount ? totalData.findServiceTotalCount + 1 : 1;
             					##
                                 <td>
-                                    ##if (commonModel._id == obj.first_update_user || commonModel._id == obj.last_update_user || (commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service.save > 1)) {##
+                                    ##if (commonModel._id == obj.first_update_user || commonModel._id == obj.last_update_user || findServiceModel.getAuth(1)) {##
             						<button data-ind="##=ind##" data-id="##=obj[Bridge.idName]##" data-event="##:findServiceModel.lineEdit##" class="btn btn-default btn-xs">修正</button>
             						<button data-event="##:findServiceModel.lineDelete##" class="btn btn-default btn-xs">削除</button>
             					    ##}##
@@ -771,7 +771,7 @@ if(data.list) {
             }},
             
             getAuth: function(level) {
-                return commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service.save > level;
+                return commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service._write > level;
             },
             
             matchAddress: function() {
@@ -955,20 +955,7 @@ if(data.list) {
     				    //searchParm.$query.$and.push(JSON.parse('{"' + searchFormObj.searchField + '" : {"' + searchFormObj.searchComparison + '" : "' + search_findService[key] + '"}}'));
     				}
 				}
-				/*
-				if (search_findService.search_findServiceFindFrom) {
-                    searchParm.$query.$and.push({'findServiceFindFrom' : {$regex : search_findService.search_findServiceFindFrom}});
-				}
-				if (search_findService.search_findServiceMapPage) {
-                    searchParm.$query.$and.push({'findServiceMapPage': {$eq : search_findService.search_findServiceMapPage}});
-				}
-				if (search_findService.search_findServiceMapKu) {
-                    searchParm.$query.$and.push({'findServiceMapKu': {$regex : search_findService.search_findServiceMapKu}});
-				}
-				if (search_findService.search_findServiceMapTown) {
-                    searchParm.$query.$and.push({'findServiceAddress3': {$regex : search_findService.search_findServiceMapTown}});
-				}
-				*/
+
 				if (search_findService.search_isNew) {
 				    if (search_findService.search_isNew == 0) {
 				        searchParm.$query.$and.push({'$or': [{isNew : {$exists : false}}, {isNew : {$eq : 0}}, {isNew : {$eq : '0'}}]});
@@ -1176,7 +1163,8 @@ var Workspace = Bridge.Router.extend({
         "help":                 "help",    // #help
         //"search/:query":        "search",  // #search/kiwis
         //"search/:query/p:page": "search",   // #search/kiwis/p7
-        "_id/:id":                 "search"
+        "_id/:id":                 "searchById",
+        "address/:address3(%:address2)(%:address1)(/isNew/:isNew)(/result/:result)": "searchByAddress"
     },
     
     index: function() {
@@ -1187,9 +1175,9 @@ var Workspace = Bridge.Router.extend({
         console.log('help');
     },
     
-    search: function(id) {
+    search: function(searchParm, searchField) {
        //console.log('search');
-        var searchParm = {$query: {'_id': id}, $orderby: {findServiceDate : -1}};
+        
         findServiceConn.reset()
             .reqCount('count', searchParm.$query)
             .reqList('reqList', searchParm)
@@ -1201,16 +1189,52 @@ var Workspace = Bridge.Router.extend({
                 data.listCount = data['count'];
                 commonModel.messageAreaReset(data);
                 
-                data.search = {};
+                data.search = searchField;
                 data.page = findServiceModel.page;
-                
                 Bridge.tmplTool.render('findServiceTable', data);
         });
        
+    },
+    searchById: function(id) {
+        var searchParm = {$query: {'_id': id}, $orderby: {findServiceDate : -1}};
+        this.search(searchParm, {});
+    },
+    searchByAddress: function(address3, address2, address1, isNew, result) {
+        var search_findService = {
+            "search_findServiceCityward": address3,
+            "search_findServiceTown": address2,
+            "search_isNew": isNew,
+            "search_result": result
+        }
+		Bridge.sessionStorageTool.push('search_findService', search_findService);
+		findServiceModel.listAreaReset();
     }
-
 });
 
+/*
+{
+    "_id": "5525e8f831eb1711007e2c51",
+    "findServiceDate": "2015-04-09",
+    "findServiceFindFrom": "ゼンリン",
+    "findServiceMapKu": "川崎市中原区",
+    "findServiceMapPage": "2",
+    "findServiceAddress1": "神奈川県",
+    "findServiceAddress2": "川崎市中原区",
+    "findServiceAddress3": "宮内",
+    "findServiceAddress4": "2丁目34-7-2",
+    "findServiceName": "リー",
+    "findServiceLat": "35.5949682",
+    "findServiceLng": "139.63200729999994",
+    "findServiceComment": "",
+    "last_update_user": "532960fea8900d0b00a70778",
+    "last_update_date": "2015-04-16 06:10:47",
+    "isNew": 1,
+    "last_update_name": "チェ ソンホ",
+    "findServiceAddress5": ""
+}
+
+
+*/
 
 
 
