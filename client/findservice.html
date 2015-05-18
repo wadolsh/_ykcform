@@ -1178,7 +1178,6 @@ var Workspace = Bridge.Router.extend({
 
     routes: {
         "":                     "index",
-        "help":                 "help",    // #help
         //"search/:query":        "search",  // #search/kiwis
         //"search/:query/p:page": "search",   // #search/kiwis/p7
         "_id/:id":                 "searchById",
@@ -1239,15 +1238,25 @@ var Workspace = Bridge.Router.extend({
     searchByBounds: function(sw, ne, isNew, result) {
         var swArry = sw.split('|');
         var neArry = ne.split('|');
-        var searchParm = {$query: {'findServiceLat': { $gt: swArry[0], $lt: neArry[0] }
-                                 , 'findServiceLng': { $gt: swArry[1], $lt: neArry[1] }}
+
+        var searchParm = {$query: { $and : [{'findServiceLat': { $gt: swArry[0], $lt: neArry[0] }}
+                                          , {'findServiceLng': { $gt: swArry[1], $lt: neArry[1] }}]}
                                  , $orderby: {findServiceDate : -1}};
-        if (isNew) {
-            searchParm.$query['isNew'] = parseInt(isNew);
-        }
-        if (result) {
-            searchParm.$query['result'] = parseInt(result);
-        }
+
+		if (isNew) {
+		    if (isNew == 0) {
+		        searchParm.$query.$and.push({'$or': [{isNew : {$exists : false}}, {isNew : {$eq : 0}}, {isNew : {$eq : '0'}}]});
+		    } else {
+		        searchParm.$query.$and.push({'isNew': {$eq : parseInt(isNew)}});
+		    }
+		}
+		if (result) {
+		    if (result == 0) {
+		        searchParm.$query.$and.push({'$or': [{result : {$exists : false}}, {result : {$eq : 0}}]});
+		    } else {
+		        searchParm.$query.$and.push({'result': {$eq : parseInt(result)}});
+		    }
+		}
         this.search(searchParm, {
                 pageSize: 1000,
                 pageNum: 1,

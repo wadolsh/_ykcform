@@ -46,7 +46,7 @@ exports.loginMethod = {
                             _write: 0
                         },
                         isNew: {
-                            _write: 2
+                            _write: 0
                         },
                         findServiceComment: {
                             _write: 0
