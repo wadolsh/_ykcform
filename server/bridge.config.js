@@ -50,7 +50,16 @@ exports.loginMethod = {
                         },
                         findServiceComment: {
                             _write: 0
-                        }
+                        },
+                        result_update_name: {
+                            _write: 0
+                        },
+                        result_update_date: {
+                            _write: 0
+                        },
+                        result_update_user: {
+                            _write: 0
+                        },
                     }
                 }
                 , jpon2012: {_write : 1, _read : 0}

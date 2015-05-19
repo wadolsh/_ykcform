@@ -449,7 +449,7 @@ if(data.list) {
             					totalData.findServiceTotalCount = totalData.findServiceTotalCount ? totalData.findServiceTotalCount + 1 : 1;
             					##
                                 <td>
-                                    ##if (commonModel._id == obj.first_update_user || commonModel._id == obj.last_update_user || findServiceModel.getAuth(1)) {##
+                                    ##if (commonModel._id == obj.first_update_user  || findServiceModel.getAuth(1)) {##
             						<button data-ind="##=ind##" data-id="##=obj[Bridge.idName]##" data-event="##:findServiceModel.lineEdit##" class="btn btn-default btn-xs">修正</button>
             						<button data-event="##:findServiceModel.lineDelete##" class="btn btn-default btn-xs">削除</button>
             					    ##}##

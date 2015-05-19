@@ -35,9 +35,44 @@ exports.addLastUpdate = function(reqData, req) {
 
 var authCheckLogic = {
     Update : function(authData, reqData, req) {
+        var user = req.session.user;
+        var field = null;
+        var data = null;
+        if (authData._field) {
+            var fieldOnly = true;
+            for (var key in reqData.data) {
+                if (key == idName) {
+                    continue;
+                } else if (authData._field[key] == undefined) {
+                    fieldOnly = false;
+                    break;
+                }
+            }
+ 
+            for (var key in authData._field) {
+                field = authData._field[key];
+                data = reqData[key];
+                if (data) {
+                    if (field._write == 0 && user) {
+                        continue;
+                    } else if (field._write == 1 && user) {
+                        continue;
+                    } else if (user._auth && user._auth[dataName] && user._auth[dataName]._write > field._write) {
+                        continue;
+                    }
+                    return false;
+                }
+            }
+            
+            if (fieldOnly) {
+                return true;
+            }
+        }
+        
         if (authData._write) {
-            var user = req.session.user;
+            
             var dataName = reqData.dataName;
+
             if (authData._write == 0 && user) {
                 return true;
             } else if (authData._write == 1 && user) {

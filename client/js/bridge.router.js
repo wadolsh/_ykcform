@@ -79,13 +79,13 @@
             //this._wantsHashChange = this.options.hashChange !== false;
             this._hasPushState    = window.history && window.history.pushState;
             
-            if (this._hasPushState) {
-                $(window).on('popstate', this.checkUrl);
-            } else if ('onhashchange' in window) {
-                $(window).on('hashchange', this.checkUrl);
+            //if (this._hasPushState) {
+                //$(window).on('popstate', this.checkUrl);
+            //} else if ('onhashchange' in window) {
+            //    $(window).on('hashchange', this.checkUrl);
             //} else if (this._wantsHashChange) {
                 //this._checkUrlInterval = setInterval(this.checkUrl, this.interval);
-            }
+            //}
             
             this.checkUrl();
         },
