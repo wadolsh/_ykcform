@@ -278,9 +278,14 @@
             */
 
             listAreaReset: function(data) {
+                var kuNames = [];
+                for (var key in ku_list) {
+                    kuNames.push(key);
+                }
+                
 				//var serviceDateMonth = $('#dat').val();
 				var search_findServicePlanName = $('#search_findServicePlanName').val();
-				var searchParm = {$query: {}, $orderby: {findServicePlan_numFrom : 1}};
+				var searchParm = {$query: {findServicePlan_kuName: {$in: kuNames}}, $orderby: {findServicePlan_numFrom : 1}};
 				
 				//if (search_findServicePlanName) {
                 //    searchParm.$query['findServicePlanFindFrom'] = {$regex : search_findServicePlanName};
