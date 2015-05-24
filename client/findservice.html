@@ -367,7 +367,6 @@ if(data.list) {
         		    $.each(findServiceModel.searchForm, function(key, obj) {
         		        if (obj.lineBreak) {
         		    ##
-        		    
             		</div>
             		<div class="form-inline">
             		    ##}##
@@ -376,24 +375,6 @@ if(data.list) {
                             <input type="##=obj.type || 'text'##" id="##=key##" list="##=obj.list##" value="##=data.search[key]##" class="form-control" style="##=obj.style##"/>
             			</div>
         		    ##});##
-        		    <!--
-                        <div class="form-group">
-                            <label class="">情報元</label>
-                            <input type="text" id="search_findServiceFindFrom" list="findServiceFindFromList" value="##=data.search.search_findServiceFindFrom##" class="form-control"/>
-            			</div>
-                        <div class="form-group">
-                            <label class="">地図:市区</label>
-                            <input type="text" list="findServiceMapKuList" id="search_findServiceMapKu" value="##=data.search.search_findServiceMapKu##" class="form-control"/>
-            			</div>
-                        <div class="form-group">
-                            <label class="">ページ</label>
-                            <input type="text" style="width:60px;" id="search_findServiceMapPage" value="##=data.search.search_findServiceMapPage##" class="form-control"/>
-            			</div>
-                        <div class="form-group">
-                            <label class="">町村</label>
-                            <input type="text" list="townNameList" id="search_findServiceMapTown" value="##=data.search.search_findServiceMapTown##" class="form-control"/>
-            			</div>
-                    -->
                 		<div class="form-group">
                 		    <select id="search_isNew" class="form-control" value="##=data.search.search_isNew##">
                 		        <option value="">-新規有無-</option>
@@ -914,21 +895,21 @@ if(data.list) {
 			search: {click: function(e) {
 			    findServiceModel.page.pageNum = 1;
 
-			    var search_findService = {};
+			    var search = {};
 			    var value = null;
 			    for (var key in findServiceModel.searchForm) {
 			        value = $('#' + key).val();
 			        if (value) {
-			            search_findService[key] = value;
+			            search[key] = value;
 			        }
 			    }
 			    value = $('#search_isNew').val();
 			    if (value) {
-			        search_findService['search_isNew'] = value;
+			        search['search_isNew'] = value;
 			    }
 			    value = $('#search_result').val();
 			    if (value) {
-			        search_findService['search_result'] = value;
+			        search['search_result'] = value;
 			    }
 			    
 				Bridge.sessionStorageTool.push('search_findService', search_findService);
@@ -937,15 +918,15 @@ if(data.list) {
             listAreaReset: function(isReflash) {
                 
 				//var serviceDateMonth = $('#dat').val();
-				var search_findService = Bridge.sessionStorageTool.get('search_findService') || {};
-				$.each(search_findService, function(key, value) {
+				var search = Bridge.sessionStorageTool.get('search_findService') || {};
+				$.each(search, function(key, value) {
 				    $('#' + key).val(value);
 				});
 				
 			    if (isReflash == undefined) isReflash = true;
                 if (!isReflash) {
                     var data = {};
-                    data.search = search_findService;
+                    data.search = search;
                     data.page = findServiceModel.page;
                     data.list = findServiceModel.listData;
                     data.listCount = findServiceModel.listCount;
@@ -955,7 +936,7 @@ if(data.list) {
 				
 				
 				var searchParm = {$query: {}, $orderby: {findServiceDate : -1}};
-				if (Object.keys(search_findService).length != 0) {
+				if (Object.keys(search).length != 0) {
 				    searchParm.$query.$and = [];
 				}
 				
@@ -964,28 +945,28 @@ if(data.list) {
 				var searchValue = null;
 				for(var key in searchFrom) {
 				    searchFormObj = searchFrom[key];
-    				if (search_findService[key]) {
+    				if (search[key]) {
     				    searchValue = {};
     				    searchValue[searchFormObj.searchField] = {};
-    				    searchValue[searchFormObj.searchField][searchFormObj.searchComparison] = search_findService[key];
+    				    searchValue[searchFormObj.searchField][searchFormObj.searchComparison] = search[key];
                         searchParm.$query.$and.push(searchValue);
-                        //searchParm.$query.$and.push({}[searchFormObj.searchField] = {}[searchFormObj.searchComparison] = search_findService[key]);
+                        //searchParm.$query.$and.push({}[searchFormObj.searchField] = {}[searchFormObj.searchComparison] = search[key]);
     				    //searchParm.$query.$and.push(JSON.parse('{"' + searchFormObj.searchField + '" : {"' + searchFormObj.searchComparison + '" : "' + search_findService[key] + '"}}'));
     				}
 				}
 
-				if (search_findService.search_isNew) {
-				    if (search_findService.search_isNew == 0) {
+				if (search.search_isNew) {
+				    if (search.search_isNew == 0) {
 				        searchParm.$query.$and.push({'$or': [{isNew : {$exists : false}}, {isNew : {$eq : 0}}, {isNew : {$eq : '0'}}]});
 				    } else {
-				        searchParm.$query.$and.push({'isNew': {$eq : parseInt(search_findService.search_isNew)}});
+				        searchParm.$query.$and.push({'isNew': {$eq : parseInt(search.search_isNew)}});
 				    }
 				}
-				if (search_findService.search_result) {
-				    if (search_findService.search_result == 0) {
+				if (search.search_result) {
+				    if (search.search_result == 0) {
 				        searchParm.$query.$and.push({'$or': [{result : {$exists : false}}, {result : {$eq : 0}}]});
 				    } else {
-				        searchParm.$query.$and.push({'result': {$eq : parseInt(search_findService.search_result)}});
+				        searchParm.$query.$and.push({'result': {$eq : parseInt(search.search_result)}});
 				    }
 				}
 				var pageSize = findServiceModel.page.pageSize;
@@ -1002,7 +983,7 @@ if(data.list) {
                     data.listCount = data['count'];
                     commonModel.messageAreaReset(data);
                     
-                    data.search = search_findService;
+                    data.search = search;
                     data.page = findServiceModel.page;
                     
                     Bridge.tmplTool.render('findServiceTable', data);

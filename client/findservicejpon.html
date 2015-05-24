@@ -10,44 +10,7 @@
 <link href="css/app.css" rel="stylesheet">
 </head>
 <body>
-    <nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="./">
-                    <img alt="Brand" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACgAAAAoCAMAAAC7IEhfAAAA81BMVEX///9VPnxWPXxWPXxWPXxWPXxWPXxWPXz///9hSYT6+vuFc6BXPn37+vz8+/z9/f2LeqWMe6aOfqiTg6uXiK5bQ4BZQX9iS4VdRYFdRYJfSINuWI5vWY9xXJF0YJR3Y5Z4ZZd5ZZd6Z5h9apq0qcW1qsW1q8a6sMqpnLyrn76tocCvpMGwpMJoUoprVYxeRoJjS4abjLGilLemmbrDutDFvdLPx9nX0eDa1OLb1uPd1+Td2OXe2eXh3Ofj3+nk4Orl4evp5u7u7PLv7fPx7/T08vb08/f19Pf29Pj39vn6+fuEcZ9YP35aQn/8/P1ZQH5fR4PINAOdAAAAB3RSTlMAIWWOw/P002ipnAAAAPhJREFUeF6NldWOhEAUBRvtRsfdfd3d3e3/v2ZPmGSWZNPDqScqqaSBSy4CGJbtSi2ubRkiwXRkBo6ZdJIApeEwoWMIS1JYwuZCW7hc6ApJkgrr+T/eW1V9uKXS5I5GXAjW2VAV9KFfSfgJpk+w4yXhwoqwl5AIGwp4RPgdK3XNHD2ETYiwe6nUa18f5jYSxle4vulw7/EtoCdzvqkPv3bn7M0eYbc7xFPXzqCrRCgH0Hsm/IjgTSb04W0i7EGjz+xw+wR6oZ1MnJ9TWrtToEx+4QfcZJ5X6tnhw+nhvqebdVhZUJX/oFcKvaTotUcvUnY188ue/n38AunzPPE8yg7bAAAAAElFTkSuQmCC">
-                </a>
-        		<div id="menu" class="br-tmpl panel-body navbar-left" role="form">
-        		    <script type="text/tmpl" data-tmpl-id="menu">
-            		    <select data-event="##:commonModel.viewport##" id="viewport-scale">
-                            ##
-                            var sv = 0;
-                            var selected = false;
-                            var value = localStorage['viewport_scale'] || 1;
-                            commonModel.viewport.setScale(value);
-                            for (var i=150; i > 49; i=i-5) {
-                                sv = i / 100;
-                                selected = value == sv;
-                            ##
-                                <option value="##=sv##" ##=selected ? 'selected="selected"' : ""##>x ##=sv##</option>
-                            ##}##
-                        </select>
-                    </script>
-        		</div>
-        		<div id="loginUser" class="br-tmpl panel-body navbar-right" role="form">
-                    <script type="text/tmpl" data-tmpl-id="loginUser">
-                        ##if(data.name) {##
-                        <span>##=data.name##</span>
-                        <button data-event="##:commonModel.logout##" class="btn btn-primary btn-xs">Sign Out</button>
-                        ##}##
-                    </script>
-        		</div>
-    		</div>
-            <div id="message" class="br-tmpl">
-                <script type="text/tmpl" data-tmpl-id="message">
-                    <div>##=data.msg##</div>
-                </script>
-            </div>
-        </div>
+    <nav class="navbar navbar-default navbar-fixed-top" role="navigation" data-bind-tmpl-id="header" data-tmpl-src="./tmpl/tmpl.common.html">
     </nav>
     
 <datalist id="findServiceJponMapKuList">
@@ -76,39 +39,6 @@
     <option value="川崎市多摩区">川崎市多摩区</option>
     <option value="川崎市宮前区">川崎市宮前区</option>
     <option value="川崎市麻生区">川崎市麻生区</option>
-    <option value="相模原市緑区">相模原市緑区</option>
-    <option value="相模原市中央区">相模原市中央区</option>
-    <option value="相模原市南区">相模原市南区</option>
-    <option value="横須賀市">横須賀市</option>
-    <option value="平塚市">平塚市</option>
-    <option value="鎌倉市">鎌倉市</option>
-    <option value="藤沢市">藤沢市</option>
-    <option value="小田原市">小田原市</option>
-    <option value="茅ヶ崎市">茅ヶ崎市</option>
-    <option value="逗子市">逗子市</option>
-    <option value="三浦市">三浦市</option>
-    <option value="秦野市">秦野市</option>
-    <option value="厚木市">厚木市</option>
-    <option value="大和市">大和市</option>
-    <option value="伊勢原市">伊勢原市</option>
-    <option value="海老名市">海老名市</option>
-    <option value="座間市">座間市</option>
-    <option value="南足柄市">南足柄市</option>
-    <option value="綾瀬市">綾瀬市</option>
-    <option value="三浦郡葉山町">三浦郡葉山町</option>
-    <option value="高座郡寒川町">高座郡寒川町</option>
-    <option value="中郡大磯町">中郡大磯町</option>
-    <option value="中郡二宮町">中郡二宮町</option>
-    <option value="足柄上郡中井町">足柄上郡中井町</option>
-    <option value="足柄上郡大井町">足柄上郡大井町</option>
-    <option value="足柄上郡松田町">足柄上郡松田町</option>
-    <option value="足柄上郡山北町">足柄上郡山北町</option>
-    <option value="足柄上郡開成町">足柄上郡開成町</option>
-    <option value="足柄下郡箱根町">足柄下郡箱根町</option>
-    <option value="足柄下郡真鶴町">足柄下郡真鶴町</option>
-    <option value="足柄下郡湯河原町">足柄下郡湯河原町</option>
-    <option value="愛甲郡愛川町">愛甲郡愛川町</option>
-    <option value="愛甲郡清川村">愛甲郡清川村</option>
 </datalist>
 <datalist id="findServiceJponFindFromList">
     <option value="電話帳">
@@ -128,9 +58,17 @@
 		    <script type="text/tmpl" data-tmpl-id="findServiceJponTable">
         		<div class="panel-heading">
         		    探し記録
+        		    <button type="button" class="btn btn-default btn-sm pull-right ##=data.editMode=='new' || data.editMode=='no' ? 'hidden': ''##" data-event="##:findServiceJponModel.matchAddress##">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 重複検査
+                    </button>
+                    <button type="button" class="btn btn-default" data-event="##:{click:function(){refreshStorage();}}##">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> 区域データ
+                    </button>
+                    <!--
                     <button type="button" class="btn btn-default btn-sm pull-right ##=data.editMode=='new' || data.editMode=='no' ? 'hidden': ''##" data-event="##:findServiceJponModel.addNew##">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 新規追加
                     </button>
+                    -->
                     <button type="button" class="btn btn-default btn-sm pull-right ##=(!data.editMode) ? 'hidden': ''##" data-event="##:findServiceJponModel.listArea##">
                         <span class="glyphicon glyphicon-list-alt" aria-hidden="true"></span> 一覧
                     </button>
@@ -169,8 +107,8 @@
                             <button type="button" class="btn btn-default" data-event="##:{click:function(){refreshStorage();}}##">
                                 <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> 区域データ
                             </button>
-                            <button type="button" data-event="##:findServiceJponModel.setToNew##" class="btn btn-default ##=(data.isNew==1) ? 'btn-success' : 'btn-default'##">新規</button>
-            			    <button type="button" data-event="##:findServiceJponModel.setToDuplicate##" class="btn btn-default ##=(data.isNew==2) ? 'btn-success' : 'btn-default'##">既存</button>
+                            <button type="button" data-event="##:findServiceJponModel.setToNew##" class="btn btn-default ##=(data.isNew=='TRUE') ? 'btn-success' : 'btn-default'##">新規</button>
+            			    <button type="button" data-event="##:findServiceJponModel.setToDuplicate##" class="btn btn-default ##=(data.isNew=='FALSE') ? 'btn-success' : 'btn-default'##">既存</button>
                         </form>
 
 
@@ -192,99 +130,68 @@
 ##if(data.list) {##
         		<div class="panel-heading">
         		    <div class="form-inline">
+        		    ##
+        		    $.each(findServiceJponModel.searchForm, function(key, obj) {
+        		        if (obj.lineBreak) {
+        		    ##
+            		</div>
+            		<div class="form-inline">
+            		    ##}##
                         <div class="form-group">
-                            <label class="">情報元</label>
-                            <input type="text" id="search_findServiceJponFindFrom" list="findServiceJponFindFromList" value="##=data.search_findServiceJponFindFrom##" class="form-control"/>
+                            <label class="">##=obj.label##</label>
+                            <input type="##=obj.type || 'text'##" id="##=key##" list="##=obj.list##" value="##=data.search[key]##" class="form-control" style="##=obj.style##"/>
             			</div>
-                        <div class="form-group">
-                            <label class="">地図:市区</label>
-                            <input type="text" list="findServiceJponMapKuList" id="search_findServiceJponMapKu" value="##=data.search_findServiceJponMapKu##" class="form-control"/>
-            			</div>
-                        <div class="form-group">
-                            <label class="">ページ</label>
-                            <input type="text" id="search_findServiceJponMapPage" value="##=data.search_findServiceJponMapPage##" class="form-control"/>
-            			</div>
-                			
+        		    ##});##
                 		<div class="form-group">
-                		    <select id="search_isNew" class="form-control" value="##=data.search_isNew##">
-                		        <option value=""></option>
-                                <option value="0" ##=data.search_isNew == '0' ? 'selected="selected"' : ""##>未設定</option>
-                                <option value="1" ##=data.search_isNew == 1 ? 'selected="selected"' : ""##>新規</option>
-                                <option value="2" ##=data.search_isNew == 2 ? 'selected="selected"' : ""##>既存</option>
+                		    <select id="search_unique" class="form-control" value="##=data.search_unique##">
+                		        <option value="">-新規有無-</option>
+                		        <option value="-" ##=data.search.search_unique == '-' ? 'selected="selected"' : ""##>未設定</option>
+                                <option value="TRUE" ##=data.search.search_unique == 'TRUE' ? 'selected="selected"' : ""##>新規</option>
+                                <option value="FALSE" ##=data.search.search_unique == 'FALSE' ? 'selected="selected"' : ""##>既存</option>
                             </select>
                         </div>
+
             			<button class="btn btn-default" type="submit" data-event="##:findServiceJponModel.search##">検索</button>
         			</div>
         		</div>
 
-        		<nav>                    
-                    <ul class="pagination" style="margin:0px">
-                        ##
-                        var listCount = data.listCount;
-                        var pageNum = data.page.pageNum;
-                        var pageSize = data.page.pageSize;
-                        var pageWidth = data.page.pageWidth;
-                        ##
-                        <li class="##=pageNum == 1 ? 'disable' : ''##" data-page="##=findServiceJponModel.pageNum - 1##" data-event="##:findServiceJponModel.pageSelect##">
-                            <a href="#" aria-label="Previous"><span aria-hidden="true">&laquo;</span></a>
-                        </li>
-                        <li class="##=pageNum == 1 ? 'active' : ''##" data-page="1" data-event="##:findServiceJponModel.pageSelect##">
-                            <a href="#">1<span class="sr-only">(current)</span></a>
-                        </li>
-                        ##
-                        var endNum = Math.ceil(listCount / pageSize) -1;
-                        //for (var num = 1; num < endNum; num++) {
-                        $.each(_.range((pageNum - pageWidth < 1 ? 1 : pageNum - pageWidth) + 1, (pageNum + pageWidth > endNum ? endNum : pageNum + pageWidth) ), function(ind, num) {
-                        ##
-                        <li class="##=data.page.pageNum == num ? 'active' : ''##" data-page="##=num##" data-event="##:findServiceJponModel.pageSelect##">
-                            <a href="#">##=num##<span class="sr-only">(current)</span></a>
-                        </li>
-                        ##})##
-                        <li class="##=pageNum == endNum ? 'active' : ''##" data-page="##=endNum##" data-event="##:findServiceJponModel.pageSelect##">
-                            <a href="#">##=endNum##<span class="sr-only">(current)</span></a>
-                        </li>
-                        <li class="##=pageNum == endNum ? 'disable' : ''##" data-page="##=pageNum + 1##" data-event="##:findServiceJponModel.pageSelect##">
-                            <a href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span></a>
-                        </li>
-                    </ul>
-                    <select id="findService_pageSize" class="form-control" style="width:100px; display:inline;vertical-align:top;" data-event="##:findServiceJponModel.pageSizeChange##">
-                        ##$.each([10, 20, 50, 100, 200, 1000], function(ind, num) {##
-                        <option value="##=num##" ##=(num==pageSize) ? 'selected="selected"' : ""##>##=num##</option>
-                        ##})##
-                    </select>
+        		<nav>
+        		    ##@Bridge.tmplTool.include('/tmpl/tmpl.pagenation.html', 'pagination')##
                 </nav>
 
         		<div class="table-responsive">
-            		<table class="table table-bordered">
+            		<table class="table table-bordered" id="listTable">
                         <thead>
                             <tr class="active">
-            					<th style="width:92px;"></th>
+            					<th style="width:92px;">##=findServiceJponModel.listCount##</th>
                                 <th>電話番号</th>
                                 <th>名前</th>
                                 <th>住所</th>
-            					##if(findServiceJponModel.getAuth(1)) {##
-            					<th>登録者</th>
-            					##}##
                             </tr>
                         </thead>
                         <tbody>
             				##totalData={};##
                             ##$.each(data.list || {} , function(ind, obj) {##
-                            <tr class="##=(commonModel._id == obj.last_update_user) ? '' : ''##">
+                            <tr data-ind="##=ind##" class="##=(obj.unique == 'FALSE') ? 'active' : ''##">
             					##
-            					totalData.findServiceJponTotalCount = totalData.findServiceJponTotalCount ? totalData.findServiceJponTotalCount + 1 : 1;
+            					    var addr = obj.cityward + ' ' + obj.town + ' '+ obj.chome;
+                    				addr += (obj.banchi) ? ('-' + obj.banchi):'';
+                    				addr += (obj.gou) ? ('-' + obj.gou):'';
+                    				addr += ' ' + obj.address2;// + ' ' + obj.name;
             					##
                                 <td>
-                                    ##if (commonModel._id == obj.last_update_user || (commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service.save > 1)) {##
+                                    ##if (commonModel._id == obj.last_update_user || (commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service._write > 1)) {##
             						<button data-ind="##=ind##" data-id="##=obj[Bridge.idName]##" data-event="##:findServiceJponModel.lineEdit##" class="btn btn-default btn-xs">修正</button>
             						<button data-event="##:findServiceJponModel.lineDelete##" class="btn btn-default btn-xs">削除</button>
             					    ##}##
-            					    <button data-event="##:findServiceJponModel.setToNew##" class="btn btn-xs ##=(obj.isNew==1) ? 'btn-success' : 'btn-default'##" ##if(!findServiceJponModel.getAuth(1)) {## disabled="disabled" ##}##>新規</button>
-            					    <button data-event="##:findServiceJponModel.setToDuplicate##" class="btn btn-xs ##=(obj.isNew==2) ? 'btn-warning' : 'btn-default'##" ##if(!findServiceJponModel.getAuth(1)) {## disabled="disabled" ##}##>既存</button>
+
+            					    <button data-event="##:findServiceJponModel.setToNew##" class="btn btn-xs ##=(obj.unique=='TRUE') ? 'btn-success' : 'btn-default'##" ##if(!findServiceJponModel.getAuth(1)) {## disabled="disabled" ##}##>新規</button>
+            					    <button data-event="##:findServiceJponModel.setToDuplicate##" class="btn btn-xs ##=(obj.unique=='FALSE') ? 'btn-warning' : 'btn-default'##" ##if(!findServiceJponModel.getAuth(1)) {## disabled="disabled" ##}##>既存</button>
             					</td>
                                 <td>##=obj.tel##</td>
             					<td>##=obj.name##</td>
                                 <td>
+                                <!--
                                     ##if(findServiceJponModel.getAuth(1)) {##
                                     <button type="button" class="btn btn-default btn-xs" data-event="##:{click:function(e){
                                             Bridge.tmplTool.render('findServiceJponTable', Bridge.extend(e.data, {mathcMode: true, editMode: 'no'}));
@@ -295,33 +202,29 @@
                                     </button>
                                     &nbsp;
                                     ##}##
+                                -->
                                     <a href="http://maps.google.co.jp/maps?q=##=(obj.findServiceJponLat && obj.findServiceJponLng) ? 'loc:' + obj.findServiceJponLat + ',' + obj.findServiceJponLng :  obj.prefecture + obj.cityward + obj.town + ' ' + obj.address2##" target="gmap">
-                                        ##=obj.prefecture####=obj.cityward####=obj.town## ##=obj.address2##
+                                        ##=obj.cityward## ##=obj.town## ##=addr##
                                     </a>
                                 </td>
-            					##if(findServiceJponModel.getAuth(1)) {##
-            					<td>##=obj.first_update_name##</td>
-            					##}##
                             </tr>
                             ##});##
                         </tbody>
                         <tfoot>
                             <tr class="active">
-            					<th></th>
-                                <th>総計 >></th>
-                                <th id="findServiceJponTotalCount">##=findServiceJponModel.listCount##</th>
-                                <th id="">##=totalData.findServiceJponTotalCount##</th>
+            					<th>##=findServiceJponModel.listCount##</th>
+                                <th></th>
                                 <th id=""></th>
                                 <th id=""></th>
-            					##if(findServiceJponModel.getAuth(1)) {##
-            					<th></th>
-            					##}##
+
                             </tr>
                         </tfoot>
             		</table>
             	</div>
             	
-
+        		<nav>
+        		    ##@Bridge.tmplTool.include('/tmpl/tmpl.pagenation.html', 'pagination')##
+                </nav>
 ##}##
 		    </script>
 		</div>
@@ -368,11 +271,6 @@
             savedData: null,
             listData: null,
             listCount: 0,
-            page: {
-                pageSize: 20,
-                pageNum: 1,
-                pageWidth: 5
-            },
 			lineEdit: {click: function(e) {
 					e.stopPropagation();
 					findServiceJponConn.reqData('eventData', e.data._id).request(function(data, textStatus, jqXHR) {
@@ -531,55 +429,86 @@
             */
             
             setToNew: {click: function(e) {
-                findServiceJponConn.reqUpdate('reqUpdate', e.data._id, {isNew: e.data.isNew == 1 ? 0 : 1}).request(function(data) {
+                findServiceJponConn.reqUpdate('reqUpdate', e.data._id, {unique: e.data.unique == 'TRUE' ? '' : 'TRUE'}).request(function(data) {
                     commonModel.messageAreaReset(data);
                     findServiceJponModel.listAreaReset();
                 });
             }},
             setToDuplicate: {click: function(e) {
-                findServiceJponConn.reqUpdate('reqUpdate', e.data._id, {isNew: e.data.isNew == 2 ? 0 : 2}).request(function(data) {
+                findServiceJponConn.reqUpdate('reqUpdate', e.data._id, {unique: e.data.unique == 'FALSE' ? '' : 'FALSE'}).request(function(data) {
                     commonModel.messageAreaReset(data);
                     findServiceJponModel.listAreaReset();
                 });
             }},
             
             getAuth: function(level) {
-                return commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service.save > level;
+                return commonModel._auth && commonModel._auth.find_service && commonModel._auth.find_service._write > level;
             },
             
-            matchAddress: function() {
+            matchAddress: {click: function() {
                 /*
                 address2: "501"banchi: "22"chome: "1"cityward: "川崎市川崎区"class: "返却済"congregation: "川崎市中央"description: "日本語"fileno: "03"gou: ""id: "KWS5352070940"lastvisit: ""lat: "35.53521"lng: "139.70940"name: ""notice: ""phonetic_town: "ｱｻﾋﾁｮｳ"prefecture: "神奈川県"serial: "0"tel: ""town: "旭町"zipcode: "2100808"
                 */
-                var address1 = $('#matchAddressInput1').val();
-                var address2 = $('#matchAddressInput2').val();
-                var address3 = $('#matchAddressInput3').val();
-                var address4 = $('#matchAddressInput4').val();
-                var $matchAddressTableBody = $('#matchAddressTable tbody').empty();
-
-                var exports = [];
-                var data = null;
-                var addr = null;
-                var hasData = false;
-                for (var key in exportdata) {
-                    data = exportdata[key];
-                    if (//data.prefecture == address1 && 
-                            (data.cityward.indexOf(address2) > -1 || address2.indexOf(data.cityward) > -1) 
-                            && address3.indexOf(data.town) > -1) {
-                        exports.push(data);
-        				addr = data.cityward + ' ' + data.town + ' '+ data.chome;
-        				addr += (data.banchi) ? ('-' + data.banchi):'';
-        				addr += (data.gou) ? ('-' + data.gou):'';
-        				addr += ' ' + data.address2 + ' ' + data.name;
-
-                        hasData = true;
-                        $('<tr><td>' + data.class + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
+                
+                var sortFunc = function(a, b) {
+                    return a.addr > b.addr;
+                }
+                
+                var $tr = null;
+                var base = null;
+                var address2 = address3 = null;
+                var listData = findServiceJponModel.listData;
+                for (var ind in listData) {
+                    base = listData[ind];
+                    var $matchAddressTableBody = $('#matchAddressTable tbody').empty();
+    
+                    var exports = [];
+                    var data = null;
+                    var addr = null;
+                    var hasData = false;
+                    var conv = function(str) {
+                        return str.replace('が', 'ケ')
+                                  .replace('ヶ', 'ケ')
+                                  .replace('ッ', 'ツ');
+                    }
+                    var cityward = null;
+                    var town = null;
+                    address2 = conv(base.cityward);
+                    address3 = conv(base.town);
+                    var addressList = [];
+                    var data
+                    for (var key in exportdata) {
+                        data = exportdata[key];
+                        cityward = conv(data.cityward);
+                        town = conv(data.town);
+                        if (//data.prefecture == address1 && 
+                            data.town != '' &&
+                                (data.cityward.indexOf(address2) > -1 || address2.indexOf(data.cityward) > -1) 
+                                && (address3.indexOf(data.town) > -1 || data.town.indexOf(address3) > -1)) {
+                            exports.push(data);
+            				addr = data.cityward + ' ' + data.town + ' '+ data.chome;
+            				addr += (data.banchi) ? ('-' + data.banchi):'';
+            				addr += (data.gou) ? ('-' + data.gou):'';
+            				addr += ' ' + data.address2; // + ' ' + data.name;
+                            data.addr = addr;
+                            hasData = true;
+                            //$('<tr><td>' + data.class + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
+                            addressList.push(data);
+                        }
+                    }
+                    
+                    $tr = $('#listTable tr[data-ind="' + ind + '"]');
+                    addressList.sort(sortFunc);
+                    for (var ind in addressList) {
+                        var selected = addressList[ind];
+                        $tr.after($('<tr class="' + (selected.tel == base.tel ? 'warning' : 'active') + '"><td>' + selected.class + '</td><td>' + selected.tel + '</td><td>' + selected.name + '</td><td>' + selected.addr + '</td></tr>'));
+                    }
+                    
+                    if (!hasData) {
+                        $tr.after($('<tr><td></td><td></td><td></td><td>データがありません。</td></tr>'));
                     }
                 }
-                if (!hasData) {
-                    $('<tr><td></td><td>データがありません。</td></tr>').appendTo($matchAddressTableBody);
-                }
-            },
+            }},
             
 			listArea: {click: function(e) {
 				findServiceJponModel.listAreaReset();
@@ -597,50 +526,83 @@
             
 			search: {click: function(e) {
 			    findServiceJponModel.page.pageNum = 1;
-				var search_findServiceJponFindFrom = $('#search_findServiceJponFindFrom').val();
-				var search_findServiceJponMapPage = $('#search_findServiceJponMapPage').val();
-				var search_findServiceJponMapKu = $('#search_findServiceJponMapKu').val();
-				var search_isNew = $('#search_isNew').val();
-				
-				Bridge.sessionStorageTool.push('search_findServiceJponFindFrom', search_findServiceJponFindFrom);
-				Bridge.sessionStorageTool.push('search_findServiceJponMapPage', search_findServiceJponMapPage);
-				Bridge.sessionStorageTool.push('search_findServiceJponMapKu', search_findServiceJponMapKu);
-				Bridge.sessionStorageTool.push('search_isNew', search_isNew);
-				
+
+			    var search = {};
+			    var value = null;
+			    for (var key in findServiceJponModel.searchForm) {
+			        value = $('#' + key).val();
+			        if (value) {
+			            search[key] = value;
+			        }
+			    }
+			    value = $('#search_isNew').val();
+			    if (value) {
+			        search['search_isNew'] = value;
+			    }
+			    value = $('#search_unique').val();
+			    if (value) {
+			        search['search_unique'] = value;
+			    }
+			    
+				Bridge.sessionStorageTool.push('search_findServiceJpon', search);
 				
 				findServiceJponModel.listAreaReset();
             }},
-            listAreaReset: function() {
-				//var serviceDateMonth = $('#dat').val();
-				var search_findServiceJponFindFrom = Bridge.sessionStorageTool.get('search_findServiceJponFindFrom');
-				var search_findServiceJponMapPage = Bridge.sessionStorageTool.get('search_findServiceJponMapPage');
-				var search_findServiceJponMapKu = Bridge.sessionStorageTool.get('search_findServiceJponMapKu');
-				var search_isNew = Bridge.sessionStorageTool.get('search_isNew');
+            listAreaReset: function(isReflash) {
+                
+				var search = Bridge.sessionStorageTool.get('search_findServiceJpon') || {};
+				$.each(search, function(key, value) {
+				    $('#' + key).val(value);
+				});
 				
-				$('#search_findServiceJponFindFrom').val(search_findServiceJponFindFrom);
-				$('#search_findServiceJponMapPage').val(search_findServiceJponMapPage);
-				$('#search_findServiceJponMapKu').val(search_findServiceJponMapKu);
-				$('#search_isNew').val(search_isNew);
+			    if (isReflash == undefined) isReflash = true;
+                if (!isReflash) {
+                    var data = {};
+                    data.search = search;
+                    data.page = findServiceJponModel.page;
+                    data.list = findServiceJponModel.listData;
+                    data.listCount = findServiceJponModel.listCount;
+                    Bridge.tmplTool.render('findServiceTable', data);
+                    return;
+                }
 				
 				
-				var searchParm = {$query: {}};
-				
-				if (search_findServiceJponFindFrom) {
-                    searchParm.$query['findServiceJponFindFrom'] = {$regex : search_findServiceJponFindFrom};
+				var searchParm = {$query: {}}; //, $orderby: {findServiceDate : -1}};
+				if (Object.keys(search).length != 0) {
+				    searchParm.$query.$and = [];
 				}
-				if (search_findServiceJponMapPage) {
-                    searchParm.$query['findServiceJponMapPage'] = {$eq : search_findServiceJponMapPage};
+				
+				var searchFrom = findServiceJponModel.searchForm;
+				var searchFormObj = null;
+				var searchValue = null;
+				for(var key in searchFrom) {
+				    searchFormObj = searchFrom[key];
+    				if (search[key]) {
+    				    searchValue = {};
+    				    searchValue[searchFormObj.searchField] = {};
+    				    searchValue[searchFormObj.searchField][searchFormObj.searchComparison] = search[key];
+                        searchParm.$query.$and.push(searchValue);
+                        //searchParm.$query.$and.push({}[searchFormObj.searchField] = {}[searchFormObj.searchComparison] = search[key]);
+    				    //searchParm.$query.$and.push(JSON.parse('{"' + searchFormObj.searchField + '" : {"' + searchFormObj.searchComparison + '" : "' + search_findService[key] + '"}}'));
+    				}
 				}
-				if (search_findServiceJponMapKu) {
-                    searchParm.$query['findServiceJponMapKu'] = {$regex : search_findServiceJponMapKu};
-				}
-				if (search_isNew) {
-				    if (search_isNew == 0) {
-				        searchParm.$query['$or'] = [{isNew : {$exists : false}}, {isNew : {$eq : 0}}];
+
+				if (search.search_isNew) {
+				    if (search.search_isNew == 0) {
+				        searchParm.$query.$and.push({'$or': [{isNew : {$exists : false}}, {isNew : {$eq : 0}}, {isNew : {$eq : '0'}}]});
 				    } else {
-				        searchParm.$query['isNew'] = {$eq : parseInt(search_isNew)};
+				        searchParm.$query.$and.push({'isNew': {$eq : parseInt(search.search_isNew)}});
 				    }
 				}
+				if (search.search_unique) {
+				    if (search.search_unique == '-') {
+				        searchParm.$query.$and.push({'unique': {$eq : ""}});
+				    } else {
+				        searchParm.$query.$and.push({'unique': {$eq : search.search_unique}});
+				    }
+				}
+				
+				
 				
 				var pageSize = findServiceJponModel.page.pageSize;
 				var pageNum = findServiceJponModel.page.pageNum;
@@ -656,17 +618,37 @@
                     data.list = data['reqList'];
                     commonModel.messageAreaReset(data);
                     
-                    data.search_findServiceJponFindFrom = search_findServiceJponFindFrom;
-                    data.search_findServiceJponMapPage = search_findServiceJponMapPage;
-                    data.search_findServiceJponMapKu = search_findServiceJponMapKu;
-                    data.search_isNew = search_isNew;
-                    
+                    data.search = search;
                     data.page = findServiceJponModel.page;
                     
                     Bridge.tmplTool.render('findServiceJponTable', data);
                 });
             },
         };
+        
+        findServiceJponModel.page = {
+                pageSize: 20,
+                pageNum: 1,
+                pageWidth: 4,
+                pageSelectFunc: findServiceJponModel.pageSelect,
+                pageSizeChangeFunc: findServiceJponModel.pageSizeChange
+        };
+	    findServiceJponModel.searchForm = {
+	        search_findServiceCityward: {
+	            searchField: "cityward",
+	            searchComparison : "$regex",
+	            label: "市区",
+	            list: "findServiceJponMapKuList",
+	            lineBreak: 1
+	        },
+	        search_findServiceTown: {
+	            searchField: "town",
+	            searchComparison : "$regex",
+	            label: "町村",
+	            list: "townNameList"
+	        }
+	    }
+
 
 
         var exportdate = null;
@@ -697,7 +679,7 @@
     		});
         }
         
-
+        Bridge.tmplTool.bindTmpl($('[data-bind-tmpl-id]'));
         Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
         Bridge.tmplTool.render('menu', {});
         
