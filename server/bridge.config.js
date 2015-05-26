@@ -21,8 +21,15 @@ exports.mongodbMethod = {
     module : require('../bridge/lib/method.mongodb'),
     db : {
         idName: '_id',
+        useOid: false ,
         url: 'mongodb://ykcform:454545@ds041188.mongolab.com:41188/ykcform',
         user_dataName: 'login_user',
+        collections: {
+            jpon2012: {
+                idName: '_id',
+                useOid: true
+            }
+        }
     },
     beforeFilter : [orignChecker, commonFilter.startLogger, loginFilter.loginCheck, loginFilter.authCheck, loginFilter.addLastUpdate],
     afterFilter : [commonFilter.endLogger],

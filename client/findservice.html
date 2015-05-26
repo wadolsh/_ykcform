@@ -18,6 +18,13 @@
                     <span class="glyphicon glyphicon-map-marker" aria-hidden="true">地図</span>
                 </button>
             </script>
+            <script type="text/tmpl" data-tmpl-id="navMenuAdminButtons" data-tmpl-option='{"render": false}'>
+                ##if(findServiceModel.getAuth(10)) {##
+                <button type="button" id="mapToggleButton" class="btn btn-default btn-xs" aria-label="Left Align" data-event="##:findServiceModel.showSearchedMap##">
+                    <span class="glyphicon glyphicon-map-marker" aria-hidden="true">管理作業</span>
+                </button>
+                ##}##
+            </script>
         </div>
     </nav>
     
@@ -517,6 +524,7 @@ if(data.list) {
     <script type="text/javascript">
         commonModel.loginCheckerAfter = function(data) {
             findServiceModel.savedData = Bridge.localStorageTool.get('findServiceModel_savedData');
+            Bridge.tmplTool.render('navMenuAdminButtons', {});
         }
         commonModel.logoutAfter = function(data) {
             location.href = "/";

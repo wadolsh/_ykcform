@@ -43,5 +43,19 @@ mongorestore -h ds041188.mongolab.com:41188 -d ykcform -u ykcform -p  bson/ykcfo
 db.find_service_ad.find().forEach(function(doc) {db.find_service.update({_id:doc._id},{$set:{findServiceAddress3:doc.findServiceAddress3, findServiceAddress4:doc.findServiceAddress4, findServiceAddress5:doc.findServiceAddress5 }})})
 
 db.find_service.update({}, {$rename: {findServiceAddress1: "prefecture",　 findServiceAddress2: "cityward",　 findServiceAddress2: "town",
-findServiceAddress4: "chome", findServiceAddress5: "address2", findServiceName : "name", findServiceLat : "lat", findServiceLng : "lng\"}})
+findServiceAddress4: "chome", findServiceAddress5: "address2", findServiceName : "name", findServiceLat : "lat", findServiceLng : "lng"}})
     
+mongo ds041188.mongolab.com:41188/ykcform -u ykcform -p
+db.jpon2012.update({}, {$rename: {"﻿tel": "tel"}})
+
+
+mongoimport -h ds041188.mongolab.com:41188 -d ykcform -c jpon2012 -u ykcform -p --file bson/kanagawa2012x_korean-names.csv --type csv --headerline
+
+
+db.jpon2012.find().forEach(function(doc) {db.jpon2012.update({_id:doc._id},{$set:{_id:new ObjectID().toHexString() }})})
+
+db.jpon2012.find().forEach(function(doc) {db.jpon2012.update({_id:doc._id},{$set:{_id:new ObjectID().toHexString() }})})
+
+db.status.find().snapshot().forEach(function(doc){ 
+    var id=doc._id; doc._id=doc.UserId; db.status.insert(doc); db.status.remove({_id:id}); 
+})
