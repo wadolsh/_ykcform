@@ -67,6 +67,12 @@ exports.loginMethod = {
                         result_update_user: {
                             _write: 0
                         },
+                        findServiceLat: {
+                            _write: 0
+                        },
+                        findServiceLng: {
+                            _write: 0
+                        },
                     }
                 }
                 , jpon2012: {_write : 1, _read : 0}

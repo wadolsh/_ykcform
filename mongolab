@@ -56,6 +56,6 @@ db.jpon2012.find().forEach(function(doc) {db.jpon2012.update({_id:doc._id},{$set
 
 db.jpon2012.find().forEach(function(doc) {db.jpon2012.update({_id:doc._id},{$set:{_id:new ObjectID().toHexString() }})})
 
-db.status.find().snapshot().forEach(function(doc){ 
-    var id=doc._id; doc._id=doc.UserId; db.status.insert(doc); db.status.remove({_id:id}); 
+db.find_service.find().snapshot().forEach(function(doc){ 
+    var id=doc._id; doc._id = ObjectId(doc._id); db.find_service_objid.insert(doc);
 })

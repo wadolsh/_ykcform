@@ -24,7 +24,7 @@
                 <script type="text/tmpl" data-tmpl-id="navMenuAdminButtons" data-tmpl-option='{"render": false}'>
                     ##if(findServiceModel.getAuth(10)) {##
                     <button type="button" id="adminMapToggleButton" class="btn btn-default btn-xs" aria-label="Left Align" data-event="##:findServiceModel.showAdminMap##">
-                        <span class="glyphicon glyphicon-map-marker" aria-hidden="true">管理作業</span>
+                        <span class="glyphicon glyphicon-map-marker" aria-hidden="true">区域番号作業</span>
                     </button>
                     ##}##
                 </script>
@@ -33,82 +33,40 @@
     
     <div class="container hidden" id="searchedMapArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
         <div id="searchedMap" style="height: 100%;">
-            
+
         </div>
-        <div class="modal" id="searchedMapModal">
-          <script type="text/tmpl" data-tmpl-id="searchedMapModal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">##=data.findServiceAddress2 + data.findServiceAddress3 + data.findServiceAddress4 + ' ' + data.findServiceAddress5+ ' ' + data.findServiceName##</h4>
-              </div>
-              <div class="modal-body br-form">
-                <input type="hidden" name="##=Bridge.idName##" value="##=data[Bridge.idName]##">
-                <div class="row">
-        			<div class="form-group col-sm-12">
-        				<label for="findServiceComment" class="">コメント</label>
-        				<textarea class="form-control" rows="5" id="searchedMapModalComment" name="findServiceComment" data-event="##:{keydown: function(e){
-        				    $('#searchedMapModalSubmitButton').removeClass('disabled');
-        				}}##">##=data.findServiceComment##</textarea>
-        			</div>
-                </div>
-                <div class="row">
-        			<div class="form-group col-sm-12">
-        			    <button type="submit" id="searchedMapModalSubmitButton" class="btn btn-primary disabled" data-event="##:findServiceModel.saveComment::data##">コメント登録</button>
-        			</div>
-                </div>
-              </div>
-              <div class="modal-footer">
-              	##$.each(findServiceModel.resultTypeModel, function(key, obj) {##
-              	    <button type="button" class="btn btn-xs ##=(data.result==key) ? obj.color : 'btn-default'##" data-event="##:findServiceModel.setResult::data##" data-resultType="##=key##" data-fromMap="true">##=obj.label##</button>
-                ##});##
-              </div>
-            </div><!-- /.modal-content -->
-          </div><!-- /.modal-dialog -->
-          </script>
-        </div><!-- /.modal -->
-        
     </div>
     
     <div class="container hidden" id="adminMapArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
-        <div id="adminMap" style="height: 100%;">
+        
+        <div style="position:fixed;z-index:100;width:400px;right:0px;opacity:0.7;" id="adminMapPanelArea">
+            <script type="text/tmpl" data-tmpl-id="adminMapPanelArea" data-tmpl-option='{"render": true}'>
+            <div class="collapse" id="adminMapPanel">
+                <div class="panel panel-default" style="margin-bottom:0px">
+                  <!-- Default panel contents -->
+                  <div class="panel-heading"><span class="badge" id="adminMapPanelCount">0</span> 区域番号設定</div>
+                  <div class="panel-body">
+                    <div class="input-group">
+                        <input type="text" class="form-control" placeholder="区域番号" id="adminMapPanelFileNo">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button" data-event="##:findServiceModel.saveFileNo##">登録</button>
+                        </span>
+                    </div><!-- /input-group -->
+                  </div>
+                  <!-- List group -->
+                  <ul class="list-group" id="adminMapPanelList" style="max-height:660px;overflow-y:auto;">
+                  </ul>
+                </div>
+            </div>
+
+            <button class="btn btn-primary" style="margin-left:290px" type="button" data-toggle="collapse" data-target="#adminMapPanel">管理パンネル</button>
+        </script>
+        </div>
+        
+        <div id="adminMap" style="width:1123px; height:792px;">
             
         </div>
-        <div class="modal" id="adminMapModal">
-          <script type="text/tmpl" data-tmpl-id="searchedMapModal">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title">##=data.findServiceAddress2 + data.findServiceAddress3 + data.findServiceAddress4 + ' ' + data.findServiceAddress5+ ' ' + data.findServiceName##</h4>
-              </div>
-              <div class="modal-body br-form">
-                <input type="hidden" name="##=Bridge.idName##" value="##=data[Bridge.idName]##">
-                <div class="row">
-        			<div class="form-group col-sm-12">
-        				<label for="findServiceComment" class="">コメント</label>
-        				<textarea class="form-control" rows="5" id="searchedMapModalComment" name="findServiceComment" data-event="##:{keydown: function(e){
-        				    $('#searchedMapModalSubmitButton').removeClass('disabled');
-        				}}##">##=data.findServiceComment##</textarea>
-        			</div>
-                </div>
-                <div class="row">
-        			<div class="form-group col-sm-12">
-        			    <button type="submit" id="searchedMapModalSubmitButton" class="btn btn-primary disabled" data-event="##:findServiceModel.saveComment::data##">コメント登録</button>
-        			</div>
-                </div>
-              </div>
-              <div class="modal-footer">
-              	##$.each(findServiceModel.resultTypeModel, function(key, obj) {##
-              	    <button type="button" class="btn btn-xs ##=(data.result==key) ? obj.color : 'btn-default'##" data-event="##:findServiceModel.setResult::data##" data-resultType="##=key##" data-fromMap="true">##=obj.label##</button>
-                ##});##
-              </div>
-            </div><!-- /.modal-content -->
-          </div><!-- /.modal-dialog -->
-          </script>
-        </div><!-- /.modal -->
-        
+
     </div>
 <datalist id="findServiceMapKuList">
     <option value=""></option>
@@ -137,41 +95,7 @@
     <option value="川崎市多摩区">川崎市多摩区</option>
     <option value="川崎市宮前区">川崎市宮前区</option>
     <option value="川崎市麻生区">川崎市麻生区</option>
-<--
-    <option value="相模原市緑区">相模原市緑区</option>
-    <option value="相模原市中央区">相模原市中央区</option>
-    <option value="相模原市南区">相模原市南区</option>
-    <option value="横須賀市">横須賀市</option>
-    <option value="平塚市">平塚市</option>
-    <option value="鎌倉市">鎌倉市</option>
-    <option value="藤沢市">藤沢市</option>
-    <option value="小田原市">小田原市</option>
-    <option value="茅ヶ崎市">茅ヶ崎市</option>
-    <option value="逗子市">逗子市</option>
-    <option value="三浦市">三浦市</option>
-    <option value="秦野市">秦野市</option>
-    <option value="厚木市">厚木市</option>
-    <option value="大和市">大和市</option>
-    <option value="伊勢原市">伊勢原市</option>
-    <option value="海老名市">海老名市</option>
-    <option value="座間市">座間市</option>
-    <option value="南足柄市">南足柄市</option>
-    <option value="綾瀬市">綾瀬市</option>
-    <option value="三浦郡葉山町">三浦郡葉山町</option>
-    <option value="高座郡寒川町">高座郡寒川町</option>
-    <option value="中郡大磯町">中郡大磯町</option>
-    <option value="中郡二宮町">中郡二宮町</option>
-    <option value="足柄上郡中井町">足柄上郡中井町</option>
-    <option value="足柄上郡大井町">足柄上郡大井町</option>
-    <option value="足柄上郡松田町">足柄上郡松田町</option>
-    <option value="足柄上郡山北町">足柄上郡山北町</option>
-    <option value="足柄上郡開成町">足柄上郡開成町</option>
-    <option value="足柄下郡箱根町">足柄下郡箱根町</option>
-    <option value="足柄下郡真鶴町">足柄下郡真鶴町</option>
-    <option value="足柄下郡湯河原町">足柄下郡湯河原町</option>
-    <option value="愛甲郡愛川町">愛甲郡愛川町</option>
-    <option value="愛甲郡清川村">愛甲郡清川村</option>
--->
+
 </datalist>
 <datalist id="findServiceFindFromList">
     <option value=""></option>
@@ -490,6 +414,12 @@ if(data.list) {
             					</td>
             					<td>
             					    <div class="btn-group">
+                                        
+                                        <button type="button" class="btn ##=findServiceModel.resultTypeModel[obj.result || 0].color## btn-xs dropdown-toggle" data-event="##:findServiceModel.openVisit##">
+                                            ##=findServiceModel.resultTypeModel[obj.result || 0].label## <span class="caret"></span>
+                                        </button>
+                                        
+                                        <!--
                 					    <button type="button" class="btn ##=findServiceModel.resultTypeModel[obj.result || 0].color## btn-xs dropdown-toggle" data-toggle="dropdown">
                                             ##=findServiceModel.resultTypeModel[obj.result || 0].label## <span class="caret"></span>
                                         </button>
@@ -502,6 +432,7 @@ if(data.list) {
                                             <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="-2" class="##=(obj.result==-2) ? 'btn-danger' : 'btn-default'##">住所不明</a></li>
                                             <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="0" class="##=(!obj.result || obj.result==0) ? 'btn-info' : 'btn-default'##">未設定</a></li>
                                         </ul>
+                                        -->
                                     </div>
             					</td>
                                 <td>##=obj.findServiceDate##</td>
@@ -557,8 +488,45 @@ if(data.list) {
     <div id="loadingModal" class="modal" data-keyboard="false" tabindex="-1" role="dialog" data-bind-tmpl-id="loadingBar" data-tmpl-src="./tmpl/tmpl.common.html">
     </div>
     
+    <div class="modal" id="searchedMapModal" data-backdrop="false">
+<script type="text/tmpl" data-tmpl-id="searchedMapModal">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title">##=data.findServiceAddress2 + data.findServiceAddress3 + data.findServiceAddress4 + ' ' + data.findServiceAddress5+ ' ' + data.findServiceName##</h4>
+          </div>
+          <div class="modal-body br-form">
+            <input type="hidden" name="##=Bridge.idName##" value="##=data[Bridge.idName]##">
+            <div class="row">
+    			<div class="form-group col-sm-12">
+    				<label for="findServiceComment" class="">コメント</label>
+    				<textarea class="form-control" rows="5" id="searchedMapModalComment" name="findServiceComment" data-event="##:{keydown: function(e){
+    				    $('#searchedMapModalSubmitButton').removeClass('disabled');
+    				}}##">##=data.findServiceComment##</textarea>
+    			</div>
+            </div>
+            <div class="row">
+    			<div class="form-group col-sm-12">
+    			    <button type="submit" id="searchedMapModalSubmitButton" class="btn btn-primary disabled" data-event="##:findServiceModel.saveComment::data##">コメント登録</button>
+    			</div>
+            </div>
+          </div>
+          <div class="modal-footer">
+          	##$.each(findServiceModel.resultTypeModel, function(key, obj) {##
+          	    <button type="button" class="btn btn-xs ##=(data.result==key) ? obj.color : 'btn-default'##" data-event="##:findServiceModel.setResult::data##" data-resultType="##=key##" data-fromMap="true">##=obj.label##</button>
+            ##});##
+          </div>
+          
+        </div><!-- /.modal-content -->
+        
+      </div><!-- /.modal-dialog -->
+</script>
+    </div><!-- /.modal -->    
+    
     <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDejNEedWnONLDewIynvzf6Wv-aI4sd3eU&amp;sensor=true"></script>
     <script src="js/jquery-2.1.0.min.js"></script>
+    <script src="js/jquery-ui.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="js/underscore.js"></script>
     <script src="js/bridge.core.js"></script>
@@ -751,6 +719,12 @@ if(data.list) {
             saveCancel: {click: function(e) {
                 findServiceModel.listAreaReset(false);
             }},
+            
+            openVisit: {click: function(e) {
+                Bridge.tmplTool.render('searchedMapModal', e.data);
+                $('#searchedMapModal').modal('show');
+            
+            }},
             restoreFromPrev: {click: function(e) {
                 var findServiceModel_savedData = Bridge.localStorageTool.get('findServiceModel_savedData');
                 
@@ -882,7 +856,7 @@ if(data.list) {
             }},
             
             showAdminMap: {click: function(e) {
-
+                var listData = findServiceModel.listData;
                 var $adminMapArea = $('#adminMapArea');
                 
                 $adminMapArea.toggleClass('hidden');
@@ -894,6 +868,7 @@ if(data.list) {
                 }
                 $('#adminMapToggleButton').addClass('btn-warning');
                 
+                var $adminMapPanelFileNo = $('#adminMapPanelFileNo');
                 if (!findServiceModel.adminMap) {
                     var mapOptions = {
                         center: {lat: parseFloat(listData[0].findServiceLat), lng: parseFloat(listData[0].findServiceLng)},
@@ -901,50 +876,99 @@ if(data.list) {
                         mapTypeId: google.maps.MapTypeId.ROADMAP
                     };
                     var map_canvas = document.getElementById("adminMap");
-                    //map_canvas.style.height = '400px';
+                    var $adminMapPanelList = $('#adminMapPanelList');
+                    var $adminMapPanelCount = $('#adminMapPanelCount');
+                    
                     findServiceModel.adminMap = new google.maps.Map(map_canvas, mapOptions);
+                    google.maps.event.addListener(findServiceModel.adminMap, "bounds_changed", function() {
+                        var fileNo = $adminMapPanelFileNo.val();
+                        var data = null;
+                        var inAreaMarkers = [];
+                        $adminMapPanelList.empty();
+                        for (var ind in listData) {
+                            data = listData[ind];
+                            if (map.getBounds().contains(new google.maps.LatLng(parseFloat(data.findServiceLat), parseFloat(data.findServiceLng)))) {
+                                inAreaMarkers.push(data);
+                                $('<li class="list-group-item" data-id="' + data[Bridge.idName] + '">'
+                                    + data.findServiceAddress3 
+                                    + data.findServiceAddress4 
+                                    + ' ' + data.findServiceAddress5 
+                                    + ' ' + data.findServiceName
+                                    + '<span class="badge" ' + (fileNo && data.fileno && data.fileno != fileNo ? 'style="background-color:red;"' : '') + '>' + (data.fileno || '-') + '</span>'
+                                    + '</li>').appendTo($adminMapPanelList)[0].objData = data;
+                            }
+                        }
+                        $adminMapPanelCount.html(inAreaMarkers.length);
+                        resetMapMarker(inAreaMarkers);
+                    });
                 }
+                
                 var map = findServiceModel.adminMap;
                 
-                if (!findServiceModel.searchedMarkers) {
+                if (!findServiceModel.adminMapMarkers) {
                     findServiceModel.adminMapMarkers = [];
                 }
                 
-                var searchedMarkers = findServiceModel.searchedMarkers;
-                
-                for(var ind in adminMapMarkers) {
-                    adminMapMarkers[ind].setMap(null);
+                var resetMapMarker = function(markerDataList) {
+                    var fileNo = $adminMapPanelFileNo.val();
+                    var adminMapMarkers = findServiceModel.adminMapMarkers;
+                    //findServiceModel.adminMapDataList = markerDataList;
+                    
+                    for(var ind in adminMapMarkers) {
+                        adminMapMarkers[ind].setMap(null);
+                    }
+                    
+                    var listLat = [];
+                    var listLng = [];
+                    var marker, data = null;
+                    $.each(markerDataList, function(ind, data) {
+                    //for (var ind in listData) {
+                        //data = listData[ind];
+                        if (!data.findServiceLat || !data.findServiceLng) {
+                            return;
+                        }
+                        listLat.push(data.findServiceLat);
+                        listLng.push(data.findServiceLng);
+                        marker = new google.maps.Marker({
+                            icon : 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || 'N') + '|' + ( data.fileno ? '00a8e6' : 'e63e00') + '|000000',
+                            map: map,
+                            position: {lat: parseFloat(data.findServiceLat), lng: parseFloat(data.findServiceLng)},
+                            draggable: false,
+                        });
+                        
+                        //google.maps.event.addListener.call(this, marker, 'click', function(e) {
+    
+                        //});
+                        adminMapMarkers.push(marker);
+                    });
+                    var sw = new google.maps.LatLng(Math.min.apply({}, listLat), Math.min.apply({}, listLng));
+                    var ne = new google.maps.LatLng(Math.max.apply({}, listLat), Math.max.apply({}, listLng));
+                    var bounds = new google.maps.LatLngBounds(sw, ne);
+                    return bounds;
                 }
                 
-                var listLat = [];
-                var listLng = [];
-                var marker, data = null;
-                $.each(listData, function(ind, data) {
-                //for (var ind in listData) {
-                    //data = listData[ind];
-                    if (!data.findServiceLat || !data.findServiceLng) {
-                        return;
-                    }
-                    listLat.push(data.findServiceLat);
-                    listLng.push(data.findServiceLng);
-                    marker = new google.maps.Marker({
-                        //icon : 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + idx + '|00a8e6|000000',
-                        map: map,
-                        position: {lat: parseFloat(data.findServiceLat), lng: parseFloat(data.findServiceLng)},
-                        draggable: false
-                    });
-                    google.maps.event.addListener.call(this, marker, 'click', function(e) {
-
-                    });
-                    searchedMarkers.push(marker);
-                });
-                
-                var sw = new google.maps.LatLng(Math.min.apply({}, listLat), Math.min.apply({}, listLng));
-                var ne = new google.maps.LatLng(Math.max.apply({}, listLat), Math.max.apply({}, listLng));
-                var bounds = new google.maps.LatLngBounds(sw, ne);
+                var bounds = resetMapMarker(listData);
                 map.fitBounds(bounds);
             }},
             
+            saveFileNo: {click: function(e) {
+                var adminMapPanelFileNo = $('#adminMapPanelFileNo').val();
+                if (!confirm('リスト内のすべての区域の区域番号を上書きします。宜しいでしょうか？')) {
+                    return;
+                }
+                
+                $("#adminMapPanelList li").each(function(ind, obj) {
+                    findServiceConn.reqUpdate('fileNoUpdate', obj.dataset.id, {
+                            fileno: adminMapPanelFileNo
+                        }).request(function(data) {
+                        commonModel.messageAreaReset(data);
+                        var fileno = data['fileNoUpdate'].fileno;
+                        $(obj).find('.badge').html(fileno);
+                        obj.objData.fileno = fileno;
+                    });
+                });
+                
+            }},
             
             showSearchedMap: {click: function(e) {
                 var listData = findServiceModel.listData;
@@ -1002,6 +1026,8 @@ if(data.list) {
                     google.maps.event.addListener.call(this, marker, 'click', function(e) {
                         Bridge.tmplTool.render('searchedMapModal', data);
                         $('#searchedMapModal').modal('show');
+                        this.setIcon('http://maps.google.co.jp/mapfiles/ms/icons/blue-dot.png');
+                        findServiceModel.selectedMapMarker = this;
                     });
                     searchedMarkers.push(marker);
                 });
@@ -1157,6 +1183,12 @@ if(data.list) {
 	            searchComparison : "$regex",
 	            label: "町村",
 	            list: "townNameList"
+	        },
+	        search_fileno: {
+	            searchField: "fileno",
+	            searchComparison : "$eq",
+	            label: "区域番号",
+	            style: "width:100px;"
 	        }
 	    }
         findServiceModel.resultTypeModel = {
@@ -1367,6 +1399,25 @@ var Workspace = Bridge.Router.extend({
         });
     }
 });
+
+$('#searchedMapModal').on('hidden.bs.modal', function (e) {
+    if (findServiceModel.selectedMapMarker) {
+        findServiceModel.selectedMapMarker.setIcon(null);
+    }
+}).draggable({
+    handle: ".modal-header"
+});
+
+/*
+$('#searchedMapModal').delegate(".modal-content", "load",  function() {
+    alert*('ddd');
+  $('#searchedMapModal .modal-content').position({
+  my: "right bottom",
+  at: "right bottom",
+  of: "#searchedMap"
+});
+});
+*/
 
 /*
 {
