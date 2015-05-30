@@ -394,11 +394,12 @@ var findServiceModel = {
             
             findServiceModel.adminMap = new google.maps.Map(map_canvas, mapOptions);
             google.maps.event.addListener(findServiceModel.adminMap, "bounds_changed", function() {
+                var listData = findServiceModel.listData;
                 var fileNo = $adminMapPanelFileNo.val();
                 var data = null;
                 var inAreaMarkers = [];
                 $adminMapPanelList.empty();
-                for (var ind in findServiceModel.listData) {
+                for (var ind in listData) {
                     data = listData[ind];
                     if (!data.findServiceLat || !data.findServiceLng) {
                         continue;
