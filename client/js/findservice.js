@@ -398,7 +398,7 @@ var findServiceModel = {
                 var data = null;
                 var inAreaMarkers = [];
                 $adminMapPanelList.empty();
-                for (var ind in listData) {
+                for (var ind in findServiceModel.listData) {
                     data = listData[ind];
                     if (!data.findServiceLat || !data.findServiceLng) {
                         continue;
