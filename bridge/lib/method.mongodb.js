@@ -110,7 +110,6 @@ exports.reqInsert = function(reqData, callback){
 };
 
 
-
 exports.reqUpdate = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
@@ -126,6 +125,36 @@ exports.reqUpdate = function(reqData, callback, req){
             }
             
             callback(reqData.data);
+        });
+    });
+};
+
+exports.reqUpdateOperator = function(reqData, callback, req){
+    mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
+        if(err) throw err;
+        var query = req.query ? req.query : {};
+        //query[idName] = reqData.data[idName];
+        query[idName] = getId(reqData.data[idName], reqData.dataName);
+        delete reqData.data[idName];
+        var updateData = reqData.operator;
+        
+        if (updateData['$set']) {
+            var $setData = reqData.data;
+            for (var key in $setData) {
+                updateData['$set'][key] = $setData[key];
+            }
+        } else {
+            updateData['$set'] = reqData.data;
+        }
+        
+        db.collection(reqData.dataName).update(query, updateData, function (err, docs) {
+            if(err) throw err;
+
+            if (docs == 0) {
+                callback({});
+            }
+            
+            callback(updateData);
         });
     });
 };

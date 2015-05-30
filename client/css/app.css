@@ -114,3 +114,40 @@ nav .panel-body {
 table .open>.dropdown-menu {
   display: flex;
 }
+
+
+.list-group-item.collapse {
+  display: none;
+}
+
+.list-group-item.collapse.in {
+  display: block;
+}
+
+.modal-content>.list-group,
+.modal-content>.panel-collapse>.list-group {
+  margin-bottom: 0px;
+}
+
+.modal-content>.list-group .list-group-item,
+.modal-content>.panel-collapse>.list-group .list-group-item {
+  border-width: 1px 0;
+  border-radius: 0;
+}
+
+.visit-right-side {
+  position: absolute;
+  right: -40px;
+  top: -1px;;
+}
+
+.visit-right-side .btn {
+  border-radius: 0px;
+  padding: 10px 14px;
+}
+
+.btn-group .btn.active {
+  color: #fff;
+  background-color: #5cb85c;
+  border-color: #4cae4c;
+}

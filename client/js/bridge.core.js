@@ -744,6 +744,15 @@
             });
             return this;
         },
+        reqUpdateOperator : function (key, id, data) {
+            this.combine({
+                "key" : key,
+                "method" : "reqUpdateOperator",
+                "data" : this.addId({}, id),
+                "operator" : data
+            });
+            return this;
+        },
         reqSave : function (key, data) {
             this.combine(extend({
                 "key" : key,

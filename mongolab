@@ -59,3 +59,17 @@ db.jpon2012.find().forEach(function(doc) {db.jpon2012.update({_id:doc._id},{$set
 db.find_service.find().snapshot().forEach(function(doc){ 
     var id=doc._id; doc._id = ObjectId(doc._id); db.find_service_objid.insert(doc);
 })
+
+db.find_service.find().snapshot().forEach(function(doc){ 
+    doc.findServiceVisitHistory = [{
+            result: doc.result,
+            comment: doc.findServiceComment,
+            last_update_name: doc.last_update_name,
+            last_update_date: doc.last_update_date,
+            last_update_user: doc.last_update_user,
+            first_update_name: doc.last_update_name,
+            first_update_date: doc.last_update_date,
+            first_update_user: doc.last_update_user
+    }];
+    db.find_service_visit.insert(doc);
+})
