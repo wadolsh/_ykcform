@@ -398,7 +398,7 @@ var findServiceModel = {
                 var data = null;
                 var inAreaMarkers = [];
                 $adminMapPanelList.empty();
-                for (var ind in listData) {
+                for (var ind in findServiceModel.listData) {
                     data = listData[ind];
                     if (map.getBounds().contains(new google.maps.LatLng(parseFloat(data.findServiceLat), parseFloat(data.findServiceLng)))) {
                         inAreaMarkers.push(data);

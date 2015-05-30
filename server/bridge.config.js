@@ -73,6 +73,9 @@ exports.loginMethod = {
                         findServiceLng: {
                             _write: 0
                         },
+                        findServiceVisitHistory: {
+                            _write: 0
+                        }
                     }
                 }
                 , jpon2012: {_write : 1, _read : 0}
