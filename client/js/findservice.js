@@ -398,8 +398,11 @@ var findServiceModel = {
                 var data = null;
                 var inAreaMarkers = [];
                 $adminMapPanelList.empty();
-                for (var ind in findServiceModel.listData) {
+                for (var ind in listData) {
                     data = listData[ind];
+                    if (!data.findServiceLat || !data.findServiceLng) {
+                        continue;
+                    }
                     if (map.getBounds().contains(new google.maps.LatLng(parseFloat(data.findServiceLat), parseFloat(data.findServiceLng)))) {
                         inAreaMarkers.push(data);
                         $('<li class="list-group-item" data-id="' + data[Bridge.idName] + '">'
