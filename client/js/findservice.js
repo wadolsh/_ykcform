@@ -447,12 +447,12 @@ var findServiceModel = {
                             inAreaMarkers.push(data);
                             var $li = $('<li class="list-group-item" data-id="' + data[Bridge.idName] + '">'
                                 + '<label><input type="checkbox" ' + (!data.fileno ? 'checked' : '') + ' data-fileno="' + data.fileno + '"> '
+                                + '<span class="badge" ' + (fileNo && data.fileno && data.fileno != fileNo ? 'style="background-color:red;"' : '') + '>' + (data.fileno || '-') + '</span> '
                                 + data.findServiceAddress3 
                                 + data.findServiceAddress4 
                                 + ' ' + data.findServiceAddress5 
                                 + ' ' + data.findServiceName
                                 + '</label>'
-                                + '<span class="badge" ' + (fileNo && data.fileno && data.fileno != fileNo ? 'style="background-color:red;"' : '') + '>' + (data.fileno || '-') + '</span>'
                                 + '</li>').appendTo($adminMapPanelList);
                             
                             var $checkbox = $li.find(':checkbox').change(function(e){
