@@ -419,18 +419,7 @@ var findServiceModel = {
         var $adminMapPanelCount = $('#adminMapPanelCount');
         var $adminMapPanelTotalCount = $('#adminMapPanelTotalCount');
         
-        var $adminMapPanelFileNo = $('#adminMapPanelFileNo').change(function() {
-            listUpFunc();
-        }).click(function() {
-            var listData = findServiceModel.listData;
-            var data = null;
-            for (var ind in listData) {
-                data = listData[ind];
-                var marker = data.adminMapMarker;
-                var checked = marker.admiMapChekced;
-                marker.setIcon('https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || '') + '|' + ( !checked ? '00a8e6' : 'e63e00') + '|000000');
-            }
-        });
+        var $adminMapPanelFileNo = $('#adminMapPanelFileNo');
         if (!findServiceModel.adminMap) {
             var mapOptions = {
                 center: {lat: parseFloat(listData[0].findServiceLat), lng: parseFloat(listData[0].findServiceLng)},
@@ -486,6 +475,20 @@ var findServiceModel = {
                 $adminMapPanelTotalCount.html(inAreaMarkers.length);
                 return resetMapMarker(inAreaMarkers);
             }
+            
+            $adminMapPanelFileNo.keydown(function() {
+                listUpFunc();
+            }).click(function() {
+                var listData = findServiceModel.listData;
+                var data = null;
+                for (var ind in listData) {
+                    data = listData[ind];
+                    var marker = data.adminMapMarker;
+                    var checked = marker.admiMapChekced;
+                    marker.setIcon('https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || '') + '|' + ( !checked ? '00a8e6' : 'e63e00') + '|000000');
+                }
+            });
+            
             google.maps.event.addListener(findServiceModel.adminMap, 'idle', listUpFunc);
             //google.maps.event.addListener(findServiceModel.adminMap, "dragend", listUpFunc);
             //google.maps.event.addListener(findServiceModel.adminMap, "zoom_changed", listUpFunc);
@@ -575,6 +578,7 @@ var findServiceModel = {
     }},
     saveFileNo: {click: function(e) {
         var adminMapPanelFileNo = $('#adminMapPanelFileNo').val();
+        var adminMapPanelCount = $('#adminMapPanelCount').val();
         if (!confirm('リスト内選択されたすべての区域の区域番号を上書きします。宜しいでしょうか？')) {
             return;
         }
@@ -595,6 +599,9 @@ var findServiceModel = {
                 data.$checkbox.prop('checked', flag);
                 updateCount++;
                 $adminMapPanelUpdateCount.html(updateCount);
+                if (updateCount == adminMapPanelCount) {
+                    $('#adminMapPanelFileNo').keydown();
+                }
             });
         });
     }},
