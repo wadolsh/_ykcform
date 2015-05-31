@@ -26,6 +26,9 @@
                     <button type="button" id="adminMapToggleButton" class="btn btn-default btn-xs" aria-label="Left Align" data-event="##:findServiceModel.showAdminMap##">
                         <span class="glyphicon glyphicon-map-marker" aria-hidden="true">区域番号作業</span>
                     </button>
+                    <button type="button" class="btn btn-default btn-xs" data-event="##:{click:function(){refreshStorage();}}##">
+                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> 区域データ
+                    </button>
                     ##}##
                 </script>
             </div>
@@ -166,10 +169,6 @@
                                                                     click:function(e){
                                                                         findServiceModel.matchAddress();
                                                                     }}##">検索</button>
-                                                                        
-                            <button type="button" class="btn btn-default" data-event="##:{click:function(){refreshStorage();}}##">
-                                <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> 区域データ
-                            </button>
                             <button type="button" data-event="##:findServiceModel.setToNew##" class="btn btn-default ##=(data.isNew==1) ? 'btn-success' : 'btn-default'##">新規</button>
             			    <button type="button" data-event="##:findServiceModel.setToDuplicate##" class="btn btn-default ##=(data.isNew==2) ? 'btn-success' : 'btn-default'##">既存</button>
                         </form>
@@ -681,7 +680,6 @@ if(data.list) {
                     data.page = findServiceModel.page;
                     Bridge.tmplTool.render('findServiceTable', data);
             });
-           
         },
         searchById: function(id) {
             var searchParm = {$query: {'_id': id}, $orderby: {findServiceDate : -1}};
@@ -755,34 +753,6 @@ if(data.list) {
     });
     });
     */
-
-/*
-{
-    "_id": "5525e8f831eb1711007e2c51",
-    "findServiceDate": "2015-04-09",
-    "findServiceFindFrom": "ゼンリン",
-    "findServiceMapKu": "川崎市中原区",
-    "findServiceMapPage": "2",
-    "findServiceAddress1": "神奈川県",
-    "findServiceAddress2": "川崎市中原区",
-    "findServiceAddress3": "宮内",
-    "findServiceAddress4": "2丁目34-7-2",
-    "findServiceName": "リー",
-    "findServiceLat": "35.5949682",
-    "findServiceLng": "139.63200729999994",
-    "findServiceComment": "",
-    "last_update_user": "532960fea8900d0b00a70778",
-    "last_update_date": "2015-04-16 06:10:47",
-    "isNew": 1,
-    "last_update_name": "チェ ソンホ",
-    "findServiceAddress5": ""
-}
-*/
-
-
-
-
-        
         //if (Bridge.localStorageTool.get('keepLogin')) {
         //    commonModel.loginChecker();
         //} else {

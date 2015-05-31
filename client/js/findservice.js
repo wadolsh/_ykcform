@@ -50,12 +50,46 @@ var findServiceModel = {
 	}},
 	toCsv: {click: function(e) {
 	    var search_findService = Bridge.sessionStorageTool.get('search_findService') || {};
-        var csv = JSON2CSV(findServiceModel.listData, true, true, escape('\r\n'));
+	    var eData = null;
+	    var lData = null;
+	    var hasFlag = false;
+	    var listData = findServiceModel.listData;
+	    var existDataList = [];
+	    var notExistDataList = [];
+	    /*
+	    var eDataList = [];
+	    for (var ind in exportdata) {
+	        eData = exportdata[ind];
+	        if (eData.id) {
+	            eDataList.push(eData);
+	        }
+	    }
+	    */
+	    
+	    for (var ind in listData) {
+	        hasFlag = false;
+	        lData = listData[ind];
+	        for (var ind2 in exportdata) {
+            	eData = exportdata[ind2];
+            	if (lData._id == eData.id) {
+                    hasFlag = true;
+                    existDataList.push(eData);
+                    eData.new_fileno = lData.fileno || '';
+                    break;
+                }
+	        }
+            if (!hasFlag) {
+                notExistDataList.push(lData);
+            }
+	    }
+
+        var trtr = JSON2CSV(existDataList, true, true, escape('\r\n'));
+        var addData = JSON2CSV(notExistDataList, true, true, escape('\r\n'));
         //window.open('data:text/csv;filename=exportData.csv;charset=utf-8,' + csv);
         
         var link = document.createElement('a');
         link.download = 'CSV_' + (search_findService.search_findServiceCityward || '') + (search_findService.search_findServiceTown || '') + '.csv';
-        link.href = 'data:text/csv;charset=utf-8,' + csv;
+        link.href = 'data:text/csv;charset=utf-8,' + trtr + addData;
         link.click();
         
 	}},
