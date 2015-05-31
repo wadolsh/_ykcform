@@ -451,8 +451,9 @@ var findServiceModel = {
                                 + data.findServiceAddress4 
                                 + ' ' + data.findServiceAddress5 
                                 + ' ' + data.findServiceName
-                                + ' <span class="badge" ' + (fileNo && data.fileno && data.fileno != fileNo ? 'style="background-color:red;"' : '') + '>' + (data.fileno || '-') + '</span>'
-                                + '</label></li>').appendTo($adminMapPanelList);
+                                + '</label>'
+                                + '<span class="badge" ' + (fileNo && data.fileno && data.fileno != fileNo ? 'style="background-color:red;"' : '') + '>' + (data.fileno || '-') + '</span>'
+                                + '</li>').appendTo($adminMapPanelList);
                             
                             var $checkbox = $li.find(':checkbox').change(function(e){
                                 var marker = data.adminMapMarker;
