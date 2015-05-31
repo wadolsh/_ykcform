@@ -402,9 +402,10 @@ var findServiceModel = {
 
                 var inAreaMarkers = [];
                 $adminMapPanelList.empty();
-                for (var ind in listData) {
-                    (function() {
-                        var data = listData[ind];
+                $.each(listData, function(ind, data) {
+                //for (var ind in listData) {
+                    //(function() {
+                        //var data = listData[ind];
                         if (!data.findServiceLat || !data.findServiceLng) {
                             return;
                         }
@@ -428,8 +429,8 @@ var findServiceModel = {
                             //data.$li = $li;
                             data.$checkbox = $checkbox;
                         }
-                    }).call(this);
-                };
+                    //}).call(this);
+                });
                 
                 countReset();
                 $adminMapPanelTotalCount.html(inAreaMarkers.length);
@@ -464,10 +465,11 @@ var findServiceModel = {
             var listLat = [];
             var listLng = [];
 
-            for(var ind in markerDataList) {
+            $.each(markerDataList, function(ind, data) {
+            //for(var ind in markerDataList) {
             //for (var ind in listData) {
-                (function() {
-                    var data = listData[ind];
+                //(function() {
+                    //var data = listData[ind];
                     if (!data.findServiceLat || !data.findServiceLng) {
                         return;
                     }
@@ -493,8 +495,8 @@ var findServiceModel = {
 
                     adminMapMarkerlist.push(data.adminMapMarker);
                     data.adminMapMarker.setMap(map);
-                }).call(this);
-            }
+                //}).call(this);
+            });
             var sw = new google.maps.LatLng(Math.min.apply({}, listLat), Math.min.apply({}, listLng));
             var ne = new google.maps.LatLng(Math.max.apply({}, listLat), Math.max.apply({}, listLng));
             var bounds = new google.maps.LatLngBounds(sw, ne);
