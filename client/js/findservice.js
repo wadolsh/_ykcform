@@ -559,7 +559,7 @@ var findServiceModel = {
         var bounds = resetMapMarker(listData);
         map.fitBounds(bounds);
     }},
-    searchFileNo: {click: function(e) {
+    searchFileNo: function(e) {
         var adminMapPanelSearchFileNo = $('#adminMapPanelSearchFileNo').val();
         var listData = findServiceModel.listData;
         var count = 0;
@@ -574,8 +574,8 @@ var findServiceModel = {
                 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' 
                     + (data.fileno || '') + '|' + ( data.fileno == adminMapPanelSearchFileNo ? 'e63e00' : 'fdf498') + '|000000');
         });
-        e.target.innerText = '検索: ' + count;
-    }},
+        $('#adminMapPanelSearchFileNoButton').html('検索: ' + count);
+    },
     saveFileNo: {click: function(e) {
         var adminMapPanelFileNo = $('#adminMapPanelFileNo').val();
         var adminMapPanelCount = $('#adminMapPanelCount').val();

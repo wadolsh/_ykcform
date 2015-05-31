@@ -55,9 +55,9 @@
                             $("#adminMapPanelList li :checkbox").prop('checked', true);
                         }}##">すべて選択</button>
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="区域番号" id="adminMapPanelSearchFileNo">
+                            <input type="text" class="form-control" placeholder="区域番号" id="adminMapPanelSearchFileNo" data-event="##:{click:findServiceModel.searchFileNo, keyup:findServiceModel.searchFileNo}##">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" data-event="##:findServiceModel.searchFileNo##">検索: 0</button>
+                                <button class="btn btn-default" type="button" id="adminMapPanelSearchFileNoButton">検索: 0</button>
                             </span>
                         </div>
                     </div>
