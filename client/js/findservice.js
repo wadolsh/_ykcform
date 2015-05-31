@@ -393,71 +393,102 @@ var findServiceModel = {
             var $adminMapPanelCount = $('#adminMapPanelCount');
             
             findServiceModel.adminMap = new google.maps.Map(map_canvas, mapOptions);
-            google.maps.event.addListener(findServiceModel.adminMap, "bounds_changed", function() {
+
+            var listUpFunc = function() {
                 var listData = findServiceModel.listData;
                 var fileNo = $adminMapPanelFileNo.val();
-                var data = null;
+
                 var inAreaMarkers = [];
                 $adminMapPanelList.empty();
                 for (var ind in listData) {
-                    data = listData[ind];
-                    if (!data.findServiceLat || !data.findServiceLng) {
-                        continue;
-                    }
-                    if (map.getBounds().contains(new google.maps.LatLng(parseFloat(data.findServiceLat), parseFloat(data.findServiceLng)))) {
-                        inAreaMarkers.push(data);
-                        $('<li class="list-group-item" data-id="' + data[Bridge.idName] + '">'
-                            + data.findServiceAddress3 
-                            + data.findServiceAddress4 
-                            + ' ' + data.findServiceAddress5 
-                            + ' ' + data.findServiceName
-                            + '<span class="badge" ' + (fileNo && data.fileno && data.fileno != fileNo ? 'style="background-color:red;"' : '') + '>' + (data.fileno || '-') + '</span>'
-                            + '</li>').appendTo($adminMapPanelList)[0].objData = data;
-                    }
-                }
+                    (function() {
+                        var data = listData[ind];
+                        if (!data.findServiceLat || !data.findServiceLng) {
+                            return;
+                        }
+                        if (map.getBounds().contains(new google.maps.LatLng(parseFloat(data.findServiceLat), parseFloat(data.findServiceLng)))) {
+                            inAreaMarkers.push(data);
+                            var $li = $('<li class="list-group-item" data-id="' + data[Bridge.idName] + '">'
+                                + '<label><input type="checkbox" ' + (!data.fileno ? 'checked' : '') + ' data-fileno="' + data.fileno + '"> '
+                                + data.findServiceAddress3 
+                                + data.findServiceAddress4 
+                                + ' ' + data.findServiceAddress5 
+                                + ' ' + data.findServiceName
+                                + '<span class="badge" ' + (fileNo && data.fileno && data.fileno != fileNo ? 'style="background-color:red;"' : '') + '>' + (data.fileno || '-') + '</span>'
+                                + '</label></li>').appendTo($adminMapPanelList);
+                            
+                            
+                            var $checkbox = $li.find(':checkbox').change(function(e){
+                                var marker = data.adminMapMarker;
+                                var checked = e.target.checked;
+                                marker.setIcon('https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || '') + '|' + ( !checked ? '00a8e6' : 'e63e00') + '|000000');
+                            });
+                            $li[0].objData = data;
+                            //data.$li = $li;
+                            data.$checkbox = $checkbox;
+                        }
+                    }).call(this);
+                };
+
                 $adminMapPanelCount.html(inAreaMarkers.length);
-                resetMapMarker(inAreaMarkers);
-            });
+                return resetMapMarker(inAreaMarkers);
+            }
+            google.maps.event.addListener(findServiceModel.adminMap, 'idle', listUpFunc);
+            //google.maps.event.addListener(findServiceModel.adminMap, "dragend", listUpFunc);
+            //google.maps.event.addListener(findServiceModel.adminMap, "zoom_changed", listUpFunc);
+            //listUpFunc();
         }
         
         var map = findServiceModel.adminMap;
         
-        if (!findServiceModel.adminMapMarkers) {
-            findServiceModel.adminMapMarkers = [];
+        if (!findServiceModel.adminMapMarkerlist) {
+            findServiceModel.adminMapMarkerlist = [];
         }
         
         var resetMapMarker = function(markerDataList) {
             var fileNo = $adminMapPanelFileNo.val();
-            var adminMapMarkers = findServiceModel.adminMapMarkers;
-            //findServiceModel.adminMapDataList = markerDataList;
+            var adminMapMarkerlist = findServiceModel.adminMapMarkerlist;
+            findServiceModel.adminMapDataList = markerDataList;
             
-            for(var ind in adminMapMarkers) {
-                adminMapMarkers[ind].setMap(null);
+            for(var ind in adminMapMarkerlist) {
+                adminMapMarkerlist[ind].setMap(null);
             }
+            adminMapMarkerlist.length = 0;
             
             var listLat = [];
             var listLng = [];
-            var marker, data = null;
-            $.each(markerDataList, function(ind, data) {
-            //for (var ind in listData) {
-                //data = listData[ind];
-                if (!data.findServiceLat || !data.findServiceLng) {
-                    return;
-                }
-                listLat.push(data.findServiceLat);
-                listLng.push(data.findServiceLng);
-                marker = new google.maps.Marker({
-                    icon : 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || 'N') + '|' + ( data.fileno ? '00a8e6' : 'e63e00') + '|000000',
-                    map: map,
-                    position: {lat: parseFloat(data.findServiceLat), lng: parseFloat(data.findServiceLng)},
-                    draggable: false,
-                });
-                
-                //google.maps.event.addListener.call(this, marker, 'click', function(e) {
 
-                //});
-                adminMapMarkers.push(marker);
-            });
+            for(var ind in markerDataList) {
+            //for (var ind in listData) {
+                (function() {
+                    var data = listData[ind];
+                    if (!data.findServiceLat || !data.findServiceLng) {
+                        return;
+                    }
+                    
+                    listLat.push(data.findServiceLat);
+                    listLng.push(data.findServiceLng);
+                    
+                    if (!data.adminMapMarker) {
+                        data.adminMapMarker = new google.maps.Marker({
+                            icon : 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || '') + '|' + ( data.fileno ? '00a8e6' : 'e63e00') + '|000000',
+                            map: map,
+                            position: {lat: parseFloat(data.findServiceLat), lng: parseFloat(data.findServiceLng)},
+                            draggable: false,
+                        });
+                        
+                        google.maps.event.addListener.call(this, data.adminMapMarker, 'click', function(e) {
+                            var $checkbox = data.$checkbox;
+                            $checkbox.prop('checked', !$checkbox.prop('checked'));
+                            $checkbox.change();
+                        });
+                        
+                    }
+                    
+                    adminMapMarkerlist.push(data.adminMapMarker);
+                    data.adminMapMarker.setMap(map);
+                }).call(this);
+            }
             var sw = new google.maps.LatLng(Math.min.apply({}, listLat), Math.min.apply({}, listLng));
             var ne = new google.maps.LatLng(Math.max.apply({}, listLat), Math.max.apply({}, listLng));
             var bounds = new google.maps.LatLngBounds(sw, ne);
@@ -470,11 +501,11 @@ var findServiceModel = {
     
     saveFileNo: {click: function(e) {
         var adminMapPanelFileNo = $('#adminMapPanelFileNo').val();
-        if (!confirm('リスト内のすべての区域の区域番号を上書きします。宜しいでしょうか？')) {
+        if (!confirm('リスト内選択されたすべての区域の区域番号を上書きします。宜しいでしょうか？')) {
             return;
         }
         
-        $("#adminMapPanelList li").each(function(ind, obj) {
+        $("#adminMapPanelList li:has(input:checked)").each(function(ind, obj) {
             findServiceConn.reqUpdate('fileNoUpdate', obj.dataset.id, {
                     fileno: adminMapPanelFileNo
                 }).request(function(data) {

@@ -36,7 +36,12 @@
         each = Bridge.each = _.each;
     }
 
-
+    var bind = Bridge.bind = function (fn, scope) {
+        return function () {
+            fn.apply(scope, arguments);
+            //fn.call
+        };
+    }
 
     // When customizing `templateSettings`, if you don't want to define an
     // interpolation, evaluation or escaping regex, we need one that is
