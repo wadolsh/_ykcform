@@ -43,23 +43,30 @@
             <script type="text/tmpl" data-tmpl-id="adminMapPanelArea" data-tmpl-option='{"render": true}'>
             <div class="collapse in" id="adminMapPanel">
                 <div class="panel panel-default" style="margin-bottom:0px">
-                  <div class="panel-heading"><span class="badge" id="adminMapPanelCount">0</span> 区域番号設定</div>
-                  <div class="panel-body">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="区域番号" id="adminMapPanelFileNo">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button" data-event="##:findServiceModel.saveFileNo##">登録</button>
-                        </span>
+                    <div class="panel-heading">
+                        全件:<span class="badge" id="adminMapPanelTotalCount">0</span>
+                        チェック有:<span class="badge" id="adminMapPanelCount">0</span>
+                        更新完了:<span class="badge" id="adminMapPanelUpdateCount">0</span>
+                        
+                        <button class="btn btn-default" type="button" data-event="##:{click:function(e) {
+                            $("#adminMapPanelList li :checkbox").prop('checked', true);
+                        }}##">すべて選択</button>
                     </div>
-                  </div>
-                  <!-- List group -->
-                  <ul class="list-group" id="adminMapPanelList" style="max-height:660px;overflow-y:auto;">
-                  </ul>
+                    <div class="panel-body">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="区域番号" id="adminMapPanelFileNo">
+                            <span class="input-group-btn">
+                                <button class="btn btn-default" type="button" data-event="##:findServiceModel.saveFileNo##">登録</button>
+                            </span>
+                        </div>
+                    </div>
+                    <ul class="list-group" id="adminMapPanelList" style="max-height:660px;overflow-y:auto;">
+                    </ul>
                 </div>
             </div>
 
             <button class="btn btn-primary" style="margin-left:290px" type="button" data-toggle="collapse" data-target="#adminMapPanel">管理パネル</button>
-        </script>
+            </script>
         </div>
         
         <div id="adminMap" style="width:1123px; height:792px;">
