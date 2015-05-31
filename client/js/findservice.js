@@ -419,7 +419,9 @@ var findServiceModel = {
         var $adminMapPanelCount = $('#adminMapPanelCount');
         var $adminMapPanelTotalCount = $('#adminMapPanelTotalCount');
         
-        var $adminMapPanelFileNo = $('#adminMapPanelFileNo');
+        var $adminMapPanelFileNo = $('#adminMapPanelFileNo').change(function() {
+            listUpFunc();
+        });
         if (!findServiceModel.adminMap) {
             var mapOptions = {
                 center: {lat: parseFloat(listData[0].findServiceLat), lng: parseFloat(listData[0].findServiceLng)},
@@ -450,7 +452,7 @@ var findServiceModel = {
                             //}
                             var $li = $('<li class="list-group-item" data-id="' + data[Bridge.idName] + '">'
                                 + '<label><input type="checkbox" ' + (data.adminMapMarker.admiMapChekced ? 'checked' : '') + ' data-fileno="' + data.fileno + '"> '
-                                + '<span class="badge" ' + (fileNo && data.fileno && data.fileno != fileNo ? 'style="background-color:red;"' : '') + '>' + (data.fileno || '-') + '</span> '
+                                + '<span class="badge" ' + (fileNo && data.fileno && data.fileno == fileNo ? 'style="background-color:red;"' : '') + '>' + (data.fileno || '-') + '</span> '
                                 + data.findServiceAddress3 
                                 + data.findServiceAddress4 
                                 + ' ' + data.findServiceAddress5 
@@ -545,7 +547,20 @@ var findServiceModel = {
         var bounds = resetMapMarker(listData);
         map.fitBounds(bounds);
     }},
-    
+    searchFileNo: {click: function(e) {
+        var adminMapPanelSearchFileNo = $('#adminMapPanelSearchFileNo').val();
+        var adminMapDataList = findServiceModel.adminMapDataList;
+        var count = 0;
+        $.each(adminMapDataList, function(ind, data) {
+            if (data.fileno == adminMapPanelSearchFileNo) {
+                count++;
+            }
+            data.adminMapMarker.setIcon(
+                'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' 
+                    + (data.fileno || '') + '|' + ( data.fileno == adminMapPanelSearchFileNo ? 'e63e00' : 'fdf498') + '|000000');
+        });
+        e.target.innerText = '検索: ' + count;
+    }},
     saveFileNo: {click: function(e) {
         var adminMapPanelFileNo = $('#adminMapPanelFileNo').val();
         if (!confirm('リスト内選択されたすべての区域の区域番号を上書きします。宜しいでしょうか？')) {
