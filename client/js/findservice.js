@@ -476,7 +476,7 @@ var findServiceModel = {
                 return resetMapMarker(inAreaMarkers);
             }
             
-            $adminMapPanelFileNo.keydown(function() {
+            $adminMapPanelFileNo.keyup(function() {
                 listUpFunc();
             }).click(function() {
                 var listData = findServiceModel.listData;
@@ -600,7 +600,7 @@ var findServiceModel = {
                 updateCount++;
                 $adminMapPanelUpdateCount.html(updateCount);
                 if (updateCount == adminMapPanelCount) {
-                    $('#adminMapPanelFileNo').keydown();
+                    $('#adminMapPanelFileNo').keyup();
                 }
             });
         });
