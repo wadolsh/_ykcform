@@ -421,6 +421,15 @@ var findServiceModel = {
         
         var $adminMapPanelFileNo = $('#adminMapPanelFileNo').change(function() {
             listUpFunc();
+        }).click(function() {
+            var listData = findServiceModel.listData;
+            var data = null;
+            for (var ind in listData) {
+                data = listData[ind];
+                var marker = data.adminMapMarker;
+                var checked = marker.admiMapChekced;
+                marker.setIcon('https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || '') + '|' + ( !checked ? '00a8e6' : 'e63e00') + '|000000');
+            }
         });
         if (!findServiceModel.adminMap) {
             var mapOptions = {
@@ -549,9 +558,12 @@ var findServiceModel = {
     }},
     searchFileNo: {click: function(e) {
         var adminMapPanelSearchFileNo = $('#adminMapPanelSearchFileNo').val();
-        var adminMapDataList = findServiceModel.adminMapDataList;
+        var listData = findServiceModel.listData;
         var count = 0;
-        $.each(adminMapDataList, function(ind, data) {
+        $.each(listData, function(ind, data) {
+            if (!data.adminMapMarker) {
+                return;
+            }
             if (data.fileno == adminMapPanelSearchFileNo) {
                 count++;
             }
