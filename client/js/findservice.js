@@ -445,8 +445,11 @@ var findServiceModel = {
                         }
                         if (map.getBounds().contains(new google.maps.LatLng(parseFloat(data.findServiceLat), parseFloat(data.findServiceLng)))) {
                             inAreaMarkers.push(data);
+                            //if (data.adminMapMarker.admiMapChekced == undefined && !data.fileno) {
+                                
+                            //}
                             var $li = $('<li class="list-group-item" data-id="' + data[Bridge.idName] + '">'
-                                + '<label><input type="checkbox" ' + (!data.fileno ? 'checked' : '') + ' data-fileno="' + data.fileno + '"> '
+                                + '<label><input type="checkbox" ' + (data.adminMapMarker.admiMapChekced ? 'checked' : '') + ' data-fileno="' + data.fileno + '"> '
                                 + '<span class="badge" ' + (fileNo && data.fileno && data.fileno != fileNo ? 'style="background-color:red;"' : '') + '>' + (data.fileno || '-') + '</span> '
                                 + data.findServiceAddress3 
                                 + data.findServiceAddress4 
@@ -458,6 +461,7 @@ var findServiceModel = {
                             var $checkbox = $li.find(':checkbox').change(function(e){
                                 var marker = data.adminMapMarker;
                                 var checked = e.target.checked;
+                                marker.admiMapChekced = checked;
                                 marker.setIcon('https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || '') + '|' + ( !checked ? '00a8e6' : 'e63e00') + '|000000');
                             });
                             $li[0].objData = data;
@@ -519,7 +523,7 @@ var findServiceModel = {
                             position: {lat: parseFloat(data.findServiceLat), lng: parseFloat(data.findServiceLng)},
                             draggable: false,
                         });
-
+                        data.adminMapMarker.admiMapChekced = data.fileno ? false : true;
                         google.maps.event.addListener.call(this, data.adminMapMarker, 'click', function(e) {
                             var $checkbox = data.$checkbox;
                             $checkbox.prop('checked', !$checkbox.prop('checked'));
@@ -559,6 +563,9 @@ var findServiceModel = {
                 var data = obj.objData;
                 data.fileno = fileno;
                 data.adminMapMarker.setIcon('https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || '') + '|' + ( data.fileno ? '00a8e6' : 'e63e00') + '|000000');
+                var flag = adminMapPanelFileNo ? false : true;
+                data.adminMapMarker.admiMapChekced = flag;
+                data.$checkbox.prop('checked', flag);
                 updateCount++;
                 $adminMapPanelUpdateCount.html(updateCount);
             });
