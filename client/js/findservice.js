@@ -49,13 +49,14 @@ var findServiceModel = {
 			//alert(e.data.mark);
 	}},
 	toCsv: {click: function(e) {
-	    var search_findService = Bridge.sessionStorageTool.get('search_findService') || {};
+        var search_findService = Bridge.sessionStorageTool.get('search_findService') || {};
 	    var eData = null;
 	    var lData = null;
 	    var hasFlag = false;
 	    var listData = findServiceModel.listData;
 	    var existDataList = [];
 	    var notExistDataList = [];
+	    var csvText = null;
 	    
 	    /*
 	    var eDataList = [];
@@ -66,33 +67,42 @@ var findServiceModel = {
 	        }
 	    }
 	    */
-	    
-	    for (var ind in listData) {
-	        hasFlag = false;
-	        lData = listData[ind];
-	        for (var ind2 in exportdata) {
-            	eData = exportdata[ind2];
-            	if (lData._id == eData.id) {
-                    hasFlag = true;
-                    existDataList.push(eData);
-                    eData.new_fileno = lData.fileno || '';
-                    break;
+
+        var trtrCsvExportHeaderArray = $('#trtrCsvExportHeader').val().replace(/ /g, '').split(',');
+        var findServiceCsvExportHeaderArray = $('#findServiceCsvExportHeader').val().replace(/ /g, '').split(',');
+
+	    if (e.data == 2) {
+            for (var ind in listData) {
+    	        hasFlag = false;
+    	        lData = listData[ind];
+    	        for (var ind2 in exportdata) {
+                	eData = exportdata[ind2];
+                	if (lData._id == eData.id) {
+                        hasFlag = true;
+                        existDataList.push(eData);
+                        eData.new_fileno = lData.fileno || '';
+                        break;
+                    }
+    	        }
+                if (!hasFlag) {
+                    notExistDataList.push(lData);
                 }
-	        }
-            if (!hasFlag) {
-                notExistDataList.push(lData);
-            }
+    	    }
+
+            var trtrText = JSON2CSV(existDataList, trtrCsvExportHeaderArray, true, escape('\r\n'));
+            var addDataText = JSON2CSV(notExistDataList, findServiceCsvExportHeaderArray, true, escape('\r\n'));
+            csvText = trtrText + addDataText;
+	    } else {
+	        csvText = JSON2CSV(listData, findServiceCsvExportHeaderArray, true, escape('\r\n'));
 	    }
 
-        var trtr = JSON2CSV(existDataList, true, true, escape('\r\n'));
-        var addData = JSON2CSV(notExistDataList, true, true, escape('\r\n'));
         //window.open('data:text/csv;filename=exportData.csv;charset=utf-8,' + csv);
         
         var link = document.createElement('a');
         link.download = 'CSV_' + (search_findService.search_findServiceCityward || '')
         + (search_findService.search_findServiceTown || '') 
         + (search_findService.search_fileno || '') + '.csv';
-        link.href = 'data:text/csv;charset=utf-8,' + trtr + addData;
+        link.href = 'data:text/csv;charset=utf-8,' + csvText;
         link.click();
         
 	}},
@@ -267,7 +277,6 @@ var findServiceModel = {
     openVisit: {click: function(e) {
         Bridge.tmplTool.render('searchedMapModal', e.data);
         $('#searchedMapModal').modal('show');
-    
     }},
     restoreFromPrev: {click: function(e) {
         var findServiceModel_savedData = Bridge.localStorageTool.get('findServiceModel_savedData');
@@ -877,33 +886,33 @@ function refreshStorage() {
 }
 
 
-function JSON2CSV(objArray, labels, quote, newline) {
+function JSON2CSV(objArray, withHeader, quote, newline) {
+    var withHeader = withHeader || true;
+    var quote = quote || true;
     var newline = newline || '\n';
     var array = typeof objArray != 'object' ? JSON.parse(objArray) : objArray;
 
     var str = '';
     var line = '';
 
-    var head = array[0];
     var headArry = [];
-    for (var index in head) {
-        headArry.push(index);
-    } 
-
-    if (labels) {
-        if (quote) {
-            for (var index in head) {
-                var value = index + "";
-                line += '"' + value.replace(/"/g, '""') + '",';
-            }
+    if (withHeader) {
+        if (Array.isArray(withHeader)) {
+            headArry = withHeader;
         } else {
-            for (var index in head) {
-                line += index + ',';
-            }
+            var head = array[0];
+            for (var key in head) {
+                headArry.push(key);
+            } 
         }
-
-        line = line.slice(0, -1);
+        
+        if (quote) {
+            line = '"' + headArry.join('","') + '"';
+        } else {
+            line = headArry.join(',');
+        }
         str += line + newline;
+        
     }
 
     var obj = null;
@@ -913,12 +922,12 @@ function JSON2CSV(objArray, labels, quote, newline) {
 
         if (quote) {
             for (var index in headArry) {
-                var value = obj[headArry[index]] + "";
+                var value = (obj[headArry[index]] || '') + "";
                 line += '"' + value.replace(/"/g, '""') + '",';
             }
         } else {
             for (var index in headArry) {
-                line += obj[headArry[index]] + ',';
+                line += (obj[headArry[index]]  || '') + ',';
             }
         }
 

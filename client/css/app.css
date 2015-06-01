@@ -156,7 +156,6 @@ table .open>.dropdown-menu {
 @media (max-width: 768px) {
   .modal-content {
     border-radius: 0px;
-    margin-right: -17px;
   }
   
   .modal-dialog {

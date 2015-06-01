@@ -16,7 +16,7 @@
             <div class="btn-group" role="group" id="navMenu">
                 <script type="text/tmpl" data-tmpl-id="navMenu" data-tmpl-option='{"render": true}'>
                     <button type="button" id="mapToggleButton" class="btn btn-default btn-xs" aria-label="Left Align" data-event="##:findServiceModel.showSearchedMap##">
-                        <span class="glyphicon glyphicon-map-marker" aria-hidden="true">地図</span>
+                        <span class="glyphicon glyphicon-map-marker">地図</span>
                     </button>
                 </script>
             </div>
@@ -24,13 +24,18 @@
             <div class="btn-group" role="group" id="navMenuAdminButtons">
                 <script type="text/tmpl" data-tmpl-id="navMenuAdminButtons" data-tmpl-option='{"render": false}'>
                     ##if(findServiceModel.getAuth(10)) {##
-                    <button type="button" id="adminMapToggleButton" class="btn btn-default btn-xs" aria-label="Left Align" data-event="##:findServiceModel.showAdminMap##">
+                    <button type="button" id="adminMapToggleButton" class="btn btn-default btn-xs" data-event="##:findServiceModel.showAdminMap##">
                         <span class="glyphicon glyphicon-map-marker" aria-hidden="true">区域番号作業</span>
                     </button>
                     <button type="button" class="btn btn-default btn-xs" data-event="##:{click:function(){refreshStorage();}}##">
-                        <span class="glyphicon glyphicon-download-alt" aria-hidden="true"></span> 区域データ
+                        <span class="glyphicon glyphicon-download-alt"></span> 区域データ
                     </button>
-                    ##}##
+                    <button type="button" id="csvDownLoadButton" class="btn btn-default btn-xs" data-toggle="modal" data-target="#csvExportModal">
+                        <span class="glyphicon glyphicon-download">CSV</span>
+                    </button>
+                    ##}
+                    Bridge.tmplTool.render('csvExportModal', {});
+                    ##
                 </script>
             </div>
     </nav>
@@ -382,11 +387,6 @@ if(data.list) {
                             </select>
                         </div>
             			<button class="btn btn-default" type="submit" data-event="##:findServiceModel.search##">検索</button>
-            			##if(findServiceModel.getAuth(1)) {##
-                        <button type="button" id="csvDownLoadButton" class="btn btn-default" aria-label="Left Align" data-event="##:findServiceModel.toCsv##">
-                            <span class="glyphicon glyphicon-download" aria-hidden="true"> CSV</span>
-                        </button>
-                        ##}##
         			</div>
         		</div>
 
@@ -508,7 +508,7 @@ if(data.list) {
     </div>
     
     <div class="modal" id="searchedMapModal" data-backdrop="true">
-<script type="text/tmpl" data-tmpl-id="searchedMapModal">
+        <script type="text/tmpl" data-tmpl-id="searchedMapModal">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -619,9 +619,40 @@ if(data.list) {
             </div><!-- /.modal-content -->
 
         </div><!-- /.modal-dialog -->
-</script>
-    </div><!-- /.modal -->    
+        </script>
+    </div><!-- /.modal -->
     
+    <div class="modal" id="csvExportModal" data-backdrop="true">
+        <script type="text/tmpl" data-tmpl-id="csvExportModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title">CSVダウンロード</h4>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+        			    <div class="form-group col-sm-12">
+        				    <label class="">TRTR出力順</label>
+        				    <textarea class="form-control" rows="5" id="trtrCsvExportHeader">id,fileno,new_fileno,serial,notice,lastvisit,class,lat,lng,congregation,zipcode,prefecture,cityward,town,chome,banchi,gou,address2,name,tel,description,phonetic_town</textarea>
+        			    </div>
+                    </div>
+                    <div class="row">
+        			    <div class="form-group col-sm-12">
+        				    <label class="">探し出力順</label>
+        				    <textarea class="form-control" rows="5" id="findServiceCsvExportHeader">_id,isNew,result,findServiceDate,findServiceFindFrom,findServiceMapKu,findServiceMapPage,findServiceAddress1,findServiceAddress2,findServiceAddress3,findServiceAddress4,findServiceAddress5,findServiceName,findServiceLat,findServiceLng,findServiceComment,first_update_name,first_update_user,first_update_date,last_update_name,last_update_user,last_update_date</textarea>
+        			    </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" data-event="##:findServiceModel.toCsv::2##">TRTR + 探し</button>
+                    <button type="button" class="btn btn-primary" data-event="##:findServiceModel.toCsv::1##">探しのみ</button>
+                </div>
+            </div>
+        </div>
+        </script>
+    </div>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDejNEedWnONLDewIynvzf6Wv-aI4sd3eU&amp;sensor=true"></script>
 <script src="js/jquery-2.1.0.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
@@ -749,7 +780,10 @@ if(data.list) {
         if (findServiceModel.selectedMapMarker) {
             findServiceModel.selectedMapMarker.setIcon(null);
         }
-    })
+    });
+    
+    
+    
     /*
     .draggable({
         handle: ".modal-header"
