@@ -417,7 +417,7 @@ var findServiceModel = {
     getMarkerIcon: function(text, fill_color, text_color) {
         text = (text || '');
         fill_color = fill_color || 'e63e00';
-        text_color = text_color || '666666';
+        text_color = text_color || '000000';
         return 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + text + '|' + fill_color + '|' + text_color;
     },
     showAdminMap: {click: function(e) {
