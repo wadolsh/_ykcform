@@ -56,6 +56,7 @@ var findServiceModel = {
 	    var listData = findServiceModel.listData;
 	    var existDataList = [];
 	    var notExistDataList = [];
+	    
 	    /*
 	    var eDataList = [];
 	    for (var ind in exportdata) {
@@ -88,7 +89,9 @@ var findServiceModel = {
         //window.open('data:text/csv;filename=exportData.csv;charset=utf-8,' + csv);
         
         var link = document.createElement('a');
-        link.download = 'CSV_' + (search_findService.search_findServiceCityward || '') + (search_findService.search_findServiceTown || '') + '.csv';
+        link.download = 'CSV_' + (search_findService.search_findServiceCityward || '')
+        + (search_findService.search_findServiceTown || '') 
+        + (search_findService.search_fileno || '') + '.csv';
         link.href = 'data:text/csv;charset=utf-8,' + trtr + addData;
         link.click();
         
@@ -563,18 +566,27 @@ var findServiceModel = {
         var adminMapPanelSearchFileNo = $('#adminMapPanelSearchFileNo').val();
         var listData = findServiceModel.listData;
         var count = 0;
+        var listLat = [];
+        var listLng = [];
         $.each(listData, function(ind, data) {
             if (!data.adminMapMarker) {
                 return;
             }
+
             if (data.fileno == adminMapPanelSearchFileNo) {
                 count++;
+                listLat.push(data.findServiceLat);
+                listLng.push(data.findServiceLng);
             }
             data.adminMapMarker.setIcon(
                 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' 
                     + (data.fileno || '') + '|' + ( data.fileno == adminMapPanelSearchFileNo ? 'e63e00' : 'fdf498') + '|000000');
         });
-        $('#adminMapPanelSearchFileNoButton').html('検索: ' + count);
+        $('#adminMapPanelSearchFileNoCount').html(count);
+        var sw = new google.maps.LatLng(Math.min.apply({}, listLat), Math.min.apply({}, listLng));
+        var ne = new google.maps.LatLng(Math.max.apply({}, listLat), Math.max.apply({}, listLng));
+        findServiceModel.adminMapSearchBounds = new google.maps.LatLngBounds(sw, ne);
+
     },
     saveFileNo: {click: function(e) {
         var adminMapPanelFileNo = $('#adminMapPanelFileNo').val();

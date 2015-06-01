@@ -151,3 +151,24 @@ table .open>.dropdown-menu {
   background-color: #5cb85c;
   border-color: #4cae4c;
 }
+
+
+@media (max-width: 768px) {
+  .modal-content {
+    border-radius: 0px;
+    margin-right: -17px;
+  }
+  
+  .modal-dialog {
+    margin: 0px;
+  }
+  
+  .modal:before {
+    content: none;
+  }
+  
+  .modal-dialog {
+    display: block;
+    text-align: left;
+  }
+}

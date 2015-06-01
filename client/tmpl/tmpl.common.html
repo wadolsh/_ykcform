@@ -22,6 +22,13 @@
                     </select>
                 </script>
     		</div>
+    		
+    		<button type="button" class="navbar-toggle collapsed navbar-right" data-toggle="collapse" data-target="#navbarMenu">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
     		<div id="loginUser" class="br-tmpl panel-body navbar-right" role="form">
                 <script type="text/tmpl" data-tmpl-id="loginUser">
                     ##if(data.name) {##
@@ -30,10 +37,12 @@
                     ##}##
                 </script>
     		</div>
-    		<div class="panel-body navbar-right">
+
+    		<div class="panel-body navbar-right collapse navbar-collapse" id="navbarMenu">
     		    <content></content>
     		</div>
 		</div>
+
         <div id="message" class="br-tmpl">
             <script type="text/tmpl" data-tmpl-id="message">
                 <div>##=data.msg##</div>

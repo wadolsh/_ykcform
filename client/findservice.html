@@ -20,6 +20,7 @@
                     </button>
                 </script>
             </div>
+
             <div class="btn-group" role="group" id="navMenuAdminButtons">
                 <script type="text/tmpl" data-tmpl-id="navMenuAdminButtons" data-tmpl-option='{"render": false}'>
                     ##if(findServiceModel.getAuth(10)) {##
@@ -55,9 +56,12 @@
                             $("#adminMapPanelList li :checkbox").prop('checked', true);
                         }}##">すべて選択</button>
                         <div class="input-group">
+                            <span class="input-group-addon"  id="adminMapPanelSearchFileNoCount">0</span>
                             <input type="text" class="form-control" placeholder="区域番号" id="adminMapPanelSearchFileNo" data-event="##:{click:findServiceModel.searchFileNo, keyup:findServiceModel.searchFileNo}##">
                             <span class="input-group-btn">
-                                <button class="btn btn-default" type="button" id="adminMapPanelSearchFileNoButton">検索: 0</button>
+                                <button class="btn btn-default" type="button" data-event="##:{click:function(e) {
+                                    findServiceModel.adminMap.fitBounds(findServiceModel.adminMapSearchBounds);
+                                }}##">検索</button>
                             </span>
                         </div>
                     </div>
@@ -745,9 +749,12 @@ if(data.list) {
         if (findServiceModel.selectedMapMarker) {
             findServiceModel.selectedMapMarker.setIcon(null);
         }
-    }).draggable({
+    })
+    /*
+    .draggable({
         handle: ".modal-header"
     });
+    */
 
     /*
     $('#searchedMapModal').delegate(".modal-content", "load",  function() {
