@@ -414,6 +414,12 @@ var findServiceModel = {
         findServiceModel.listAreaReset();
     }},
     
+    getMarkerIcon: function(text, fill_color, text_color) {
+        text = (text || '');
+        fill_color = fill_color || 'e63e00';
+        text_color = text_color || '666666';
+        return 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + text + '|' + fill_color + '|' + text_color;
+    },
     showAdminMap: {click: function(e) {
         var listData = findServiceModel.listData;
         var $adminMapArea = $('#adminMapArea');
@@ -474,7 +480,7 @@ var findServiceModel = {
                                 var marker = data.adminMapMarker;
                                 var checked = e.target.checked;
                                 marker.admiMapChekced = checked;
-                                marker.setIcon('https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || '') + '|' + ( !checked ? '00a8e6' : 'e63e00') + '|000000');
+                                marker.setIcon(findServiceModel.getMarkerIcon(data.fileno, ( !checked ? '00a8e6' : 'e63e00')));
                             });
                             $li[0].objData = data;
                             //data.$li = $li;
@@ -497,7 +503,7 @@ var findServiceModel = {
                     data = listData[ind];
                     var marker = data.adminMapMarker;
                     var checked = marker.admiMapChekced;
-                    marker.setIcon('https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || '') + '|' + ( !checked ? '00a8e6' : 'e63e00') + '|000000');
+                    marker.setIcon(findServiceModel.getMarkerIcon(data.fileno, ( !checked ? '00a8e6' : 'e63e00')));
                 }
             });
             
@@ -544,7 +550,7 @@ var findServiceModel = {
 
                     if (!data.adminMapMarker) {
                         data.adminMapMarker = new google.maps.Marker({
-                            icon : 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || '') + '|' + ( data.fileno ? '00a8e6' : 'e63e00') + '|000000',
+                            icon : findServiceModel.getMarkerIcon(data.fileno, ( !data.fileno ? '00a8e6' : 'e63e00')),
                             map: map,
                             position: {lat: parseFloat(data.findServiceLat), lng: parseFloat(data.findServiceLng)},
                             draggable: false,
@@ -588,8 +594,7 @@ var findServiceModel = {
                 listLng.push(data.findServiceLng);
             }
             data.adminMapMarker.setIcon(
-                'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' 
-                    + (data.fileno || '') + '|' + ( data.fileno == adminMapPanelSearchFileNo ? 'e63e00' : 'fdf498') + '|000000');
+                findServiceModel.getMarkerIcon(data.fileno, ( data.fileno == adminMapPanelSearchFileNo ? 'e63e00' : 'fdf498')));
         });
         $('#adminMapPanelSearchFileNoCount').html(count);
         var sw = new google.maps.LatLng(Math.min.apply({}, listLat), Math.min.apply({}, listLng));
@@ -614,7 +619,7 @@ var findServiceModel = {
                 $(obj).find('.badge').html(fileno);
                 var data = obj.objData;
                 data.fileno = fileno;
-                data.adminMapMarker.setIcon('https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + (data.fileno || '') + '|' + ( data.fileno ? '00a8e6' : 'e63e00') + '|000000');
+                data.adminMapMarker.setIcon(findServiceModel.getMarkerIcon(data.fileno, ( data.fileno ? '00a8e6' : 'e63e00')));
                 var flag = adminMapPanelFileNo ? false : true;
                 data.adminMapMarker.admiMapChekced = flag;
                 data.$checkbox.prop('checked', flag);
