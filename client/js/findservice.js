@@ -550,7 +550,7 @@ var findServiceModel = {
 
                     if (!data.adminMapMarker) {
                         data.adminMapMarker = new google.maps.Marker({
-                            icon : findServiceModel.getMarkerIcon(data.fileno, ( !data.fileno ? '00a8e6' : 'e63e00')),
+                            icon : findServiceModel.getMarkerIcon(data.fileno, ( data.fileno ? '00a8e6' : 'e63e00')),
                             map: map,
                             position: {lat: parseFloat(data.findServiceLat), lng: parseFloat(data.findServiceLng)},
                             draggable: false,
