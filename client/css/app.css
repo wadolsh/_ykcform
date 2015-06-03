@@ -171,3 +171,7 @@ table .open>.dropdown-menu {
     text-align: left;
   }
 }
+
+#adminMapPanel.collapse.in {
+  height: 100%;
+}

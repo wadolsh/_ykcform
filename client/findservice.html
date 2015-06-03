@@ -48,10 +48,10 @@
     
     <div class="container hidden" id="adminMapArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
         
-        <div style="position:fixed;z-index:100;width:400px;right:0px;opacity:0.7;top:52px;bottom:0px;" id="adminMapPanelArea">
+        <div style="position:fixed;z-index:100;width:400px;right:0px;opacity:0.7;top:52px;bottom:20px;" id="adminMapPanelArea">
             <script type="text/tmpl" data-tmpl-id="adminMapPanelArea" data-tmpl-option='{"render": true}'>
-            <div class="collapse in" id="adminMapPanel">
-                <div class="panel panel-default" style="margin-bottom:0px">
+            <div class="collapse in" id="adminMapPanel" style="height:100%">
+                <div class="panel panel-default" style="margin-bottom:0px;height:100%">
                     <div class="panel-heading">
                         全件:<span class="badge" id="adminMapPanelTotalCount">0</span>
                         チェック有:<span class="badge" id="adminMapPanelCount">0</span>
@@ -78,12 +78,12 @@
                             </span>
                         </div>
                     </div>
-                    <ul class="list-group" id="adminMapPanelList" style="max-height:660px;overflow-y:auto;">
+                    <ul class="list-group" id="adminMapPanelList" style="height:calc(100% - 153px);overflow-y:auto;">
                     </ul>
                 </div>
             </div>
 
-            <button class="btn btn-primary" style="margin-left:290px" type="button" data-toggle="collapse" data-target="#adminMapPanel">管理パネル</button>
+            <button class="btn btn-primary btn-xs" style="margin-left:330px" type="button" data-toggle="collapse" data-target="#adminMapPanel">管理パネル</button>
             </script>
         </div>
         
