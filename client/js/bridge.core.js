@@ -174,7 +174,7 @@
             $.each(funcArray, function(key, obj) {
                 var $element = $area.find('[data-event="' + key + '"]');
                 $.each(obj.func, function(eventId, eventFunc) {
-                    $element.on(eventId, obj.data, function(e) {
+                    $element.on(eventId, null, obj.data, function(e) {
                         RouterTool.capture(eventFunc, e);
                     });
                 });

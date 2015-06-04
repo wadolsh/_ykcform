@@ -737,13 +737,13 @@ var findServiceModel = {
             data.search = search;
             data.page = findServiceModel.page;
             data.list = findServiceModel.listData;
+            data.orderBy = findServiceModel.orderBy;
             data.listCount = findServiceModel.listCount;
             Bridge.tmplTool.render('findServiceTable', data);
             return;
         }
 		
-		
-		var searchParm = {$query: {}, $orderby: {findServiceDate : -1}};
+		var searchParm = {$query: {}, $orderby: findServiceModel.orderBy};
 		if (Object.keys(search).length != 0) {
 		    searchParm.$query.$and = [];
 		}
@@ -793,6 +793,7 @@ var findServiceModel = {
             
             data.search = search;
             data.page = findServiceModel.page;
+            data.orderBy = findServiceModel.orderBy;
             
             Bridge.tmplTool.render('findServiceTable', data);
         });
@@ -806,7 +807,9 @@ findServiceModel.page = {
         pageSelectFunc: findServiceModel.pageSelect,
         pageSizeChangeFunc: findServiceModel.pageSizeChange
 };
-
+findServiceModel.orderBy = {
+          
+};
 findServiceModel.searchForm = {
     search_findServiceDate: {
         searchField: "findServiceDate",

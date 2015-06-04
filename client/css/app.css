@@ -175,3 +175,7 @@ table .open>.dropdown-menu {
 #adminMapPanel.collapse.in {
   height: 100%;
 }
+
+table th[data-event] { 
+  cursor: pointer;
+}

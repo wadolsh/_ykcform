@@ -398,16 +398,32 @@ if(data.list) {
             		<table class="table table-bordered">
                         <thead>
                             <tr class="active">
+                                ##
+                                    var changePattern = {'undefined' : 1, '1' : -1, '-1': undefined};
+                                    var sortEvent = {click: function(e) {
+                                        var sortValue = data.orderBy[e.data];
+                                        findServiceModel.orderBy[e.data] = changePattern[sortValue];
+                                        findServiceModel.listAreaReset();
+                                    }};
+                                    var sortIcon = function(field) {
+                                        
+                                        var sortObj = data.orderBy[field];
+                                        if (!sortObj) {
+                                            return '';
+                                        }
+                                        return '<span class="glyphicon glyphicon-sort-by-attributes' + (sortObj == 1 ? '': '-alt') + '"></span>';
+                                    }
+                                ##
             					<th style="width:92px;">総計:##=data.listCount##</th>
-            					<th>確認記録</th>
-                                <th width="90px">登録日</th>
-                                <th>情報元</th>
-                                <th>区域番号</th>
-                                <th>住所</th>
-                                <th>名前</th>
-            					<th>コメント</th>
+            					<th data-event="##:sortEvent::'result'##">確認記録 ##=sortIcon('result')##</th>
+                                <th data-event="##:sortEvent::'findServiceDate'##" width="90px">登録日 ##=sortIcon('findServiceDate')##</th>
+                                <th data-event="##:sortEvent::'findServiceFindFrom'##">情報元 ##=sortIcon('findServiceFindFrom')##</th>
+                                <th data-event="##:sortEvent::'fileno'##">区域番号 ##=sortIcon('fileno')##</th>
+                                <th data-event="##:sortEvent::'findServiceAddress1'##">住所 ##=sortIcon('findServiceAddress1')##</th>
+                                <th data-event="##:sortEvent::'findServiceName'##">名前 ##=sortIcon('findServiceName')##</th>
+            					<th data-event="##:sortEvent::'findServiceComment'##">コメント ##=sortIcon('findServiceComment')##</th>
             					##if(findServiceModel.getAuth(1)) {##
-            					<th>登録者</th>
+            					<th data-event="##:sortEvent::'first_update_name'##">登録者 ##=sortIcon('first_update_name')##</th>
             					##}##
                             </tr>
                         </thead>
