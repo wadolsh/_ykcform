@@ -5,7 +5,8 @@ var loginFilter = require('./filter.login');
 var orignChecker = function(reqData, req, res) {
     if (req.headers.origin.indexOf('bridge-choish.c9.io') > -1
         || req.headers.origin.indexOf('ykcform.herokuapp.com') > -1
-        || req.headers.origin.indexOf('http://uwkk2251a358.wadolsh.koding.io') > -1) {
+        || req.headers.origin.indexOf('http://uwkk2251a358.wadolsh.koding.io') > -1
+        || req.headers.origin.indexOf('157.7.133.77') > -1) {
         
     } else {
         throw new Error('接近不可');
@@ -22,7 +23,8 @@ exports.mongodbMethod = {
     db : {
         idName: '_id',
         useOid: false ,
-        url: 'mongodb://ykcform:454545@ds041188.mongolab.com:41188/ykcform',
+        //url: 'mongodb://ykcform:454545@ds041188.mongolab.com:41188/ykcform',
+        url: 'mongodb://mongodb:27017/ykcform',
         user_dataName: 'login_user',
         collections: {
             jpon2012: {

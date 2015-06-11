@@ -1,1 +1,0 @@
-{ "options" : { "create" : "kanaga14", "capped" : false, "autoIndexId" : true }, "indexes" : [ { "v" : 1, "key" : { "_id" : 1 }, "ns" : "address_selector.kanaga14", "name" : "_id_" } ] }
