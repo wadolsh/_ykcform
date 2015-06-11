@@ -856,6 +856,7 @@ findServiceModel.searchForm = {
         style: "width:100px;"
     }
 }
+findServiceModel.visitResultInfo = {'1' : '〇', '2' : '×'};
 findServiceModel.resultTypeModel = {
     '1': {label: '韓国語', color:'btn-success'},
     '2': {label: '日本語', color:'btn-info'}, 

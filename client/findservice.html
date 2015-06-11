@@ -423,12 +423,12 @@ if(data.list) {
             					<th data-event="##:sortEvent::'result'##">確認記録 ##=sortIcon('result')##</th>
                                 <th data-event="##:sortEvent::'findServiceDate'##" width="90px">登録日 ##=sortIcon('findServiceDate')##</th>
                                 <th data-event="##:sortEvent::'findServiceFindFrom'##">情報元 ##=sortIcon('findServiceFindFrom')##</th>
-                                <th data-event="##:sortEvent::'fileno'##">区域番号 ##=sortIcon('fileno')##</th>
+                                <th data-event="##:sortEvent::'fileno'##" style="min-width:45px">区域番号 ##=sortIcon('fileno')##</th>
                                 <th data-event="##:sortEvent::'findServiceAddress1'##">住所 ##=sortIcon('findServiceAddress1')##</th>
                                 <th data-event="##:sortEvent::'findServiceName'##">名前 ##=sortIcon('findServiceName')##</th>
             					<th data-event="##:sortEvent::'findServiceComment'##">コメント ##=sortIcon('findServiceComment')##</th>
             					##if(findServiceModel.getAuth(1)) {##
-            					<th data-event="##:sortEvent::'first_update_name'##">登録者 ##=sortIcon('first_update_name')##</th>
+            					<th data-event="##:sortEvent::'first_update_name'##" style="min-width:45px">登録者 ##=sortIcon('first_update_name')##</th>
             					##}##
                             </tr>
                         </thead>
@@ -492,7 +492,21 @@ if(data.list) {
                                     </a>
                                 </td>
                                 <td>##=obj.findServiceName##</td>
-            					<td>##=obj.findServiceComment##</td>
+            					<td>
+            					    ##
+            					    var comments = obj.findServiceVisitHistory || {};
+            					    var comment = null;
+            					    for(var key in comments) {
+            					        comment = comments[key];
+            					    ##
+            					        <div>
+            					            ##=comment.visitDate || comment.last_update_date || comment.first_update_date##
+            					            ##=findServiceModel.visitResultInfo[comment.visitResult]##
+            					            ##=findServiceModel.resultTypeModel[comment.result || 0].label##
+            					            ##=comment.comment##
+            			                </div>
+            				        ##}##
+            					</td>
             					##if(findServiceModel.getAuth(1)) {##
             					<td>##=obj.first_update_name##</td>
             					##}##
@@ -540,11 +554,10 @@ if(data.list) {
 
                 <div class="list-group">
                     ##
-                    var visitResultInfo = {'1' : '〇', '2' : '×'};
                     $.each(data.findServiceVisitHistory || [], function(ind, obj) {##
                     <a href="#" class="list-group-item" data-toggle="collapse" data-target="#visitCollapse##=ind##" style="margin-right:40px;">
                         ##=obj.visitDate || obj.last_update_date || obj.first_update_date##
-                        ##=visitResultInfo[obj.visitResult]##
+                        ##=findServiceModel.visitResultInfo[obj.visitResult]##
                         <span class="visit-right-side">
                             ##=obj.last_update_name##
                             <button type="button" class="btn btn-default" data-ind="##=ind##" data-event="##:findServiceModel.removeVisit::data##">
