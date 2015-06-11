@@ -359,8 +359,7 @@
 }
 if(data.list) {
 ##
-        		<div class="panel-heading">
-            		<div class="collapse" id="searchArea">
+        		<div class="panel-heading collapse" id="searchArea">
             		    <div class="form-inline">
             		    ##
             		    $.each(findServiceModel.searchForm, function(key, obj) {
@@ -392,13 +391,13 @@ if(data.list) {
                             </div>
                 			<button class="btn btn-default" type="submit" data-event="##:findServiceModel.search##">検索</button>
             			</div>
-        		    </div>
+
         		</div>
-
-        		<nav>
-                    ##@Bridge.tmplTool.include('/tmpl/tmpl.pagenation.html', 'pagination')##
-                </nav>
-
+                <div class="panel-pagenation">
+            		<nav>
+                        ##@Bridge.tmplTool.include('/tmpl/tmpl.pagenation.html', 'pagination')##
+                    </nav>
+                </div>
         		<div class="table-responsive">
             		<table class="table table-bordered">
                         <thead>
@@ -517,10 +516,11 @@ if(data.list) {
                         </tfoot>
             		</table>
             	</div>
-            	
-        		<nav>
-        		    ##@Bridge.tmplTool.include('/tmpl/tmpl.pagenation.html', 'pagination')##
-                </nav>
+            	<div class="panel-pagenation bottom">
+            		<nav>
+            		    ##@Bridge.tmplTool.include('/tmpl/tmpl.pagenation.html', 'pagination')##
+                    </nav>
+                </div>
 ##}##
 		    </script>
 		</div>
