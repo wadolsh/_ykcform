@@ -808,7 +808,7 @@ findServiceModel.page = {
         pageSizeChangeFunc: findServiceModel.pageSizeChange
 };
 findServiceModel.orderBy = {
-          
+        findServiceDate: -1
 };
 findServiceModel.searchForm = {
     search_findServiceDate: {
