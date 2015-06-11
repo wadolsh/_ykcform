@@ -31,7 +31,7 @@
         <a href="#" aria-label="Next" data-page="##=pageNum + 1##"  ##if(pageNum != endNum) {## data-event="##:pageSelectFunc##" ##}##><span data-page="##=pageNum + 1##" aria-hidden="true">&raquo;</span></a>
     </li>
 </ul>
-<select id="findService_pageSize" class="form-control" style="width:100px; display:inline;vertical-align:top;" data-event="##:pageSizeChangeFunc##">
+<select id="findService_pageSize" class="form-control" style="width:85px; display:inline;vertical-align:top;" data-event="##:pageSizeChangeFunc##">
     ##$.each([10, 20, 50, 100, 200, 1000], function(ind, num) {##
     <option value="##=num##" ##=(num==pageSize) ? 'selected="selected"' : ""##>##=num##</option>
     ##})##
