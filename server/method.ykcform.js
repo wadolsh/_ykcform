@@ -27,6 +27,21 @@ exports.mainMenuList = function(reqData, callback, req){
     });
 };
 
+exports.findServiceStatistics = function(reqData, callback, req){
+	console.log('findServiceStatistics!');
+    mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
+        if(err) throw err;
+        db.collection('find_service').aggregate({
+            $group   : { "_id"  : "$result", "count" : { "$sum" : 1 } } 
+        }, function (err, doc) {
+            if(err) throw err;
+            callback(doc);
+        });
+    });
+};
+
+
+
 exports.getDataByUrl = function(reqData, callback, req){
 	console.log('getDataByUrl!');
 

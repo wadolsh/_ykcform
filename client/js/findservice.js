@@ -632,6 +632,73 @@ var findServiceModel = {
         });
     }},
     
+    showStatistics: {click: function(e) {
+        var $statisticsArea = $('#statisticsArea');
+        $statisticsArea.toggleClass('hidden');
+        $('#findService').toggleClass('hidden');
+        var isHidden = $statisticsArea.hasClass('hidden');
+        if (isHidden) {
+            $('#statisticsButton').removeClass('btn-success');
+            //Bridge.tmplTool.render('statisticsDiv', {});
+            return;
+        }
+        $('#statisticsButton').addClass('btn-success');
+        
+/*        if (!findServiceModel.statistics.loadPackage.corechart) {
+            findServiceModel.statistics.loadPackage.corechart = 1;
+        }*/
+        
+        var resultTypeModel = findServiceModel.resultTypeModel;
+
+        findServiceConn
+            .reqCount('totalCount', {})
+            .reqExecMethod('statistics1', 'findServiceStatistics').request(function(data, textStatus, jqXHR) {
+    			var statistics1 = data['statistics1'];
+    			var totalCount = data['totalCount'];
+                //Bridge.tmplTool.render('statisticsDiv', data);
+                
+                //google.setOnLoadCallback(function() {
+                statistics1
+                var dataArray1 = [['結果', '件数']];
+                var obj = null;
+                var result0 = null;
+                var resultNull = null;
+                var count1 = 0;
+                for (var ind in statistics1) {
+                    obj = statistics1[ind];
+                    if (obj._id == null) {
+                        //dataArray1[result0Ind][1] += obj.count;
+                        resultNull = obj;
+                        continue;
+                    } else if (obj._id == 0) {
+                        result0 = obj;
+                        continue;
+                    }
+                    dataArray1.push([resultTypeModel[obj._id || 0].label, obj.count]);
+                    count1 += obj.count;
+                }
+                
+                var chart1 = new google.visualization.PieChart(document.getElementById('chart1'));
+                    chart1.draw(google.visualization.arrayToDataTable(dataArray1), {
+                        title: '総件数: ' + count1,
+                        is3D: true,
+                        //pieSliceText: 'value'
+                    });
+                
+                var dataArray2 = Bridge.clone(dataArray1);
+                dataArray2.push([resultTypeModel[result0._id].label, (result0.count + resultNull.count)]);
+                
+                var chart2 = new google.visualization.PieChart(document.getElementById('chart2'));
+                    chart2.draw(google.visualization.arrayToDataTable(dataArray2), {
+                        title: '総件数: ' + totalCount,
+                        is3D: true,
+                        //pieSliceText: 'value'
+                    });
+                //});
+
+    	});
+    }},
+    
     showSearchedMap: {click: function(e) {
         var listData = findServiceModel.listData;
         
@@ -799,6 +866,10 @@ var findServiceModel = {
         });
     },
 };
+
+findServiceModel.statistics = {
+    loadPackage: {}
+}
 
 findServiceModel.page = {
         pageSize: 20,

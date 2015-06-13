@@ -10,7 +10,6 @@
 <link href="css/app.css" rel="stylesheet">
 </head>
 <body>
-
     <nav class="navbar navbar-default navbar-fixed-top" role="navigation" data-bind-tmpl-id="header" data-tmpl-src="./tmpl/tmpl.common.html">
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group" role="group" id="navMenu">
@@ -18,7 +17,10 @@
                     <button type="button" id="mapToggleButton" class="btn btn-default btn-xs" data-event="##:findServiceModel.showSearchedMap##">
                         <span class="glyphicon glyphicon-map-marker">地図</span>
                     </button>
-                    <button type="button" id="mapToggleButton" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#searchArea">
+                    <button type="button" id="statisticsButton" class="btn btn-default btn-xs" data-event="##:findServiceModel.showStatistics##">
+                        <span class="glyphicon glyphicon-object-align-bottom">統計</span>
+                    </button>
+                    <button type="button" id="searchToggleButton" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#searchArea">
                         <span class="glyphicon glyphicon-search">検索</span>
                     </button>
                 </script>
@@ -46,6 +48,21 @@
     <div class="container hidden" id="searchedMapArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
         <div id="searchedMap" style="height: 100%;">
 
+        </div>
+    </div>
+    
+    <div class="container hidden" id="statisticsArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
+        <div style="height: 100%;">
+            <div class="row">
+                <div id="chart1" class="col-sm-6" style="height:400px"></div>
+                <div id="chart2" class="col-sm-6" style="height:400px"></div>
+            </div>
+            
+            <div id="statisticsDiv">
+                <script type="text/tmpl" data-tmpl-id="statisticsDiv">
+                    
+                </script>
+            </div>
         </div>
     </div>
     
@@ -689,6 +706,7 @@ if(data.list) {
         </script>
     </div>
 <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDejNEedWnONLDewIynvzf6Wv-aI4sd3eU&amp;sensor=true"></script>
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script src="js/jquery-2.1.0.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
@@ -699,6 +717,8 @@ if(data.list) {
 <script src="js/app.js"></script>
 <script src="js/findservice.js"></script>
 <script type="text/javascript">
+    google.load("visualization", "1", {packages:["corechart"]});
+    
     var kanagwa_town = Bridge.localStorageTool.get('kanagwa_town');
     if (!kanagwa_town) {
         var kanagwaConn = new Bridge.Connector({dataName : "kanaga14",
@@ -817,8 +837,7 @@ if(data.list) {
         }
     });
     
-    
-    
+
     /*
     .draggable({
         handle: ".modal-header"
