@@ -863,8 +863,10 @@ findServiceModel.resultTypeModel = {
     '1': {label: '韓国語', color:'btn-success'},
     '2': {label: '日本語', color:'btn-info'}, 
     '3': {label: '中国語', color:'btn-info'}, 
-    '-1': {label: 'あいまい', color:'btn-warning'}, 
-    '-2': {label: '住所不明', color:'btn-danger'}, 
+    '4': {label: '他言語', color:'btn-info'}, 
+    '-1': {label: 'あいまい', color:'btn-warning'},
+    '-2': {label: '住所不明', color:'btn-danger'},
+    '-3': {label: '引っ越し', color:'btn-warning'}, 
     '0': {label: '未設定', color:'btn-default'}
 };
 
