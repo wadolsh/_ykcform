@@ -726,7 +726,7 @@ var findServiceModel = {
                         kuResult = {};
                     }
                     
-                    kuResult[obj._id.result || 0] = obj.count;
+                    kuResult[obj._id.result || 0] = (kuResult[obj._id.result || 0] || 0) + obj.count;
                     //dataArray3.push(, obj.count]);
                     // if (!obj._id || obj._id.result == null) {
                     //     resultNull = obj;
