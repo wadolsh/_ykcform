@@ -32,7 +32,9 @@ exports.findServiceStatistics = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
         db.collection('find_service').aggregate({
-            $group   : { "_id"  : "$result", "count" : { "$sum" : 1 } } 
+            $group   : { "_id"  : reqData.data, "count" : { "$sum" : 1 } }
+        }, {
+            $sort: { _id: 1 } 
         }, function (err, doc) {
             if(err) throw err;
             callback(doc);

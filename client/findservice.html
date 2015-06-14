@@ -54,8 +54,12 @@
     <div class="container hidden" id="statisticsArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
         <div style="height: 100%;">
             <div class="row">
-                <div id="chart1" class="col-sm-6" style="height:400px"></div>
-                <div id="chart2" class="col-sm-6" style="height:400px"></div>
+                <div id="chart1" class="col-sm-6" style="height:400px;"></div>
+                <div id="chart2" class="col-sm-6" style="height:400px;"></div>
+            </div>
+            <div class="row">
+                <div id="chart3" class="col-sm-6" style="height:600px;margin-top:20px;"></div>
+                <div id="chart4" class="col-sm-6" style=""></div>
             </div>
             
             <div id="statisticsDiv">
@@ -717,7 +721,7 @@ if(data.list) {
 <script src="js/app.js"></script>
 <script src="js/findservice.js"></script>
 <script type="text/javascript">
-    google.load("visualization", "1", {packages:["corechart"]});
+    google.load("visualization", "1", {packages:["corechart", "bar", "table"]});
     
     var kanagwa_town = Bridge.localStorageTool.get('kanagwa_town');
     if (!kanagwa_town) {

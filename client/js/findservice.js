@@ -652,17 +652,20 @@ var findServiceModel = {
 
         findServiceConn
             .reqCount('totalCount', {})
-            .reqExecMethod('statistics1', 'findServiceStatistics').request(function(data, textStatus, jqXHR) {
+            .reqExecMethod('statistics1', 'findServiceStatistics', '$result')
+            .reqExecMethod('statistics2', 'findServiceStatistics', {findServiceMapKu: '$findServiceMapKu', result: '$result'})
+            .request(function(data, textStatus, jqXHR) {
     			var statistics1 = data['statistics1'];
+    			var statistics2 = data['statistics2'];
     			var totalCount = data['totalCount'];
                 //Bridge.tmplTool.render('statisticsDiv', data);
                 
                 //google.setOnLoadCallback(function() {
-                statistics1
-                var dataArray1 = [['結果', '件数']];
+                
                 var obj = null;
                 var result0 = null;
                 var resultNull = null;
+                var dataArray1 = [['結果', '件数']];
                 var count1 = 0;
                 for (var ind in statistics1) {
                     obj = statistics1[ind];
@@ -681,7 +684,7 @@ var findServiceModel = {
                 var chart1 = new google.visualization.PieChart(document.getElementById('chart1'));
                     chart1.draw(google.visualization.arrayToDataTable(dataArray1), {
                         title: '総件数: ' + count1,
-                        is3D: true,
+                        //is3D: true,
                         //pieSliceText: 'value'
                     });
                 
@@ -691,9 +694,58 @@ var findServiceModel = {
                 var chart2 = new google.visualization.PieChart(document.getElementById('chart2'));
                     chart2.draw(google.visualization.arrayToDataTable(dataArray2), {
                         title: '総件数: ' + totalCount,
-                        is3D: true,
+                        //is3D: true,
                         //pieSliceText: 'value'
                     });
+                    
+                
+                var chart2header = ['区'];
+                for (var key in resultTypeModel) {
+                    chart2header.push(resultTypeModel[key].label);
+                }
+                
+                
+                var dataArray3 = [chart2header];
+                var count3 = 0;
+                var lastKu = null;
+                var kuResult = {};
+                statistics2.push({_id:{findServiceMapKu :null}});
+                for (var ind in statistics2) {
+                    obj = statistics2[ind];
+
+                    if (lastKu != obj._id.findServiceMapKu) {
+                        var array = [];
+                        for (var key in chart2header) {
+                            array.push(kuResult[key] || 0);
+                        }
+                        array[0] = lastKu;
+                        dataArray3.push(array);
+                        lastKu = obj._id.findServiceMapKu;
+                        kuResult = {};
+                    }
+                    kuResult[obj._id.result] = obj.count;
+                    //dataArray3.push(, obj.count]);
+                    if (!obj._id || obj._id.result == null) {
+                        resultNull = obj;
+                        continue;
+                    } else if (obj._id.result == 0) {
+                        result0 = obj;
+                        continue;
+                    }
+                    count3 += obj.count;
+                    
+                }
+                
+
+                var chart3 = new google.charts.Bar(document.getElementById('chart3'));
+                    chart3.draw(google.visualization.arrayToDataTable(dataArray3), {
+                        title: '地図別',
+                        //pieSliceText: 'value'
+                        bars: 'horizontal'
+                    });
+                    
+                //var table = new google.visualization.Table(document.getElementById('chart4'));
+                //    table.draw(dataArray3, {showRowNumber: true});
                 //});
 
     	});
