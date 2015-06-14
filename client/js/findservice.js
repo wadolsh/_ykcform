@@ -699,13 +699,15 @@ var findServiceModel = {
                     });
                     
                 
-                var chart2header = ['区'];
+                var chart3header = ['区'];
+                var chart3headerKey = [0];
                 for (var key in resultTypeModel) {
-                    chart2header.push(resultTypeModel[key].label);
+                    chart3header.push(resultTypeModel[key].label);
+                    chart3headerKey.push(key);
                 }
                 
                 
-                var dataArray3 = [chart2header];
+                var dataArray3 = [chart3header];
                 var count3 = 0;
                 var lastKu = null;
                 var kuResult = {};
@@ -715,8 +717,8 @@ var findServiceModel = {
 
                     if (lastKu != obj._id.findServiceMapKu) {
                         var array = [];
-                        for (var key in chart2header) {
-                            array.push(kuResult[key] || 0);
+                        for (var key in chart3headerKey) {
+                            array.push(kuResult[chart3headerKey[key]] || 0);
                         }
                         array[0] = lastKu;
                         dataArray3.push(array);
