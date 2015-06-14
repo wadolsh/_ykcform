@@ -725,27 +725,53 @@ var findServiceModel = {
                         lastKu = obj._id.findServiceMapKu;
                         kuResult = {};
                     }
-                    kuResult[obj._id.result] = obj.count;
+                    
+                    kuResult[obj._id.result || 0] = obj.count;
                     //dataArray3.push(, obj.count]);
-                    if (!obj._id || obj._id.result == null) {
-                        resultNull = obj;
-                        continue;
-                    } else if (obj._id.result == 0) {
-                        result0 = obj;
-                        continue;
-                    }
+                    // if (!obj._id || obj._id.result == null) {
+                    //     resultNull = obj;
+                    //     continue;
+                    // } else if (obj._id.result == 0) {
+                    //     result0 = obj;
+                    //     continue;
+                    // }
                     count3 += obj.count;
                     
                 }
                 
-
-                var chart3 = new google.charts.Bar(document.getElementById('chart3'));
-                    chart3.draw(google.visualization.arrayToDataTable(dataArray3), {
-                        title: '地図別',
+                var dataArray4 = Bridge.clone(dataArray3);
+                var chart4 = new google.visualization.BarChart(document.getElementById('chart4'));
+                    chart4.draw(google.visualization.arrayToDataTable(dataArray3), {
+                        //title: '地図別',
                         //pieSliceText: 'value'
-                        bars: 'horizontal'
+                        //bars: 'horizontal',
+                        isStacked: true,
+                        //height: 300,
+                        bar: { groupWidth: '75%' },
+                        legend: {position: 'top', maxLines: 3},
+                        hAxis: {minValue: 0}
+                    });       
+
+
+                var ind0 = 1;
+                for (var ind in dataArray3) {
+                    dataArray3[ind].splice(ind0, 1);
+                }
+                
+                var chart3 = new google.visualization.BarChart(document.getElementById('chart3'));
+                    chart3.draw(google.visualization.arrayToDataTable(dataArray3), {
+                        //title: '地図別',
+                        //pieSliceText: 'value'
+                        //bars: 'horizontal',
+                        isStacked: true,
+                        //height: 300,
+                        bar: { groupWidth: '75%' },
+                        legend: {position: 'top', maxLines: 3},
+                        hAxis: {minValue: 0}
                     });
-                    
+
+                
+      
                 //var table = new google.visualization.Table(document.getElementById('chart4'));
                 //    table.draw(dataArray3, {showRowNumber: true});
                 //});
