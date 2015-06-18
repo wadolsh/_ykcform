@@ -386,13 +386,13 @@ var findServiceModel = {
 
                 hasData = true;
                 //$('<tr><td>' + data.class + '</td><td>' + addr + '</td></tr>').appendTo($matchAddressTableBody);
-                addressList.push(addr);
+                addressList.push([data.class, addr]);
             }
         }
         
         addressList.sort();
         for (var ind in addressList) {
-            $('<tr><td>' + data.class + '</td><td>' + addressList[ind] + '</td></tr>').appendTo($matchAddressTableBody);
+            $('<tr><td>' + addressList[ind][0] + '</td><td>' + addressList[ind][1] + '</td></tr>').appendTo($matchAddressTableBody);
         }
         
         if (!hasData) {
