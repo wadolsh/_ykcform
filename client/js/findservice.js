@@ -315,6 +315,9 @@ var findServiceModel = {
             e.data.result = data.reqUpdate.result;
             findServiceModel.listAreaReset(false);
             if (data.addVisit.$push) {
+                if (!e.data.findServiceVisitHistor) {
+                    e.data.findServiceVisitHistor = [];
+                }
                 e.data.findServiceVisitHistory.push(data.addVisit.$push.findServiceVisitHistory);
             }
             //if (e.target.dataset.frommap) {
@@ -652,8 +655,9 @@ var findServiceModel = {
 
         findServiceConn
             .reqCount('totalCount', {})
-            .reqExecMethod('statistics1', 'findServiceStatistics', '$result')
-            .reqExecMethod('statistics2', 'findServiceStatistics', {findServiceMapKu: '$findServiceMapKu', result: '$result'})
+            .reqExecMethod('statistics1', 'findServiceStatistics', { $group: '$result'})
+            .reqExecMethod('statistics2', 'findServiceStatistics', { $group: {findServiceMapKu: '$findServiceMapKu', result: '$result'}})
+            .reqExecMethod('statistics3', 'findServiceStatistics', { $group: {findServiceDate: '$findServiceVisitHistory.first_update_date', result: '$findServiceVisitHistory.result'}})
             .request(function(data, textStatus, jqXHR) {
     			var statistics1 = data['statistics1'];
     			var statistics2 = data['statistics2'];

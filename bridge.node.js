@@ -25,6 +25,11 @@ app.use(express.urlencoded());
 app.configure('development', function(){
   app.use(express.errorHandler());
 })
+/*
+app.configure('production', function(){
+  app.use(express.errorHandler());
+})
+*/
 
 server.listen(process.env.PORT || 3000, process.env.IP || "0.0.0.0", function(){
     var addr = server.address();
