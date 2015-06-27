@@ -315,8 +315,8 @@ var findServiceModel = {
             e.data.result = data.reqUpdate.result;
             findServiceModel.listAreaReset(false);
             if (data.addVisit.$push) {
-                if (!e.data.findServiceVisitHistor) {
-                    e.data.findServiceVisitHistor = [];
+                if (!e.data.findServiceVisitHistory) {
+                    e.data.findServiceVisitHistory = [];
                 }
                 e.data.findServiceVisitHistory.push(data.addVisit.$push.findServiceVisitHistory);
             }
