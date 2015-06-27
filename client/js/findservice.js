@@ -657,7 +657,7 @@ var findServiceModel = {
             .reqCount('totalCount', {})
             .reqExecMethod('statistics1', 'findServiceStatistics', { $group: '$result'})
             .reqExecMethod('statistics2', 'findServiceStatistics', { $group: {findServiceMapKu: '$findServiceMapKu', result: '$result'}})
-            .reqExecMethod('statistics3', 'findServiceStatistics', { $group: {findServiceDate: '$findServiceVisitHistory.first_update_date', result: '$findServiceVisitHistory.result'}})
+            //.reqExecMethod('statistics3', 'findServiceStatistics', { $group: {findServiceDate: '$findServiceVisitHistory.first_update_date', result: '$findServiceVisitHistory.result'}})
             .request(function(data, textStatus, jqXHR) {
     			var statistics1 = data['statistics1'];
     			var statistics2 = data['statistics2'];
