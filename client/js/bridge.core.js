@@ -134,12 +134,12 @@
             "print=function(){__p+=__j.call(arguments,'');};\n" +
             source + "return __p;\n";
     
-        try {
+        //try {
             render = new Function(settings.variable || 'obj', '_', source);
-        } catch (e) {
-            e.source = source;
-            throw e;
-        }
+        //} catch (e) {
+        //    e.source = source;
+        //    throw e;
+        //}
 
         if (data) {
             var html = render.call(data, data, _);
@@ -148,7 +148,12 @@
             $.each(funcArray, function(key, obj) {
                 var $element = $area.find('[data-event="' + key + '"]');
                 $.each(obj.func, function(eventId, eventFunc) {
-                    $element.on(eventId, obj.data, eventFunc);
+                    //$element.on(eventId, obj.data, eventFunc);
+                    var eventKey = key + eventId;
+                    $element.on(eventKey, null, obj.data, eventFunc);
+                    $element.on(eventId, function(event) {
+                        $element.trigger(eventKey, obj.data);
+                    });
                 });
             });
             return $area;
@@ -157,7 +162,7 @@
         var template = function(data, element) {
             var html = render.call(data, data, _);
             //var $html = $(html);
-            try {
+            //try {
                 if (element) {
                     //$(element).html($html);
                     element.innerHTML = html;
@@ -166,16 +171,22 @@
                     //$area.html($html);
                     $area[0].innerHTML = html;
                 }
-            } catch(e) {
-                console.log(e);
-            }
+            //} catch(e) {
+            //    console.log(e);
+            //}
             
             //$area[0].innerHTML = html;
             $.each(funcArray, function(key, obj) {
                 var $element = $area.find('[data-event="' + key + '"]');
                 $.each(obj.func, function(eventId, eventFunc) {
-                    $element.on(eventId, null, obj.data, function(e) {
-                        RouterTool.capture(eventFunc, e);
+                    //$element.on(eventId, null, obj.data, function(e) {
+                    //    RouterTool.capture(eventFunc, e);
+                    //});
+                    var eventKey = key + eventId;
+                    $element.on(eventKey, null, obj.data, eventFunc);
+                    $element.on(eventId, function(event) {
+                        //RouterTool.capture(eventFunc, event);
+                        $element.trigger(eventKey, obj.data);
                     });
                 });
             });
@@ -191,21 +202,31 @@
     
     var tmplTool = Bridge.tmplTool =  {
         cache: {},
-        addTmpl: function(obj) {
+        addTmpl: function(obj, insideCatch) {
+            var insideCatch = insideCatch || false;
             var tmpl = this;
             if (obj instanceof jQuery) {
+                var container = [];
                 obj.each(function(ind, ele) {
                     var tmpl_id = ele.dataset['tmplId'];
                     var tmpl_option = JSON.parse(ele.dataset['tmplOption'] || '{}');
                     var $tmpl_container = $('[data-bind-tmpl-id="' + tmpl_id + '"], #' + tmpl_id);
+                    //$tmpl_container = $tmpl_container[0] ? $tmpl_container : ;
                     var render = tmpl.cache[tmpl_id] = template($tmpl_container, ele.innerHTML);//ele.innerHTML);
-                    if ($tmpl_container[0]) {
-                        $tmpl_container[0].innerHTML = '';
+                    if (insideCatch) {
+                        tmpl.addTmpl($(ele.innerHTML).find(obj.selector));
                     }
-                    if (tmpl_option.render) {
+                    if ($tmpl_container[0] && !tmpl_option.render) {
+                        container.push($tmpl_container[0]);
+                    } else if (tmpl_option.render) {
                         render(tmpl_option.data || {});
                     }
                 });
+                
+                for (var i=0, size=container.length; i < size; i++) {
+                    container[i].innerHTML = '';
+                }
+                
             } else {
                 /*
                 $.get(obj, function(html) {
@@ -216,7 +237,7 @@
                 $.ajax({
                     url: obj,
                     success: function(html) {
-                        tmpl.addTmpl($(html).find('[data-tmpl-id]'));
+                        tmpl.addTmpl($(html).find('[data-tmpl-id]'), insideCatch);
                     },
                     dataType: 'text',
                     //async: false,
@@ -331,11 +352,13 @@
                         var messages = [];
                         var message = null;
                         //var result
-                        for (var ruleName in this.validateRule) {
-                            if (!this.validateTool[ruleName]) {
+                        var validateRule = this.validateRule;
+                        var validateTool = this.validateTool;
+                        for (var ruleName in validateRule) {
+                            if (!validateTool[ruleName]) {
                                 continue;
                             }
-                            message = this.validateTool[ruleName].call(this, {label : this.validateRule.label}, this.val(), this.validateRule[ruleName]);
+                            message = validateTool[ruleName].call(this, {label : validateRule.label}, this.val(), validateRule[ruleName]);
                             if (message) {
                                 messages.push(message);
                             }
@@ -359,20 +382,24 @@
                 oldData: {},
                 flashData: function() {
                     this.oldData = this.data;
-                    this.data = {};
+                    var data = this.data = {};
+                    var inputObjList = this.inputObjList;
                     var inputObj = null;
-                    for (var ind in this.inputObjList) {
-                        inputObj = this.inputObjList[ind];
-                        this.data[inputObj.name] = inputObj.val();
+                    //for (var ind in this.inputObjList) {
+                    for (var ind=0, size=inputObjList; ind < size; ind++) {
+                        inputObj = inputObjList[ind];
+                        data[inputObj.name] = inputObj.val();
                     }
-                    return this.data;
+                    return data;
                 },
                 
                 validate: function() {
                     var result = true;
                     var inputObj = null;
-                    for (var ind in this.inputObjList) {
-                        inputObj = this.inputObjList[ind];
+                    var inputObjList = this.inputObjList;
+                    //for (var ind in this.inputObjList) {
+                    for (var ind=0, size=inputObjList; ind < size; ind++) {
+                        inputObj = inputObjList[ind];
                         if (inputObj.validate) {
                             result = inputObj.validate() && result;
                         }
@@ -384,17 +411,19 @@
         
         resetAll : function(initData) {
             initData = initData || {};
-            for (var key in this.cache) {
-                this.cache[key](initData[key] ? initData[key] : {});
+            var cache = this.cache;
+            for (var key in cache) {
+                cache[key](initData[key] ? initData[key] : {});
             }
         },
 		
 		reset : function(initData) {
+		    var cache = this.cache;
             for (var key in initData) {
 				if (initData[key] == null) {
 					document.getElementById(key).innerHTML = '';
 				} else {
-					this.cache[key](initData[key] ? initData[key] : {});
+					cache[key](initData[key] ? initData[key] : {});
 				}
             }
 		}
@@ -413,7 +442,7 @@
             this.capture = function(func, event) {
                 //RouterTool.RTL = true;
                 RouterTool.temp = {};
-                func(event);
+                //func(event);
                 var state = new Date().getTime();
                 window.history.pushState(state, null);
                 RouterTool.history[state] = RouterTool.temp;
@@ -462,7 +491,7 @@
             
         },
         capture: function(func, event) {
-            func(event);
+            //func(event);
         },
         historyBack: function() {
             /*
@@ -480,15 +509,16 @@
     
     
     var storageTool = {
+        storge: null,
         push: function(key, data) {
             this.storge[key] = JSON.stringify(data);
         },
         get: function(key) {
-            try {
+            //try {
                 return JSON.parse(this.storge[key] || null);
-            } catch(e) {
-                return null;
-            }
+            //} catch(e) {
+            //    return null;
+            //}
         },
         remove: function(key) {
             this.storge.removeItem(key);
@@ -741,6 +771,16 @@
             });
             return this;
         },
+        /*
+        reqInsertId : function (key, id, data) {
+            this.combine({
+                "key" : key,
+                "method" : "reqInsertId",
+                "data" : this.addId(data, id)
+            });
+            return this;
+        },
+        */
         reqUpdate : function (key, id, data) {
             this.combine({
                 "key" : key,

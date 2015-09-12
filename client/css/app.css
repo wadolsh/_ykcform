@@ -189,3 +189,14 @@ table .open>.dropdown-menu {
 table th[data-event] { 
   cursor: pointer;
 }
+ 
+
+.congLayerPanel {
+  position: absolute;
+  /*top: 10px;*/
+  left: 140px;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+  text-align: center;
+}

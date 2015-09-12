@@ -423,10 +423,33 @@ var findServiceModel = {
         text_color = text_color || '000000';
         return 'https://chart.googleapis.com/chart?chst=d_map_pin_letter_withshadow&chld=' + text + '|' + fill_color + '|' + text_color;
     },
+    toggleArea: function($areaId, $buttonId, color) {
+        color = 'btn-' + (color || 'warning');
+        var isHidden = $areaId.hasClass('hidden');
+        
+        $(".fitArea").addClass('hidden');
+        $(".fitAreaButton").removeClass(color);
+        if (isHidden) {
+            $('#findService').addClass('hidden');
+            $buttonId.addClass(color);
+            $areaId.removeClass('hidden');
+            return false;
+        } else {
+            $('#findService').removeClass('hidden');
+            return true;
+        }
+    },
+
+    // ###############################################################################
+    
+
+    
+    // ###############################################################################
+    
     showAdminMap: {click: function(e) {
         var listData = findServiceModel.listData;
         var $adminMapArea = $('#adminMapArea');
-        
+        /*
         $adminMapArea.toggleClass('hidden');
         $('#findService').toggleClass('hidden');
         var isHidden = $adminMapArea.hasClass('hidden');
@@ -435,6 +458,11 @@ var findServiceModel = {
             return;
         }
         $('#adminMapToggleButton').addClass('btn-warning');
+        */
+        var isClose = findServiceModel.toggleArea($adminMapArea, $('#adminMapToggleButton'));
+        if (isClose) {
+            return;
+        }
         
         var $adminMapPanelList = $('#adminMapPanelList');
         var $adminMapPanelCount = $('#adminMapPanelCount');
@@ -637,6 +665,8 @@ var findServiceModel = {
     
     showStatistics: {click: function(e) {
         var $statisticsArea = $('#statisticsArea');
+        
+        /*
         $statisticsArea.toggleClass('hidden');
         $('#findService').toggleClass('hidden');
         var isHidden = $statisticsArea.hasClass('hidden');
@@ -646,7 +676,12 @@ var findServiceModel = {
             return;
         }
         $('#statisticsButton').addClass('btn-success');
+        */
         
+        var isClose = findServiceModel.toggleArea($statisticsArea, $('#statisticsButton'));
+        if (isClose) {
+            return;
+        }
 /*        if (!findServiceModel.statistics.loadPackage.corechart) {
             findServiceModel.statistics.loadPackage.corechart = 1;
         }*/
@@ -787,7 +822,7 @@ var findServiceModel = {
         var listData = findServiceModel.listData;
         
         var $searchedMapArea = $('#searchedMapArea');
-        
+        /*
         $searchedMapArea.toggleClass('hidden');
         $('#findService').toggleClass('hidden');
         var isHidden = $searchedMapArea.hasClass('hidden');
@@ -796,6 +831,12 @@ var findServiceModel = {
             return;
         }
         $('#mapToggleButton').addClass('btn-success');
+        */
+        
+        var isClose = findServiceModel.toggleArea($searchedMapArea, $('#mapToggleButton'));
+        if (isClose) {
+            return;
+        }
         
         if (!findServiceModel.searchedMap) {
             var mapOptions = {
@@ -968,13 +1009,6 @@ findServiceModel.orderBy = {
 };
 
 findServiceModel.searchForm = {
-    search_findServiceDate: {
-        searchField: "findServiceDate",
-        searchComparison : "$eq",
-        label: "登録日",
-        type: "date",
-        style: "width:160px;"
-    },
     search_findServiceFindFrom: {
         searchField: "findServiceFindFrom",
         searchComparison : "$regex",
@@ -986,12 +1020,6 @@ findServiceModel.searchForm = {
         searchComparison : "$regex",
         label: "地図:市区",
         list: "findServiceMapKuList"
-    },
-    search_findServiceMapPage: {
-        searchField: "findServiceMapPage",
-        searchComparison : "$eq",
-        label: "ページ",
-        style: "width:60px;"
     },
     search_findServiceCityward: {
         searchField: "findServiceAddress2",
@@ -1013,6 +1041,9 @@ findServiceModel.searchForm = {
         style: "width:100px;"
     }
 }
+
+
+
 findServiceModel.visitResultInfo = {'1' : '〇', '2' : '×'};
 findServiceModel.resultTypeModel = {
     '1': {label: '韓国語', color:'btn-success'},
@@ -1107,6 +1138,5 @@ function JSON2CSV(objArray, withHeader, quote, newline) {
 }
 
 
-Bridge.tmplTool.bindTmpl($('[data-bind-tmpl-id]'));
-Bridge.tmplTool.addTmpl($('[data-tmpl-id]'));
-Bridge.tmplTool.render('menu', {});
+
+

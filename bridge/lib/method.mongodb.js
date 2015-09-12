@@ -101,14 +101,28 @@ exports.reqInsert = function(reqData, callback){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
         // id採番
-        reqData.data[idName] = newId();
+        //reqData.data[idName] = newId();
+        reqData.data[idName] = reqData.data[idName] || newId();
+        db.collection(reqData.dataName).insert(reqData.data, {w:1}, function (err, docs) {
+            if(err) throw err;
+            callback(docs);
+        });
+    });
+};
+
+/*
+exports.reqInsertId = function(reqData, callback){
+    mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
+        if(err) throw err;
+        // id採番
+        reqData.data[idName] = reqData.data[idName] || newId();
         db.collection(reqData.dataName).insert(reqData.data, {w:1}, function (err, docs) {
             if(err) throw err;
             callback(docs[0]);
         });
     });
 };
-
+*/
 
 exports.reqUpdate = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
@@ -159,6 +173,17 @@ exports.reqUpdateOperator = function(reqData, callback, req){
     });
 };
 
+exports.reqSave = function(reqData, callback){
+    mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
+        if(err) throw err;
+        db.collection(reqData.dataName).save(reqData.data, {w:1}, function (err, docs) {
+            if(err) throw err;
+            callback(docs);
+        });
+    });
+};
+
+/*
 exports.reqSave = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
@@ -187,7 +212,7 @@ exports.reqSave = function(reqData, callback, req){
         }
     });
 };
-
+*/
 
 exports.reqDelete = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {

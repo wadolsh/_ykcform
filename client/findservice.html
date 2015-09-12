@@ -14,10 +14,10 @@
         <div class="btn-toolbar" role="toolbar">
             <div class="btn-group" role="group" id="navMenu">
                 <script type="text/tmpl" data-tmpl-id="navMenu" data-tmpl-option='{"render": true}'>
-                    <button type="button" id="mapToggleButton" class="btn btn-default btn-xs" data-event="##:findServiceModel.showSearchedMap##">
+                    <button type="button" id="mapToggleButton" class="btn btn-default btn-xs fitAreaButton" data-event="##:findServiceModel.showSearchedMap##">
                         <span class="glyphicon glyphicon-map-marker">地図</span>
                     </button>
-                    <button type="button" id="statisticsButton" class="btn btn-default btn-xs" data-event="##:findServiceModel.showStatistics##">
+                    <button type="button" id="statisticsButton" class="btn btn-default btn-xs fitAreaButton" data-event="##:findServiceModel.showStatistics##">
                         <span class="glyphicon glyphicon-object-align-bottom">統計</span>
                     </button>
                     <button type="button" id="searchToggleButton" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#searchArea">
@@ -29,8 +29,11 @@
             <div class="btn-group" role="group" id="navMenuAdminButtons">
                 <script type="text/tmpl" data-tmpl-id="navMenuAdminButtons" data-tmpl-option='{"render": false}'>
                     ##if(findServiceModel.getAuth(10)) {##
-                    <button type="button" id="adminMapToggleButton" class="btn btn-default btn-xs" data-toggle="collapse" data-event="##:findServiceModel.showAdminMap##">
+                    <button type="button" id="adminMapToggleButton" class="btn btn-default btn-xs fitAreaButton" data-toggle="collapse" data-event="##:findServiceModel.showAdminMap##">
                         <span class="glyphicon glyphicon-map-marker" aria-hidden="true">区域番号作業</span>
+                    </button>
+                    <button type="button" id="adminTableToggleButton" class="btn btn-default btn-xs fitAreaButton" data-event="##:adminTableModel.showAdminTable##">
+                        <span class="glyphicon glyphicon-th-large" aria-hidden="true">区域管理</span>
                     </button>
                     <button type="button" class="btn btn-default btn-xs" data-event="##:{click:function(){refreshStorage();}}##">
                         <span class="glyphicon glyphicon-download-alt"></span> 区域データ
@@ -45,13 +48,13 @@
             </div>
     </nav>
     
-    <div class="container hidden" id="searchedMapArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
+    <div class="container fitArea hidden" id="searchedMapArea" class="fitArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
         <div id="searchedMap" style="height: 100%;">
 
         </div>
     </div>
     
-    <div class="container hidden" id="statisticsArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
+    <div class="container fitArea hidden" id="statisticsArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
         <div style="height: 100%;">
             <div class="row">
                 <div id="chart1" class="col-sm-6" style="height:400px;"></div>
@@ -70,7 +73,138 @@
         </div>
     </div>
     
-    <div class="container hidden" id="adminMapArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
+    <div class="container fitArea hidden" id="adminTableArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: 35px">
+        <script type="text/tmpl" data-tmpl-id="adminTableArea">
+            <div class="panel panel-default">
+                <div class="panel-heading navbar-fixed-top" style="top:53px;">
+                    区域作業
+                    <!--
+                    <button type="button" class="btn btn-default btn-sm pull-right" data-event="##:adminTableModel.resetCongregationAdminTable##">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 会衆リセット
+                    </button>
+                    -->
+                    <button type="button" class="btn btn-default btn-sm pull-right" data-event="##:{click:function(e) {$('#adminTableSearchArea').collapse('toggle');}}##">
+                        <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 検索
+                    </button>
+                    <button type="button" class="btn btn-default btn-sm pull-right" data-event="##:{click:function(e) {$('#adminTableResultListArea').collapse('toggle');}}##">
+                        <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> 一覧
+                    </button>
+                </div>
+        		<div class="panel-heading collapse" id="adminTableSearchArea">
+            	    <div class="form-inline">
+            		    ##
+            		    $.each(findServiceModel.searchForm, function(key, obj) {
+            		        if (obj.lineBreak) {
+            		    ##
+                	</div>
+                	<div class="form-inline">
+                		    ##}##
+                        <div class="form-group">
+                            <label class="">##=obj.label##</label>
+                            <input type="##=obj.type || 'text'##" id="##=key##" list="##=obj.list##" value="##=data.search[key]##" class="form-control input-sm" style="##=obj.style##"/>
+            			</div>
+            		    ##});##
+                		<div class="form-group">
+                		    <select id="search_isNew" class="form-control input-sm" value="##=data.search.search_isNew##">
+                		        <option value="">-新規有無-</option>
+                                <option value="0" ##=data.search.search_isNew == '0' ? 'selected="selected"' : ""##>未設定</option>
+                                <option value="1" ##=data.search.search_isNew == 1 ? 'selected="selected"' : ""##>新規</option>
+                                <option value="2" ##=data.search.search_isNew == 2 ? 'selected="selected"' : ""##>既存</option>
+                            </select>
+                        </div>	
+                		<div class="form-group">
+                		    <select id="search_result" class="form-control input-sm" value="##=data.search.search_result##">
+                		        <option value="">-結果-</option>
+                		        ##$.each(findServiceModel.resultTypeModel, function(key, obj) {##
+                		            <option value="##=key##" ##=data.search.search_result == key ? 'selected="selected"' : ""##>##=obj.label##</option>
+                		        ##});##
+                            </select>
+                        </div>
+                		<button class="btn btn-default" type="submit" data-event="##:adminTableModel.searchAdminTable##">検索</button>
+            		</div>
+        		</div>
+
+                <div type="text/tmpl" class="panel-body collapse" id="adminTableResultListArea" style="height:100px; overflow:auto;" data-tmpl-id="adminTableResultListArea">
+                        <!--
+                        ##
+                        var congList = null;
+                        for (var key in data.dataList) {
+                            congList = data.dataList[key];
+                            //console.log(key);
+                        ##
+                        -->
+                        
+                        <table class="table table-bordered table-striped">
+                            <CAPTION>
+                                ##=key##
+                                <div class="btn-group pull-right">
+                                    <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        処理状態を変更 <span class="caret"></span>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a href="javascript:void(0);" data-event="##:adminTableModel.congSetStatus::[key,'ダウンロード済み']##">ダウンロード済み</a></li>
+                                        <li><a href="javascript:void(0);" data-event="##:adminTableModel.congSetStatus::[key,'地元会衆へ連絡']##">地元会衆へ連絡</a></li>
+                                        <li><a href="javascript:void(0);" data-event="##:adminTableModel.congSetStatus::[key,'地元会衆へ連絡']##">処理完了</a></li>
+                                        <li><a href="javascript:void(0);" data-event="##:adminTableModel.congSetStatus::[key,'地元会衆へ連絡']##">ステータスをクリア</a></li>
+                                    </ul>
+                                </div>
+                                <div class="btn-group pull-right" role="group">
+                                    <button type="button" class="btn btn-default btn-xs" data-event="##:adminTableModel.congDownloadCsv::key##">CSV 出力</button>
+                                </div>
+                                <div class="btn-group pull-right" role="group">
+                                    <button type="button" class="btn btn-default btn-xs" data-event="##:adminTableModel.congSetCong::key##">##=key##へ更新</button>
+                                </div>
+                            </CAPTION>
+                            <thead>
+                            <tr>
+                                <th><input type="checkbox" value="##=key##" onclick="$(this).parents('table').find(':checkbox').prop('checked', this.checked);"></th>
+                                <th>file.</th>
+                                <th>処理ステータス</th>
+                                <th>会衆</th>
+                                <th>住所</th>
+                                <th>お名前</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <!--
+                            ##
+                            for (var ind=0, size=congList.length; ind < size; ind++) {
+                                var fdata = congList[ind];
+                                //console.log(fdata);
+                            ##
+                            -->
+                            <tr>
+                                <td><input type="checkbox" value="##=ind##"></td>
+                                <td>##=fdata.fileno##</td>
+                                <td>##=fdata.findServiceCongStatus##</td>
+                                <td>##=fdata.findServiceCong## ➡ ##=key##</td>
+                                <td>##=fdata.findServiceAddress1 + fdata.findServiceAddress2 + fdata.findServiceAddress3 + fdata.findServiceAddress4 + fdata.findServiceAddress5##</td>
+                                <td>##=fdata.findServiceName##</td>
+                            </tr>
+                            <!--##};##-->
+                            </tbody>
+                        </table>
+                        <!--##}##-->
+            	</div>
+            </div>
+            <div class="panel-body" style="height:calc(100% - 0px);margin-top:-25px;">
+        		<div id="congEditPanel" class="congLayerPanel" style="position:absolute;z-index:5;left:160px;background-color:#fff;padding:4px;">
+        		    <input type="text" id="congName" placeholder="会衆名" value="">
+        		    <input type="color" id="congLayerColor" placeholder="色" value="">
+                    <input type="button" id="setToCongLayer" data-event="##:congLayer.setToCongLayer::congLayer##" value="登録">
+                    <input type="button" id="removeCongLayer" data-event="##:congLayer.removeCongLayer::congLayer##" value="削除">
+                </div>
+                <div class="congLayerPanel" style="position:absolute;z-index:5;left:500px;background-color:#fff;padding:4px;">
+                    <input type="button" id="reloadGeoJson" data-event="##:congLayer.reloadGeoJson::congLayer##" value="reload">
+                    <input type="button" id="mapGeoJsonExport" data-event="##:congLayer.saveGeoJson::congLayer##" value="layer save">
+                </div>
+                <div id="congMap" class="panel-heading" style="height:calc(100% - 0px);">
+                </div>
+            </div>
+        </script>
+    </div>
+    
+    <div class="container fitArea hidden" id="adminMapArea" style="height: 100%; position: absolute; height:calc(100% - 52px); width: 100%; margin-top: -18px;">
         
         <div style="position:fixed;z-index:100;width:400px;right:0px;opacity:0.7;top:52px;bottom:20px;" id="adminMapPanelArea">
             <script type="text/tmpl" data-tmpl-id="adminMapPanelArea" data-tmpl-option='{"render": true}'>
@@ -154,8 +288,8 @@
 <datalist id="townNameList" class="br-tmpl">
     <script type="text/tmpl" data-tmpl-id="townNameList">
         <option value=""></option>
-    ##for(var ind in data.town) {##
-        <option value="##=data.town[ind]##">
+    ##for(var ind=0, town=data.town, size=town; ind < size; ind++) {##
+        <option value="##=town[ind]##">
     ##}##
     </script>
 </datalist>
@@ -709,7 +843,7 @@ if(data.list) {
         </div>
         </script>
     </div>
-<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDejNEedWnONLDewIynvzf6Wv-aI4sd3eU&amp;sensor=true"></script>
+<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDejNEedWnONLDewIynvzf6Wv-aI4sd3eU&amp;sensor=true&amp;libraries=drawing"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script src="js/jquery-2.1.0.min.js"></script>
 <script src="js/jquery-ui.min.js"></script>
@@ -719,8 +853,15 @@ if(data.list) {
 <script src="js/bridge.date.js"></script>
 <script src="js/bridge.router.js"></script>
 <script src="js/app.js"></script>
+<script src="js/congKml.js"></script>
 <script src="js/findservice.js"></script>
+<script src="js/findservice.adminTable.js"></script>
+
 <script type="text/javascript">
+    Bridge.tmplTool.bindTmpl($('[data-bind-tmpl-id]'));
+    Bridge.tmplTool.addTmpl($('[data-tmpl-id]'), true);
+    Bridge.tmplTool.render('menu', {});
+
     google.load("visualization", "1", {packages:["corechart", "bar", "table"]});
     
     var kanagwa_town = Bridge.localStorageTool.get('kanagwa_town');
@@ -745,6 +886,7 @@ if(data.list) {
     
         routes: {
             "":                     "index",
+            "adminPanel":                "adminPanel",
             //"search/:query":        "search",  // #search/kiwis
             //"search/:query/p:page": "search",   // #search/kiwis/p7
             "_id/:id":                 "searchById",
@@ -830,6 +972,9 @@ if(data.list) {
                     pageSelectFunc: findServiceModel.pageSelect,
                     pageSizeChangeFunc: findServiceModel.pageSizeChange
             });
+        },
+        adminPanel: function() {
+            adminTableModel.showAdminTable.click();
         }
     });
     var router = new Workspace().start();
@@ -841,6 +986,9 @@ if(data.list) {
         }
     });
     
+
+
+
 
     /*
     .draggable({

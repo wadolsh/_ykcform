@@ -89,8 +89,8 @@ var authCheckLogic = {
     },
     reqData : function(authData, reqData, req) {
         if (req.session && req.session.user) {
-            console.log('last_update_user insert !');
         	reqData.parm.last_update_user = req.session.user[idName];
+        	console.log('last_update_user insert ! ' + reqData.parm.last_update_user);
         }
         if (authData._read) {
             var user = req.session.user;
