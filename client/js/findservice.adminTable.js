@@ -97,7 +97,7 @@ var adminTableModel = {
         .reqCount('count', {})
         .reqList('reqList', {$query:{}})
         .request(function(data, textStatus, jqXHR) {
-            $('#adminTableResultListArea').collapse('show');
+            
             var list = data.reqList;
             self.congTableData(list);
             self.dataListForCong = list;
@@ -124,6 +124,7 @@ var adminTableModel = {
             //html = html + "<div>" + ind + " : " + fdata._id + " : " + cong + "</div>";
         }
         adminTableModel.congMap = congMap;
+        $('#adminTableResultListArea').collapse('show');
         Bridge.tmplTool.render('adminTableResultListArea', {dataList: congMap});
         
     },
