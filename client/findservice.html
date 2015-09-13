@@ -20,9 +20,6 @@
                     <button type="button" id="statisticsButton" class="btn btn-default btn-xs fitAreaButton" data-event="##:findServiceModel.showStatistics##">
                         <span class="glyphicon glyphicon-object-align-bottom">統計</span>
                     </button>
-                    <button type="button" id="searchToggleButton" class="btn btn-default btn-xs" data-toggle="collapse" data-target="#searchArea">
-                        <span class="glyphicon glyphicon-search">検索</span>
-                    </button>
                 </script>
             </div>
 
@@ -93,7 +90,7 @@
         		<div class="panel-heading collapse" id="adminTableSearchArea">
             	    <div class="form-inline">
             		    ##
-            		    $.each(findServiceModel.searchForm, function(key, obj) {
+            		    $.each(findServiceModel_searchForm, function(key, obj) {
             		        if (obj.lineBreak) {
             		    ##
                 	</div>
@@ -107,15 +104,15 @@
                 		<div class="form-group">
                 		    <select id="search_isNew" class="form-control input-sm" value="##=data.search.search_isNew##">
                 		        <option value="">-新規有無-</option>
-                                <option value="0" ##=data.search.search_isNew == '0' ? 'selected="selected"' : ""##>未設定</option>
-                                <option value="1" ##=data.search.search_isNew == 1 ? 'selected="selected"' : ""##>新規</option>
-                                <option value="2" ##=data.search.search_isNew == 2 ? 'selected="selected"' : ""##>既存</option>
+                    		        ##$.each(findServiceModel_isNew, function(key, obj) {##
+                    		            <option value="##=key##" ##=data.search.search_isNew == key ? 'selected="selected"' : ""##>##=obj.label##</option>
+                    		        ##});##
                             </select>
                         </div>	
                 		<div class="form-group">
                 		    <select id="search_result" class="form-control input-sm" value="##=data.search.search_result##">
                 		        <option value="">-結果-</option>
-                		        ##$.each(findServiceModel.resultTypeModel, function(key, obj) {##
+                		        ##$.each(findServiceModel_resultTypeModel, function(key, obj) {##
                 		            <option value="##=key##" ##=data.search.search_result == key ? 'selected="selected"' : ""##>##=obj.label##</option>
                 		        ##});##
                             </select>
@@ -160,7 +157,9 @@
                                 <th><input type="checkbox" value="##=key##" onclick="$(this).parents('table').find(':checkbox').prop('checked', this.checked);"></th>
                                 <th>file.</th>
                                 <th>処理ステータス</th>
-                                <th>会衆</th>
+                                <th>探し結果</th>
+                                <th>既存有無</th>
+                                <th>会衆 (登録内容➡マッチ)</th>
                                 <th>住所</th>
                                 <th>お名前</th>
                             </tr>
@@ -177,6 +176,8 @@
                                 <td><input type="checkbox" value="##=ind##"></td>
                                 <td>##=fdata.fileno##</td>
                                 <td>##=fdata.findServiceCongStatus##</td>
+                                <td>##=fdata.result##</td>
+                                <td>##=fdata.isNew##</td>
                                 <td>##=fdata.findServiceCong## ➡ ##=key##</td>
                                 <td>##=fdata.findServiceAddress1 + fdata.findServiceAddress2 + fdata.findServiceAddress3 + fdata.findServiceAddress4 + fdata.findServiceAddress5##</td>
                                 <td>##=fdata.findServiceName##</td>
@@ -195,8 +196,8 @@
                     <input type="button" id="removeCongLayer" data-event="##:congLayer.removeCongLayer::congLayer##" value="削除">
                 </div>
                 <div class="congLayerPanel" style="position:absolute;z-index:5;left:500px;background-color:#fff;padding:4px;">
-                    <input type="button" id="reloadGeoJson" data-event="##:congLayer.reloadGeoJson::congLayer##" value="reload">
-                    <input type="button" id="mapGeoJsonExport" data-event="##:congLayer.saveGeoJson::congLayer##" value="layer save">
+                    <input type="button" id="reloadGeoJson" data-event="##:congLayer.reloadGeoJson::congLayer##" value="reload from server">
+                    <input type="button" id="mapGeoJsonExport" data-event="##:congLayer.saveGeoJson::congLayer##" value="save to server">
                 </div>
                 <div id="congMap" class="panel-heading" style="height:calc(100% - 0px);">
                 </div>
@@ -303,6 +304,10 @@
         		    <a href="http://ko.wikipedia.org/wiki/%EB%8C%80%ED%95%9C%EB%AF%BC%EA%B5%AD%EC%9D%98_%EC%9D%B8%EA%B5%AC%EC%88%9C_%EC%84%B1%EC%94%A8_%EB%AA%A9%EB%A1%9D" class="btn btn-default btn-sm" target="wiki1">韓国姓1</a>
         		    <a href="http://ko.wikipedia.org/wiki/%ED%95%9C%EA%B5%AD%EC%9D%98_%EC%84%B1%EC%94%A8_%EB%AA%A9%EB%A1%9D" class="btn btn-default btn-sm" target="wiki2">韓国姓2</a>
         		    
+        		    
+                    <button type="button" id="searchToggleButton" class="btn btn-default btn-sm pull-right" data-toggle="collapse" data-target="#searchArea">
+                        <span class="glyphicon glyphicon-search">検索</span>
+                    </button>
                     <button type="button" class="btn btn-default btn-sm pull-right ##=data.editMode=='new' || data.editMode=='no' ? 'hidden': ''##" data-event="##:findServiceModel.addNew##">
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 新規追加
                     </button>
@@ -517,7 +522,7 @@ if(data.list) {
         		<div class="panel-heading collapse" id="searchArea">
             		    <div class="form-inline">
             		    ##
-            		    $.each(findServiceModel.searchForm, function(key, obj) {
+            		    $.each(findServiceModel_searchForm, function(key, obj) {
             		        if (obj.lineBreak) {
             		    ##
                 		</div>
@@ -531,15 +536,15 @@ if(data.list) {
                     		<div class="form-group">
                     		    <select id="search_isNew" class="form-control input-sm" value="##=data.search.search_isNew##">
                     		        <option value="">-新規有無-</option>
-                                    <option value="0" ##=data.search.search_isNew == '0' ? 'selected="selected"' : ""##>未設定</option>
-                                    <option value="1" ##=data.search.search_isNew == 1 ? 'selected="selected"' : ""##>新規</option>
-                                    <option value="2" ##=data.search.search_isNew == 2 ? 'selected="selected"' : ""##>既存</option>
+                    		        ##$.each(findServiceModel_isNew, function(key, obj) {##
+                    		            <option value="##=key##" ##=data.search.search_isNew == key ? 'selected="selected"' : ""##>##=obj.label##</option>
+                    		        ##});##
                                 </select>
                             </div>	
                     		<div class="form-group">
                     		    <select id="search_result" class="form-control input-sm" value="##=data.search.search_result##">
                     		        <option value="">-結果-</option>
-                    		        ##$.each(findServiceModel.resultTypeModel, function(key, obj) {##
+                    		        ##$.each(findServiceModel_resultTypeModel, function(key, obj) {##
                     		            <option value="##=key##" ##=data.search.search_result == key ? 'selected="selected"' : ""##>##=obj.label##</option>
                     		        ##});##
                                 </select>
@@ -607,13 +612,13 @@ if(data.list) {
             					<td>
             					    <div class="btn-group">
                                         
-                                        <button type="button" class="btn ##=findServiceModel.resultTypeModel[obj.result || 0].color## btn-xs dropdown-toggle" data-event="##:findServiceModel.openVisit##">
-                                            ##=findServiceModel.resultTypeModel[obj.result || 0].label## <span class="caret"></span>
+                                        <button type="button" class="btn ##=findServiceModel_resultTypeModel[obj.result || 0].color## btn-xs dropdown-toggle" data-event="##:findServiceModel.openVisit##">
+                                            ##=findServiceModel_resultTypeModel[obj.result || 0].label## <span class="caret"></span>
                                         </button>
                                         
                                         <!--
-                					    <button type="button" class="btn ##=findServiceModel.resultTypeModel[obj.result || 0].color## btn-xs dropdown-toggle" data-toggle="dropdown">
-                                            ##=findServiceModel.resultTypeModel[obj.result || 0].label## <span class="caret"></span>
+                					    <button type="button" class="btn ##=findServiceModel_resultTypeModel[obj.result || 0].color## btn-xs dropdown-toggle" data-toggle="dropdown">
+                                            ##=findServiceModel_resultTypeModel[obj.result || 0].label## <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" role="menu">
                                             <li><a href="#" data-event="##:findServiceModel.setResult##" data-resultType="1" class="##=(obj.result==1) ? 'btn-success' : 'btn-default'##">韓国語</a></li>
@@ -656,8 +661,8 @@ if(data.list) {
             					    ##
             					        <div>
             					            ##=comment.visitDate || comment.last_update_date || comment.first_update_date##
-            					            ##=findServiceModel.visitResultInfo[comment.visitResult]##
-            					            ##=findServiceModel.resultTypeModel[comment.result || 0].label##
+            					            ##=findServiceModel_visitResultInfo[comment.visitResult]##
+            					            ##=findServiceModel_resultTypeModel[comment.result || 0].label##
             					            ##=comment.comment##
             			                </div>
             				        ##}##
@@ -712,7 +717,7 @@ if(data.list) {
                     $.each(data.findServiceVisitHistory || [], function(ind, obj) {##
                     <a href="#" class="list-group-item" data-toggle="collapse" data-target="#visitCollapse##=ind##" style="margin-right:40px;">
                         ##=obj.visitDate || obj.last_update_date || obj.first_update_date##
-                        ##=findServiceModel.visitResultInfo[obj.visitResult]##
+                        ##=findServiceModel_visitResultInfo[obj.visitResult]##
                         <span class="visit-right-side">
                             ##=obj.last_update_name##
                             <button type="button" class="btn btn-default" data-ind="##=ind##" data-event="##:findServiceModel.removeVisit::data##">
@@ -725,7 +730,7 @@ if(data.list) {
                         ##if (obj.result != undefined) {##
                         <div class="row">
             			    <div class="form-group col-sm-12">
-            			        ##=findServiceModel.resultTypeModel[obj.result].label## へ変更
+            			        ##=findServiceModel_resultTypeModel[obj.result].label## へ変更
                             </div>
                         </div>
         			    ##}
@@ -801,7 +806,7 @@ if(data.list) {
                 </div>
 
                 <div class="modal-footer">
-                  	##$.each(findServiceModel.resultTypeModel, function(key, obj) {##
+                  	##$.each(findServiceModel_resultTypeModel, function(key, obj) {##
                   	    <button type="button" class="btn btn-xs ##=(data.result==key) ? obj.color : 'btn-default'##" data-event="##:findServiceModel.setResult::data##" data-resultType="##=key##" data-fromMap="true">##=obj.label##</button>
                     ##});##
                 </div>
@@ -854,8 +859,10 @@ if(data.list) {
 <script src="js/bridge.router.js"></script>
 <script src="js/app.js"></script>
 <script src="js/congKml.js"></script>
+<script src="js/findservice.config.js"></script>
 <script src="js/findservice.js"></script>
 <script src="js/findservice.adminTable.js"></script>
+
 
 <script type="text/javascript">
     Bridge.tmplTool.bindTmpl($('[data-bind-tmpl-id]'));

@@ -897,7 +897,7 @@ var findServiceModel = {
 
 	    var search = {};
 	    var value = null;
-	    for (var key in findServiceModel.searchForm) {
+	    for (var key in findServiceModel_searchForm) {
 	        value = $('#' + key).val();
 	        if (value) {
 	            search[key] = value;
@@ -940,7 +940,7 @@ var findServiceModel = {
 		    searchParm.$query.$and = [];
 		}
 		
-		var searchFrom = findServiceModel.searchForm;
+		var searchFrom = findServiceModel_searchForm;
 		var searchFormObj = null;
 		var searchValue = null;
 		for(var key in searchFrom) {
@@ -1008,53 +1008,6 @@ findServiceModel.orderBy = {
         findServiceDate: -1
 };
 
-findServiceModel.searchForm = {
-    search_findServiceFindFrom: {
-        searchField: "findServiceFindFrom",
-        searchComparison : "$regex",
-        label: "情報元",
-        list: "findServiceFindFromList"
-    },
-    search_findServiceMapKu: {
-        searchField: "findServiceMapKu",
-        searchComparison : "$regex",
-        label: "地図:市区",
-        list: "findServiceMapKuList"
-    },
-    search_findServiceCityward: {
-        searchField: "findServiceAddress2",
-        searchComparison : "$regex",
-        label: "住所:市区",
-        list: "findServiceMapKuList",
-        lineBreak: 1
-    },
-    search_findServiceTown: {
-        searchField: "findServiceAddress3",
-        searchComparison : "$regex",
-        label: "町村",
-        list: "townNameList"
-    },
-    search_fileno: {
-        searchField: "fileno",
-        searchComparison : "$eq",
-        label: "区域番号",
-        style: "width:100px;"
-    }
-}
-
-
-
-findServiceModel.visitResultInfo = {'1' : '〇', '2' : '×'};
-findServiceModel.resultTypeModel = {
-    '1': {label: '韓国語', color:'btn-success'},
-    '2': {label: '日本語', color:'btn-info'}, 
-    '3': {label: '中国語', color:'btn-info'}, 
-    '4': {label: '他言語', color:'btn-info'}, 
-    '-1': {label: 'あいまい', color:'btn-warning'},
-    '-2': {label: '住所不明', color:'btn-danger'},
-    '-3': {label: '引っ越し', color:'btn-warning'}, 
-    '0': {label: '未設定', color:'btn-default'}
-};
 
 var exportdate = null;
 var exportdata = Bridge.localStorageTool.get('exportdata');

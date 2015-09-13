@@ -49,7 +49,7 @@ var adminTableModel = {
 		}
 	    
 	    
-	    var searchFrom = findServiceModel.searchForm;
+	    var searchFrom = findServiceModel_searchForm;
 		var searchFormObj = null;
 		var searchValue = null;
 		for(var key in searchFrom) {
@@ -99,13 +99,13 @@ var adminTableModel = {
         .request(function(data, textStatus, jqXHR) {
             
             var list = data.reqList;
-            self.congTableData(list);
+            self.congTableData(list, data.count);
             self.dataListForCong = list;
             //console.log(data.count + " : resetCongregationAdminTable end");
         });
         
     }},
-    congTableData: function(list) {
+    congTableData: function(list, totalCount) {
         congLayer.polygonData();
         var adminTableResultListArea = document.getElementById('adminTableResultListArea');
         var congMap = {};
@@ -119,13 +119,15 @@ var adminTableModel = {
                 listCong = congMap[cong] = [];
             }
             
+            fdata.isNew = findServiceModel_isNew[fdata.isNew].label;
+            fdata.result = findServiceModel_resultTypeModel[fdata.result].label;
             listCong.push(fdata);
             //console.log(cong);
             //html = html + "<div>" + ind + " : " + fdata._id + " : " + cong + "</div>";
         }
         adminTableModel.congMap = congMap;
         $('#adminTableResultListArea').collapse('show');
-        Bridge.tmplTool.render('adminTableResultListArea', {dataList: congMap});
+        Bridge.tmplTool.render('adminTableResultListArea', {dataList: congMap, totalCount: totalCount});
         
     },
     congCollectTarget: function(key, target) {
@@ -143,12 +145,13 @@ var adminTableModel = {
         return targetData;
     },
     congDownloadCsv: { click: function(e, key) {
-        var findServiceCsvExportHeaderArray = $('#findServiceCsvExportHeader').val().replace(/ /g, '').split(',');
+        //var findServiceCsvExportHeaderArray = $('#findServiceCsvExportHeader').val().replace(/ /g, '').split(',');
+        var findServiceCsvExportHeaderArray = '_id,fileno,isNew,result,findServiceDate,findServiceFindFrom,findServiceMapKu,findServiceMapPage,findServiceAddress1,findServiceAddress2,findServiceAddress3,findServiceAddress4,findServiceAddress5,findServiceName,findServiceComment'.replace(/ /g, '').split(',');;
         var targetList = adminTableModel.congCollectTarget(key, e.target);
         var csvText = JSON2CSV(targetList, findServiceCsvExportHeaderArray, true, escape('\r\n'));
         
         var link = document.createElement('a');
-        link.download = 'CSV_' + (key || '') + '.csv';
+        link.download = 'CSV_' + (key || '') + '_' + Bridge.dateStr.getNowDate('yyyyMMdd_HHmmss') + '.csv';
         link.href = 'data:text/csv;charset=utf-8,' + csvText;
         link.click();
     }},
