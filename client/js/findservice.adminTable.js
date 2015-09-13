@@ -146,7 +146,7 @@ var adminTableModel = {
     },
     congDownloadCsv: { click: function(e, key) {
         //var findServiceCsvExportHeaderArray = $('#findServiceCsvExportHeader').val().replace(/ /g, '').split(',');
-        var findServiceCsvExportHeaderArray = '_id,fileno,isNew,result,findServiceDate,findServiceFindFrom,findServiceMapKu,findServiceMapPage,findServiceAddress1,findServiceAddress2,findServiceAddress3,findServiceAddress4,findServiceAddress5,findServiceName,findServiceComment'.replace(/ /g, '').split(',');;
+        var findServiceCsvExportHeaderArray = '_id,fileno,isNew,result,findServiceCong,findServiceDate,findServiceFindFrom,findServiceMapKu,findServiceMapPage,findServiceAddress1,findServiceAddress2,findServiceAddress3,findServiceAddress4,findServiceAddress5,findServiceName,findServiceComment'.replace(/ /g, '').split(',');;
         var targetList = adminTableModel.congCollectTarget(key, e.target);
         var csvText = JSON2CSV(targetList, findServiceCsvExportHeaderArray, true, escape('\r\n'));
         
