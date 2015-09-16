@@ -118,9 +118,10 @@ var adminTableModel = {
             if (!listCong) {
                 listCong = congMap[cong] = [];
             }
-            
-            fdata.isNew = findServiceModel_isNew[fdata.isNew].label;
-            fdata.result = findServiceModel_resultTypeModel[fdata.result].label;
+            fdata.findServiceAddress = fdata.findServiceAddress1 + fdata.findServiceAddress2 + fdata.findServiceAddress3
+                                        + fdata.findServiceAddress4 + fdata.findServiceAddress5;
+            fdata.isNew = findServiceModel_isNew[fdata.isNew || 0].label;
+            fdata.result = findServiceModel_resultTypeModel[fdata.result || 0].label;
             listCong.push(fdata);
             //console.log(cong);
             //html = html + "<div>" + ind + " : " + fdata._id + " : " + cong + "</div>";
@@ -146,7 +147,7 @@ var adminTableModel = {
     },
     congDownloadCsv: { click: function(e, key) {
         //var findServiceCsvExportHeaderArray = $('#findServiceCsvExportHeader').val().replace(/ /g, '').split(',');
-        var findServiceCsvExportHeaderArray = '_id,fileno,isNew,result,findServiceCong,findServiceDate,findServiceFindFrom,findServiceMapKu,findServiceMapPage,findServiceAddress1,findServiceAddress2,findServiceAddress3,findServiceAddress4,findServiceAddress5,findServiceName,findServiceComment'.replace(/ /g, '').split(',');;
+        var findServiceCsvExportHeaderArray = '_id,fileno,isNew,result,findServiceCong,findServiceDate,findServiceFindFrom,findServiceMapKu,findServiceMapPage,findServiceAddress,findServiceName,findServiceComment'.replace(/ /g, '').split(',');;
         var targetList = adminTableModel.congCollectTarget(key, e.target);
         var csvText = JSON2CSV(targetList, findServiceCsvExportHeaderArray, true, escape('\r\n'));
         
