@@ -80,6 +80,9 @@
                         <span class="glyphicon glyphicon-plus" aria-hidden="true"></span> 会衆リセット
                     </button>
                     -->
+                    <button type="button" class="btn btn-default btn-sm pull-right" data-event="##:adminTableModel.resetFileno##">
+                        <span class="glyphicon glyphicon-random" aria-hidden="true"></span> 区域番号リセット
+                    </button>
                     <button type="button" class="btn btn-default btn-sm pull-right" data-event="##:{click:function(e) {$('#adminTableSearchArea').collapse('toggle');}}##">
                         <span class="glyphicon glyphicon-search" aria-hidden="true"></span> 検索
                     </button>
@@ -189,13 +192,13 @@
             	</div>
             </div>
             <div class="panel-body" style="height:calc(100% - 0px);margin-top:-25px;">
-        		<div id="congEditPanel" class="congLayerPanel" style="position:absolute;z-index:5;left:160px;background-color:#fff;padding:4px;">
+        		<div id="congEditPanel" class="congLayerPanel" style="position:absolute;z-index:5;left:260px;background-color:#fff;padding:4px;">
         		    <input type="text" id="congName" placeholder="会衆名" value="">
         		    <input type="color" id="congLayerColor" placeholder="色" value="">
                     <input type="button" id="setToCongLayer" data-event="##:congLayer.setToCongLayer::congLayer##" value="登録">
                     <input type="button" id="removeCongLayer" data-event="##:congLayer.removeCongLayer::congLayer##" value="削除">
                 </div>
-                <div class="congLayerPanel" style="position:absolute;z-index:5;left:500px;background-color:#fff;padding:4px;">
+                <div class="congLayerPanel" style="position:absolute;z-index:5;left:600px;background-color:#fff;padding:4px;">
                     <input type="button" id="reloadGeoJson" data-event="##:congLayer.reloadGeoJson::congLayer##" value="reload from server">
                     <input type="button" id="mapGeoJsonExport" data-event="##:congLayer.saveGeoJson::congLayer##" value="save to server">
                 </div>

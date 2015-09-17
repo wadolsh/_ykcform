@@ -1,0 +1,1 @@
+{"options":{"create":"login_user","capped":false,"autoIndexId":true},"indexes":[{"v":NumberInt(1),"key":{"_id":NumberInt(1)},"ns":"ykcform.login_user","name":"_id_"}]}

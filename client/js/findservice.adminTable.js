@@ -185,5 +185,38 @@ var adminTableModel = {
         findServiceConn.request(function(data) {
             self.congTableData(self.dataListForCong);
         });
+    }},
+    resetFileno: { click: function() {
+        refreshStorage();
+        findServiceConn.reset()
+        .reqCount('count', {})
+        .reqList('reqList', {$query:{}})
+        .request(function(data, textStatus, jqXHR) {
+            findServiceConn.reset();
+            var list = data.reqList;
+            var edata = null;
+            var ldata = null;
+            var updateable = 0;
+            var list = data.reqList;
+            for (var i=0, size=list.length; i<size; i++) {
+                ldata = list[i];
+            	for (var ind in exportdata) {
+                	edata = exportdata[ind];
+                	if (ldata._id == edata.id) {
+                	    updateable = 1;
+                	    findServiceConn.reqUpdate('reqUpdate' + i, ldata._id, {fileno: edata.fileno});
+                        break;
+                    }
+                }
+            }
+            
+            if (updateable == 1) {
+                findServiceConn.request(function(data) {
+                    alert("finished");
+                });
+            }
+        });
+        
+
     }}
 }

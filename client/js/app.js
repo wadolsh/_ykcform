@@ -7,7 +7,8 @@ $.ajaxSetup({
         $('#loadingModal').modal('hide');
     },
     error : function(jqXHR, textStatus, errorThrown ) {
-        console.log('error');
+        console.log('error:' + textStatus);
+        console.log(errorThrown);
         //$('#loadingModal').modal('hide');
         if (jqXHR.status == 404) {
             Bridge.msg("サーバーとの通信時にエラーが発生しました。");

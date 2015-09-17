@@ -1,0 +1,1 @@
+{"options":{"create":"mydata","capped":false,"autoIndexId":true},"indexes":[{"v":NumberInt(1),"key":{"_id":NumberInt(1)},"ns":"ykcform.mydata","name":"_id_"}]}
