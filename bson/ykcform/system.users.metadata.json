@@ -1,1 +1,0 @@
-{"indexes":[{"v":NumberInt(1),"key":{"_id":NumberInt(1)},"ns":"ykcform.system.users","name":"_id_"},{"v":NumberInt(1),"key":{"user":NumberInt(1),"userSource":NumberInt(1)},"unique":true,"ns":"ykcform.system.users","name":"user_1_userSource_1"}]}
