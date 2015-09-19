@@ -686,7 +686,7 @@ var findServiceModel = {
             findServiceModel.statistics.loadPackage.corechart = 1;
         }*/
         
-        var resultTypeModel = findServiceModel.resultTypeModel;
+        var resultTypeModel = findServiceModel_resultTypeModel;
 
         findServiceConn
             .reqCount('totalCount', {})
@@ -701,10 +701,13 @@ var findServiceModel = {
                 
                 //google.setOnLoadCallback(function() {
                 
+                //
+                //
+                var model = null;
                 var obj = null;
                 var result0 = null;
                 var resultNull = null;
-                var dataArray1 = [['結果', '件数']];
+                var dataArray1 = [['結果', '件数', { role: 'style' }]];
                 var count1 = 0;
                 for (var ind in statistics1) {
                     obj = statistics1[ind];
@@ -716,7 +719,8 @@ var findServiceModel = {
                         result0 = obj;
                         continue;
                     }
-                    dataArray1.push([resultTypeModel[obj._id || 0].label, obj.count]);
+                    model = resultTypeModel[obj._id || 0];
+                    dataArray1.push([model.label, obj.count, model.scolor]);
                     count1 += obj.count;
                 }
                 
@@ -728,7 +732,7 @@ var findServiceModel = {
                     });
                 
                 var dataArray2 = Bridge.clone(dataArray1);
-                dataArray2.push([resultTypeModel[result0._id].label, (result0.count + resultNull.count)]);
+                dataArray2.push([resultTypeModel[result0._id].label, (result0.count + resultNull.count), resultTypeModel[result0._id].scolor]);
                 
                 var chart2 = new google.visualization.PieChart(document.getElementById('chart2'));
                     chart2.draw(google.visualization.arrayToDataTable(dataArray2), {
@@ -740,9 +744,12 @@ var findServiceModel = {
                 
                 var chart3header = ['区'];
                 var chart3headerKey = [0];
+                var chart3colors = [];
                 for (var key in resultTypeModel) {
-                    chart3header.push(resultTypeModel[key].label);
+                    model = resultTypeModel[key];
+                    chart3header.push(model.label);
                     chart3headerKey.push(key);
+                    chart3colors.push(model.scolor);
                 }
                 
                 
@@ -764,7 +771,7 @@ var findServiceModel = {
                         lastKu = obj._id.findServiceMapKu;
                         kuResult = {};
                     }
-                    
+
                     kuResult[obj._id.result || 0] = (kuResult[obj._id.result || 0] || 0) + obj.count;
                     //dataArray3.push(, obj.count]);
                     // if (!obj._id || obj._id.result == null) {
@@ -788,7 +795,8 @@ var findServiceModel = {
                         //height: 300,
                         bar: { groupWidth: '75%' },
                         legend: {position: 'top', maxLines: 3},
-                        hAxis: {minValue: 0}
+                        hAxis: {minValue: 0},
+                        colors: chart3colors
                     });       
 
 
@@ -796,6 +804,7 @@ var findServiceModel = {
                 for (var ind in dataArray3) {
                     dataArray3[ind].splice(ind0, 1);
                 }
+                chart3colors.splice(ind0 - 1, 1);
                 
                 var chart3 = new google.visualization.BarChart(document.getElementById('chart3'));
                     chart3.draw(google.visualization.arrayToDataTable(dataArray3), {
@@ -806,7 +815,8 @@ var findServiceModel = {
                         //height: 300,
                         bar: { groupWidth: '75%' },
                         legend: {position: 'top', maxLines: 3},
-                        hAxis: {minValue: 0}
+                        hAxis: {minValue: 0},
+                        colors: chart3colors
                     });
 
                 
