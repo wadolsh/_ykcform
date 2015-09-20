@@ -707,8 +707,10 @@ var findServiceModel = {
                 var obj = null;
                 var result0 = null;
                 var resultNull = null;
-                var dataArray1 = [['結果', '件数', { role: 'style' }]];
+                var dataArray1 = [['結果', '件数']];
+                var slices = {};
                 var count1 = 0;
+                var i = 0;
                 for (var ind in statistics1) {
                     obj = statistics1[ind];
                     if (obj._id == null) {
@@ -720,7 +722,8 @@ var findServiceModel = {
                         continue;
                     }
                     model = resultTypeModel[obj._id || 0];
-                    dataArray1.push([model.label, obj.count, model.scolor]);
+                    dataArray1.push([model.label, obj.count]);
+                    slices[i++] = {color: model.scolor};
                     count1 += obj.count;
                 }
                 
@@ -728,17 +731,19 @@ var findServiceModel = {
                     chart1.draw(google.visualization.arrayToDataTable(dataArray1), {
                         title: '総件数: ' + count1,
                         //is3D: true,
-                        //pieSliceText: 'value'
+                        //pieSliceText: 'value',
+                        slices: slices
                     });
                 
                 var dataArray2 = Bridge.clone(dataArray1);
-                dataArray2.push([resultTypeModel[result0._id].label, (result0.count + resultNull.count), resultTypeModel[result0._id].scolor]);
+                dataArray2.push([resultTypeModel[result0._id].label, (result0.count + resultNull.count)]);
                 
                 var chart2 = new google.visualization.PieChart(document.getElementById('chart2'));
                     chart2.draw(google.visualization.arrayToDataTable(dataArray2), {
                         title: '総件数: ' + totalCount,
                         //is3D: true,
-                        //pieSliceText: 'value'
+                        //pieSliceText: 'value',
+                        slices: slices
                     });
                     
                 
