@@ -689,9 +689,9 @@ var findServiceModel = {
         var resultTypeModel = findServiceModel_resultTypeModel;
 
         findServiceConn
-            .reqCount('totalCount', {})
-            .reqExecMethod('statistics1', 'findServiceStatistics', { $group: '$result'})
-            .reqExecMethod('statistics2', 'findServiceStatistics', { $group: {findServiceMapKu: '$findServiceMapKu', result: '$result'}})
+            .reqCount('totalCount', {"isNew": 1})
+            .reqExecMethod('statistics1', 'findServiceStatistics', { $match : {"isNew": 1}, $group: '$result'})
+            .reqExecMethod('statistics2', 'findServiceStatistics', { $match : {"isNew": 1}, $group: {findServiceMapKu: '$findServiceMapKu', result: '$result'}})
             //.reqExecMethod('statistics3', 'findServiceStatistics', { $group: {findServiceDate: '$findServiceVisitHistory.first_update_date', result: '$findServiceVisitHistory.result'}})
             .request(function(data, textStatus, jqXHR) {
     			var statistics1 = data['statistics1'];

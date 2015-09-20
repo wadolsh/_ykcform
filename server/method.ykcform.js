@@ -29,13 +29,15 @@ exports.mainMenuList = function(reqData, callback, req){
 
 exports.findServiceStatistics = function(reqData, callback, req){
 	console.log('findServiceStatistics!');
+	console.log(reqData.data.$match);
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
-        db.collection('find_service').aggregate({
-            //$match :  reqData.data.$match || null,
-            $group : { "_id"  : reqData.data.$group, "count" : { "$sum" : 1 } }
-        }, {
-            $sort: { _id: 1 }
+        db.collection('find_service').aggregate([
+            { $match : reqData.data.$match || null },
+            { $group : { "_id"  : reqData.data.$group, "count" : { "$sum" : 1 } } },
+            { $sort: { _id: 1 } }
+        ], {
+            
         }, function (err, doc) {
             if(err) throw err;
             callback(doc);
