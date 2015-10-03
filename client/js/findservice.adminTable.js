@@ -153,7 +153,7 @@ var adminTableModel = {
         
         var link = document.createElement('a');
         link.download = 'CSV_' + (key || '') + '_' + Bridge.dateStr.getNowDate('yyyyMMdd_HHmmss') + '.csv';
-        link.href = 'data:text/csv;charset=utf-8,' + csvText;
+        link.href = 'data:text/csv;charset=UTF-8,' + '\uFEFF' + csvText;
         link.click();
     }},
     congSetCong: { click: function(e, key, target) {

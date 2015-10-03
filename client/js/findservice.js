@@ -102,9 +102,9 @@ var findServiceModel = {
         link.download = 'CSV_' + (search_findService.search_findServiceCityward || '')
         + (search_findService.search_findServiceTown || '') 
         + (search_findService.search_fileno || '') + '.csv';
-        link.href = 'data:text/csv;charset=utf-8,' + csvText;
+        link.href = 'data:text/csv;charset=UTF-16LE,' + '\uFEFF' + csvText;
         link.click();
-        
+        //encodeURIComponent(csvText)
 	}},
 	geocoding: {
 	    map: null,
