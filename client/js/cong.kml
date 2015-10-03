@@ -302,7 +302,7 @@
 			</PolyStyle>
 		</Style>
 			<styleUrl>#poly-FF6600-3-115</styleUrl>
-			<name>横浜市本郷</name>
+			<name>横浜市本郷1</name>
 			<Polygon>
 				<outerBoundaryIs>
 					<LinearRing>
@@ -412,7 +412,7 @@
 			</PolyStyle>
 		</Style>
 			<styleUrl>#poly-33CC00-3-115</styleUrl>
-			<name>横浜市本郷</name>
+			<name>横浜市本郷2</name>
 			<Polygon>
 				<outerBoundaryIs>
 					<LinearRing>
