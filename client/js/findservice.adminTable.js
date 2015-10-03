@@ -184,7 +184,8 @@ var adminTableModel = {
             findServiceConn.reqUpdate('reqUpdate' + i, obj._id, {findServiceCongStatus: status});
         }
         findServiceConn.request(function(data) {
-            self.congTableData(self.dataListForCong);
+            console.log(data);
+            //self.congTableData(self.dataListForCong);
         });
     }},
     resetFileno: { click: function() {
