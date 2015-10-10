@@ -907,6 +907,31 @@ var findServiceModel = {
         map.fitBounds(bounds);
     }},
     
+    congSetStatus: { click: function(e, status) {
+        var self = adminTableModel;
+        //var targetList = adminTableModel.congCollectTarget(key, target || e.target);
+        var targetList = [];
+        var $checked = $('#searchedMainTable').find('tbody :checked');
+        $checked.each(function(ind, obj) {
+            targetList.push(obj);
+        });
+
+        findServiceConn.reset();
+        var obj = null;
+        for (var i=0, size=targetList.length; i < size; i++) {
+            obj = targetList[i];
+            findServiceConn.reqUpdate(i, obj.value, {findServiceCongStatus: status});
+        }
+        findServiceConn.request(function(data) {
+            for (var key in data) {
+                $($checked[key]).next().text(status);
+            }
+            
+            //console.log(data);
+            //self.congTableData(self.dataListForCong);
+        });
+    }},
+
 	search: {click: function(e) {
 	    findServiceModel.page.pageNum = 1;
 

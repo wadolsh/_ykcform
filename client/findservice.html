@@ -144,8 +144,8 @@
                                     <ul class="dropdown-menu">
                                         <li><a href="javascript:void(0);" data-event="##:adminTableModel.congSetStatus::[key,'ダウンロード済み']##">ダウンロード済み</a></li>
                                         <li><a href="javascript:void(0);" data-event="##:adminTableModel.congSetStatus::[key,'地元会衆へ連絡']##">地元会衆へ連絡</a></li>
-                                        <li><a href="javascript:void(0);" data-event="##:adminTableModel.congSetStatus::[key,'地元会衆へ連絡']##">処理完了</a></li>
-                                        <li><a href="javascript:void(0);" data-event="##:adminTableModel.congSetStatus::[key,'地元会衆へ連絡']##">ステータスをクリア</a></li>
+                                        <li><a href="javascript:void(0);" data-event="##:adminTableModel.congSetStatus::[key,'処理完了']##">処理完了</a></li>
+                                        <li><a href="javascript:void(0);" data-event="##:adminTableModel.congSetStatus::[key,'ステータスをクリア']##">ステータスをクリア</a></li>
                                     </ul>
                                 </div>
                                 <div class="btn-group pull-right" role="group">
@@ -223,7 +223,7 @@
                             $("#adminMapPanelList li :checkbox").prop('checked', true);
                         }}##">すべて選択</button>
                         <div class="input-group">
-                            <span class="input-group-addon"  id="adminMapPanelSearchFileNoCount">0</span>
+                            <span class="input-group-addon" id="adminMapPanelSearchFileNoCount">0</span>
                             <input type="text" class="form-control" placeholder="区域番号" id="adminMapPanelSearchFileNo" data-event="##:{click:findServiceModel.searchFileNo, keyup:findServiceModel.searchFileNo}##">
                             <span class="input-group-btn">
                                 <button class="btn btn-default" type="button" data-event="##:{click:function(e) {
@@ -369,8 +369,8 @@
                         </tbody>
                     </table>
                 </div>
-##}##
-##if(data.editMode && data.editMode != 'no') {##
+##}
+if(data.editMode && data.editMode != 'no') {##
         		<div class="panel-body br-form">
                  	<div id="findServiceEditArea" class="form-edit panel-body" role="form">
             		    <input type="hidden" name="##=Bridge.idName##" value="##=data[Bridge.idName]##">
@@ -554,6 +554,19 @@ if(data.list) {
                             </div>
                 			<button class="btn btn-default" type="submit" data-event="##:findServiceModel.search##">検索</button>
             			</div>
+            			<div class="form-inline">
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    処理状態を変更 <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="javascript:void(0);" data-event="##:findServiceModel.congSetStatus::['ダウンロード済み']##">ダウンロード済み</a></li>
+                                    <li><a href="javascript:void(0);" data-event="##:findServiceModel.congSetStatus::['地元会衆へ連絡']##">地元会衆へ連絡</a></li>
+                                    <li><a href="javascript:void(0);" data-event="##:findServiceModel.congSetStatus::['処理完了']##">処理完了</a></li>
+                                    <li><a href="javascript:void(0);" data-event="##:findServiceModel.congSetStatus::['ステータスをクリア']##">ステータスをクリア</a></li>
+                                </ul>
+                            </div>
+            			</div>
 
         		</div>
                 <div class="panel-pagenation">
@@ -562,7 +575,7 @@ if(data.list) {
                     </nav>
                 </div>
         		<div class="table-responsive">
-            		<table class="table table-bordered">
+            		<table class="table table-bordered" id="searchedMainTable">
                         <thead>
                             <tr class="active">
                                 ##
@@ -574,14 +587,15 @@ if(data.list) {
                                         findServiceModel.listAreaReset();
                                     }};
                                     var sortIcon = function(field) {
-                                        
                                         var sortObj = data.orderBy[field];
                                         if (!sortObj) {
                                             return '';
                                         }
                                         return '<span class="glyphicon glyphicon-sort-by-attributes' + (sortObj == 1 ? '': '-alt') + '"></span>';
                                     }
-                                ##
+                                if(findServiceModel.getAuth(1)) {##
+                                <th><input type="checkbox" onclick="$(this).parents('table').find(':checkbox').prop('checked', this.checked);"></th>
+            					##}##
             					<th style="width:92px;">総計:##=data.listCount##</th>
             					<th data-event="##:sortEvent::'result'##">確認記録 ##=sortIcon('result')##</th>
                                 <th data-event="##:sortEvent::'findServiceDate'##" width="90px">登録日 ##=sortIcon('findServiceDate')##</th>
@@ -603,7 +617,9 @@ if(data.list) {
                             <tr class="##=(commonModel._id == obj.first_update_user || commonModel._id == obj.last_update_user) ? '' : ''##">
             					##
             					totalData.findServiceTotalCount = totalData.findServiceTotalCount ? totalData.findServiceTotalCount + 1 : 1;
-            					##
+                                if(findServiceModel.getAuth(1)) {##
+            					<td><input type="checkbox" value="##=obj._id##"><span>##=obj.findServiceCongStatus##</span></td>
+            					##}##
                                 <td>
                                     ##if (commonModel._id == obj.first_update_user  || findServiceModel.getAuth(1)) {##
             						<button data-ind="##=ind##" data-id="##=obj[Bridge.idName]##" data-event="##:findServiceModel.lineEdit##" class="btn btn-default btn-xs">修正</button>
