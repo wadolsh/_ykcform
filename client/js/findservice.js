@@ -951,6 +951,10 @@ var findServiceModel = {
 	    if (value) {
 	        search['search_result'] = value;
 	    }
+	    value = $('#search_findServiceCongStatus').val();
+	    if (value) {
+	        search['search_findServiceCongStatus'] = value;
+	    }
 	    
 		Bridge.sessionStorageTool.push('search_findService', search);
 		findServiceModel.listAreaReset();
@@ -1009,6 +1013,14 @@ var findServiceModel = {
 		        searchParm.$query.$and.push({'result': {$eq : parseInt(search.search_result)}});
 		    }
 		}
+		if (search.search_findServiceCongStatus) {
+		    if (search.search_findServiceCongStatus == '') {
+		        searchParm.$query.$and.push({'$or': [{findServiceCongStatus : {$exists : false}}, {findServiceCongStatus : {$eq : ''}}]});
+		    } else {
+		        searchParm.$query.$and.push({'findServiceCongStatus': {$eq : (search.search_findServiceCongStatus)}});
+		    }
+		}
+		
 		var pageSize = findServiceModel.page.pageSize;
 		var pageNum = findServiceModel.page.pageNum;
 

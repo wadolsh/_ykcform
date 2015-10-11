@@ -42,6 +42,10 @@ var adminTableModel = {
 	    if (value) {
 	        search['search_result'] = value;
 	    }
+	    value = $('#search_findServiceCongStatus').val();
+	    if (value) {
+	        search['search_findServiceCongStatus'] = value;
+	    }
 	    
 	    var searchParm = {$query: {}, $orderby: findServiceModel.orderBy};
 		if (Object.keys(search).length != 0) {
@@ -76,6 +80,13 @@ var adminTableModel = {
 		        searchParm.$query.$and.push({'$or': [{result : {$exists : false}}, {result : {$eq : 0}}]});
 		    } else {
 		        searchParm.$query.$and.push({'result': {$eq : parseInt(search.search_result)}});
+		    }
+		}
+		if (search.search_findServiceCongStatus) {
+		    if (search.search_findServiceCongStatus == '') {
+		        searchParm.$query.$and.push({'$or': [{findServiceCongStatus : {$exists : false}}, {findServiceCongStatus : {$eq : ''}}]});
+		    } else {
+		        searchParm.$query.$and.push({'findServiceCongStatus': {$eq : (search.search_findServiceCongStatus)}});
 		    }
 		}
 	    

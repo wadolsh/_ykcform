@@ -53,3 +53,10 @@ findServiceModel_isNew = {
     1: {label: '新規'},
     2: {label: '既存'}
 }
+
+findServiceModel_findServiceCongStatus = {
+    'ダウンロード済み' : {label: 'ダウンロード済み'},
+    '地元会衆へ連絡' : {label: '地元会衆へ連絡'},
+    '処理完了' : {label: '処理完了'},
+    //'' : {label: 'ステータスをクリア'}
+}
