@@ -217,7 +217,7 @@ var adminTableModel = {
                 	edata = exportdata[ind];
                 	if (ldata._id == edata.id) {
                 	    updateable = 1;
-                	    findServiceConn.reqUpdate('reqUpdate' + i, ldata._id, {fileno: edata.fileno});
+                	    findServiceConn.reqUpdate('reqUpdate' + i, ldata._id, {fileno: edata.fileno, serial: edata.serial});
                         break;
                     }
                 }

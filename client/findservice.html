@@ -671,7 +671,7 @@ if(data.list) {
             					</td>
                                 <td>##=obj.findServiceDate##</td>
                                 <td>##=obj.findServiceFindFrom## ##=obj.findServiceMapKu## ##=obj.findServiceMapPage##</td>
-                                <td>##=obj.fileno##</td>
+                                <td>##=obj.fileno##-##=obj.serial##</td>
                                 <td>
                                     ##if(findServiceModel.getAuth(1)) {##
                                     <button type="button" class="btn btn-default btn-xs" data-event="##:{click:function(e){
