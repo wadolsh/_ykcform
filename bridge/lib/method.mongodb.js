@@ -124,6 +124,7 @@ exports.reqInsertId = function(reqData, callback){
 };
 */
 
+/*
 exports.reqBulkUpdate = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
@@ -150,6 +151,7 @@ exports.reqBulkUpdate = function(reqData, callback, req){
         });
     });
 };
+*/
 
 exports.reqUpdate = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
