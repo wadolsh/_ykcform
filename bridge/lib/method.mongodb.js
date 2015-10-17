@@ -124,7 +124,7 @@ exports.reqInsertId = function(reqData, callback){
 };
 */
 
-/*
+
 exports.reqBulkUpdate = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
@@ -138,8 +138,8 @@ exports.reqBulkUpdate = function(reqData, callback, req){
         var selected = null;
         for (var i=0, size=bulkDatas.length; i<size; i++) {
             selected = bulkDatas[i];
-            bulk.find(selected.find).updateOne(selected.update);
-            console.log(selected);
+            bulk.find(selected.find).updateOne({$set: selected.update});
+            //console.log(selected);
         }
         bulk.execute(function(err, docs) {
             if(err) throw err;
@@ -151,7 +151,7 @@ exports.reqBulkUpdate = function(reqData, callback, req){
         });
     });
 };
-*/
+
 
 exports.reqUpdate = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {

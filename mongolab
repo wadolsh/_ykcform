@@ -75,3 +75,10 @@ db.find_service.find().snapshot().forEach(function(doc){
 })
 
 mongodump -h ds041188.mongolab.com:41188 -d ykcform -u ykcform -p 454545 -o bson
+
+mongodump -h ds039684.mongolab.com:39684 -d ykcform-backup-restore -c find_service -u ykcform -p 454545 -o bson20151017
+mongorestore -h ds041188.mongolab.com:41188 -d ykcform -c find_service -u ykcform -p 454545 bson20151017/ykcform-backup-restore/find_service.bson
+
+
+
+mongorestore -h mongodb:27017 -d ykcform ./ykcform
