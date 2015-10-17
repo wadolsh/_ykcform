@@ -124,6 +124,32 @@ exports.reqInsertId = function(reqData, callback){
 };
 */
 
+exports.reqBulkUpdate = function(reqData, callback, req){
+    mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
+        if(err) throw err;
+        var query = req.query ? req.query : {};
+        //query[idName] = reqData.data[idName];
+        query[idName] = getId(reqData.data[idName], reqData.dataName);
+        delete reqData.data[idName];
+        
+        var bulk = db.collection(reqData.dataName).initializeUnorderedBulkOp();
+        var bulkDatas = reqData.data;
+        var selected = null;
+        for (var i=0, size=bulkDatas.length; i<size; i++) {
+            selected = bulkDatas[i];
+            bulk.find(selected.find).updateOne(selected.update);
+        }
+        bulk.execute(function(err, docs) {
+            if(err) throw err;
+
+            if (docs == 0) {
+                callback({});
+            }
+            callback(docs);
+        });
+    });
+};
+
 exports.reqUpdate = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;

@@ -211,21 +211,25 @@ var adminTableModel = {
             var ldata = null;
             var updateable = 0;
             var list = data.reqList;
+            var updateList = [];
             for (var i=0, size=list.length; i<size; i++) {
                 ldata = list[i];
             	for (var ind in exportdata) {
                 	edata = exportdata[ind];
                 	if (ldata._id == edata.id) {
                 	    updateable = 1;
-                	    findServiceConn.reqUpdate('reqUpdate' + i, ldata._id, {fileno: edata.fileno, serial: edata.serial});
+                	    updateList.push({find : {_id: ldata._id}, update: {fileno: edata.fileno, serial: edata.serial}});
                         break;
                     }
                 }
             }
             
+            
             if (updateable == 1) {
+                findServiceConn.reqBulkUpdate('bulkupdate', updateList);
                 findServiceConn.request(function(data) {
                     alert("finished");
+                    console.log(data);
                 });
             }
         });

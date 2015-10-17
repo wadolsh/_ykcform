@@ -781,6 +781,14 @@
             return this;
         },
         */
+        reqBulkUpdate : function (key, data) {
+            this.combine({
+                "key" : key,
+                "method" : "reqBulkUpdate",
+                "data" : data
+            });
+            return this;
+        },
         reqUpdate : function (key, id, data) {
             this.combine({
                 "key" : key,
