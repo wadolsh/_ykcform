@@ -138,6 +138,7 @@ exports.reqBulkUpdate = function(reqData, callback, req){
         for (var i=0, size=bulkDatas.length; i<size; i++) {
             selected = bulkDatas[i];
             bulk.find(selected.find).updateOne(selected.update);
+            console.log(selected);
         }
         bulk.execute(function(err, docs) {
             if(err) throw err;

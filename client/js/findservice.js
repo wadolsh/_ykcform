@@ -937,8 +937,9 @@ var findServiceModel = {
 
 	    var search = {};
 	    var value = null;
+	    var $form = $('#findServiceTable');
 	    for (var key in findServiceModel_searchForm) {
-	        value = $('#' + key).val();
+	        value = $form.find('#' + key).val();
 	        if (value) {
 	            search[key] = value;
 	        }

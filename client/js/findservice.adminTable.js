@@ -28,8 +28,9 @@ var adminTableModel = {
         var self = adminTableModel;
         var search = {};
 	    var value = null;
-	    for (var key in findServiceModel.searchForm) {
-	        value = $('#' + key).val();
+	    var $form = $('#adminTableArea');
+	    for (var key in findServiceModel_searchForm) {
+	        value = $form.find('#' + key).val();
 	        if (value) {
 	            search[key] = value;
 	        }
