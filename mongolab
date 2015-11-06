@@ -81,4 +81,4 @@ mongorestore -h ds041188.mongolab.com:41188 -d ykcform -c find_service -u ykcfor
 
 
 
-mongorestore -h mongodb:27017 -d ykcform ./ykcform
+mongorestore -h mongodb:27017 -d ykcform bson20151017/ykcform-backup-restore/find_service.bson

@@ -206,7 +206,7 @@ var findServiceModel = {
             //delete obj.data._id;
             findServiceConn.reqSave('reqSave', obj.data).request(function(data) {
                 //delete data[reqSave][Bridge.idName];
-                findServiceModel.savedData = data['reqSave'];
+                findServiceModel.savedData = obj.data;//data['reqSave'];
                 Bridge.localStorageTool.push('findServiceModel_savedData', findServiceModel.savedData);
                 findServiceModel.listAreaReset();
                 commonModel.messageAreaReset(data);

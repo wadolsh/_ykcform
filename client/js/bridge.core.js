@@ -256,9 +256,12 @@
             if (route) {
                 RouterTool.add(tmplKey, data);
             }
-
-            var $html = tmplTool.cache[tmplKeys[0]](data, ele);
-            
+            var $html = '';
+            try {
+                $html = tmplTool.cache[tmplKeys[0]](data, ele);
+            } catch(e) {
+                console.log(e);
+            }
             if (callback) {
                 callback(data, $html);
             }
@@ -807,6 +810,9 @@
             return this;
         },
         reqSave : function (key, data) {
+            if (data[this.idName] == "") {
+                delete data[this.idName];
+            }
             this.combine(extend({
                 "key" : key,
                 "method" : "reqSave",

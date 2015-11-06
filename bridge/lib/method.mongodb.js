@@ -201,7 +201,7 @@ exports.reqUpdateOperator = function(reqData, callback, req){
         });
     });
 };
-
+/*
 exports.reqSave = function(reqData, callback){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
@@ -211,8 +211,8 @@ exports.reqSave = function(reqData, callback){
         });
     });
 };
+*/
 
-/*
 exports.reqSave = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
         if(err) throw err;
@@ -241,7 +241,7 @@ exports.reqSave = function(reqData, callback, req){
         }
     });
 };
-*/
+
 
 exports.reqDelete = function(reqData, callback, req){
     mongodb.MongoClient.connect(exports.methodConfig.db.url, function(err, db) {
