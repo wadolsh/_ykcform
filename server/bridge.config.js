@@ -84,6 +84,7 @@ exports.loginMethod = {
                 , find_service_plan: {_write : 1, _read : 1}
                 , app_setting: {_write : 1, _read : 0}
                 , kanaga14: {_write : 0, _read : 0}
+                , trtr: {_write : 1, _read : 0}
     }
 }
 exports.loginMethod.module.init(exports.loginMethod);

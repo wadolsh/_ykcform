@@ -1,12 +1,10 @@
+
 /**
  * choish
  */
 (function(){
-    
     var root = this;
-    
     var Bridge = root.Bridge = {};
-    
     var log = root.log = function(str) {
         //console.log(str);
     };

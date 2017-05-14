@@ -35,7 +35,7 @@ mongoimport -h ds041188.mongolab.com:41188 -d ykcform -c find_service -u ykcform
 
 
 mongoexport -h ds041188.mongolab.com:41188 -d ykcform -c find_service -u ykcform -p 454545 -o bson/find_service20140917.json
-
+mongoimport -h ds041188.mongolab.com:41188 -d ykcform -c find_service -u ykcform -p --file bson/find_service20140917.csv
 
 mongorestore -h ds041188.mongolab.com:41188 -d ykcform -u ykcform -p  bson/ykcform/find_service.bson
 
@@ -82,3 +82,33 @@ mongorestore -h ds041188.mongolab.com:41188 -d ykcform -c find_service -u ykcfor
 
 
 mongorestore -h mongodb:27017 -d ykcform bson20151017/ykcform-backup-restore/find_service.bson
+
+
+mongodump -h ds041188.mongolab.com:41188 -d ykcform -c trtr -u ykcform -p 454545 -o bson/20160207
+mongorestore -h mongodb:27017 -d ykcform bson/20160207/ykcform/trtr.bson
+
+
+
+mongoimport -h mongodb:27017 -d ykcform -c trtr -u ykcform -p 454545 --file bson/trtr.json
+mongorestore -h mongodb:27017 -d ykcform  heroku_v75gb8lx
+
+mongodb://heroku_v75gb8lx:ge3kivvsk4ns9kbt7j7fu4mjff@ds023398.mlab.com:23398/heroku_v75gb8lx
+mongoimport -h ds023398.mlab.com:23398 -d heroku_v75gb8lx -c trtr -u heroku_v75gb8lx -p ge3kivvsk4ns9kbt7j7fu4mjff --file export.json
+
+mongorestore -h ds023398.mlab.com:23398 -d heroku_v75gb8lx -u heroku_v75gb8lx -p ge3kivvsk4ns9kbt7j7fu4mjff db_backup/20160311/ykcform/trtr.bson
+
+
+mongodump -h ds023398.mlab.com:23398 -d heroku_v75gb8lx -u trtr -p trtr1914 -c trtr_setting -o db_backup/01
+
+
+mongoimport -h mongodb:27017 -d ykcform -c trtr --file afterExport.json 
+mongoimport -h ds023398.mlab.com:23398 -d heroku_v75gb8lx -c trtr -u heroku_v75gb8lx -p ge3kivvsk4ns9kbt7j7fu4mjff --file 20160324_afterExport.json
+
+
+db.trtr.distinct('congregation')
+
+
+mongodump -h ds023398.mlab.com:23398 -d heroku_v75gb8lx -u heroku_v75gb8lx -p ge3kivvsk4ns9kbt7j7fu4mjff -o bson
+mongorestore -h ds023398.mlab.com:23398 -d heroku_v75gb8lx -u heroku_v75gb8lx -p ge3kivvsk4ns9kbt7j7fu4mjff bson/
+
+mongodump -h ds023398.mlab.com:23398 -d heroku_v75gb8lx -u heroku_v75gb8lx -p ge3kivvsk4ns9kbt7j7fu4mjff -o backup/20160329
